@@ -12,15 +12,16 @@ Website: [napkintoblueprint.com](https://napkintoblueprint.com) · Install: `npx
 
 ## How to read a showcase
 
-Each idea folder has the **napkin** — the plain-language write-up a founder typed in, verbatim — and one
-folder per run. A run is one runtime (Claude Code, Codex, OpenCode, Cursor) with one model profile.
-Same napkin, different brain: compare what each produced.
+Every top-level folder is one run: a plain n2b project, set up exactly as any user would. It holds the
+**napkin** — the plain-language write-up a founder typed in, verbatim — and the `.n2b/` output the pipeline
+produced from it. When the same napkin is re-run on another runtime (Claude Code, Codex, OpenCode, Cursor)
+or model profile, it gets a sibling folder named `<idea>--<runtime>`. Same napkin, different brain.
 
 ```
 <idea>/
-  README.md          the idea and a run-by-run comparison
+  README.md          the idea, this run's facts, links to sibling runs
   napkin.md          what the human typed
-  runs/<runtime>--<profile>/.n2b/
+  .n2b/
     BRIEF.md         Stage 1 — validated brief
     features/        Stage 2 — product definition (7 docs)
     specifications/  Stage 3 — one spec per feature
@@ -31,9 +32,9 @@ Same napkin, different brain: compare what each produced.
 
 ## Index
 
-| Idea | Runtime | Model profile | Stages done | Features | Specs | Run |
+| Run | Idea | Runtime | Model profile | Stages done | Features | Specs |
 |---|---|---|---|---|---|---|
-| [Chairtime](chairtime/) — deposit-first booking for solo beauty & wellness pros | — | — | not started | — | — | — |
+| [chairtime](chairtime/) | Deposit-first booking for solo beauty & wellness pros | Claude Code | balanced (claude-aliases) | not started | — | — |
 
 ## License
 

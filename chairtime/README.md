@@ -10,10 +10,14 @@ calendar plus a form. It actually hides two roles with different views, a real m
 and double-booking integrity — the things a first vibe-coded draft misses and a blueprint surfaces.
 
 - [napkin.md](napkin.md) — what was typed into `/n2b:s1-init`, verbatim
-- `runs/` — one folder per runtime + model profile
+- `.n2b/` — everything the pipeline produced, untouched
 
-## Runs
+## This run
 
-| Run | Runtime | Model profile / provider | Stages done | Features | Specs | Wall-clock | Notes |
-|---|---|---|---|---|---|---|---|
-| — | — | — | not started | — | — | — | — |
+| Runtime | n2b version | Model profile / provider | Stages done | Features | Specs | Wall-clock |
+|---|---|---|---|---|---|---|
+| Claude Code | 0.4.0 | balanced (claude-aliases) | not started | — | — | — |
+
+## Other runs of this napkin
+
+None yet. A re-run on another runtime or model lives in a sibling folder named `chairtime--<runtime>`.
