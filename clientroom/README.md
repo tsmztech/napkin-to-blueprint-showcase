@@ -44,25 +44,19 @@ must never pass through the platform.
 | Dates | 2026-09-26 → 2026-10-02 |
 | Blueprint | 33 features · 220 specs · 3,102 acceptance criteria · 31 ADRs · 49 tables |
 | Recommended stack | Next.js 16 · Neon Postgres · Drizzle · Cloudflare R2 · Resend · Stripe Connect / Billing · Trigger.dev + outbox · Better Auth + magic links · Documenso · Vercel |
-| Exports | [dev-brief](.n2b/exports/dev-brief/00-README.md) (44 files) · [speckit](.n2b/exports/speckit/README.md) (338 files) · jira (halted by the gate, see below) |
+| Exports | [dev-brief](.n2b/exports/dev-brief/00-README.md) (44 files) · [speckit](.n2b/exports/speckit/README.md) (338 files) |
 | Fidelity | dev-brief and speckit passed on the first attempt; see each `FIDELITY-REPORT.md` and `EXPORT-RECEIPT.md` |
 
 The full step-by-step record is in [RUN-LOG.md](RUN-LOG.md). The intake interview is in
 [session-notes.md](session-notes.md), with the founder answer key in [ANSWERS.md](ANSWERS.md).
 
-## The gate that said no
+## Deviations (as logged, not cleaned up)
 
-The first second export was **Jira**. A Jira backlog needs every acceptance criterion in a "when…, then…" shape so
-it can become a story. 3,101 of 3,102 were. One (`FEAT-20.SPEC-002-AC-25`) had no "then" clause. n2b's backlog
-builder refused to produce a backlog with a hole in it, failed twice the same way, and halted.
-
-Nothing under `.n2b/` may be hand-edited, so the run switched its second export to Spec Kit, which passed. The
-halted attempt's [FIDELITY-REPORT.md](.n2b/exports/jira/FIDELITY-REPORT.md) is kept as the record. The root cause
-was that Stage 3 never checked acceptance-criterion shape. It's fixed upstream in n2b
-([#23](https://github.com/tsmztech/napkin-to-blueprint/issues/23)).
-
-## Other deviations (as logged, not cleaned up)
-
+- **A Jira export was tried first, and the gate refused it.** A Jira backlog needs every acceptance criterion
+  in a "when…, then…" shape so it can become a story. 3,101 of 3,102 were; one (`FEAT-20.SPEC-002-AC-25`) had
+  no "then" clause. n2b's backlog builder failed twice the same way and halted rather than ship a backlog with
+  a hole in it. The run switched its second export to Spec Kit, which passed. Stage 3 now checks
+  acceptance-criterion shape upstream ([#23](https://github.com/tsmztech/napkin-to-blueprint/issues/23)).
 - **Stage 3:** the orchestrator spawned the feature analysts directly, because Claude Code subagents can't spawn
   subagents. Fixed upstream in n2b ([#22](https://github.com/tsmztech/napkin-to-blueprint/issues/22)).
 - **dev-brief:** 1 non-blocking style warning (the article in "a Important-tier" chapter openers).

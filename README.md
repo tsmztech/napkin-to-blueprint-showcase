@@ -120,8 +120,7 @@ Each folder is a normal n2b project, the same as one you would get on your own m
 - **Gates, not vibes.** Every stage passes completeness and fidelity checks before moving on. Every gate result
   is in `RUN-LOG.md` and `.n2b/tracking/`.
 - **Honest record.** Each run README lists its deviations as logged, including any time a gate refused to
-  ship an export. Those refusals stay in the repo. See
-  [Clientroom's "gate that said no"](clientroom/README.md#the-gate-that-said-no) for an example.
+  ship an export. [Clientroom](clientroom/README.md#deviations-as-logged-not-cleaned-up) has an example.
 
 ## Run your own
 
