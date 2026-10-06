@@ -1,0 +1,7 @@
+{
+  "repo_notes": [
+    "The product blueprint lives under docs/blueprint/ — treat it as the authoritative product and technical documentation for this repository.",
+    "docs/blueprint/specifications/ (per-feature specs with acceptance criteria) and docs/blueprint/architecture/ (recommended architecture and database schema) are the core content — index them deeply.",
+    "The root files (README.md, AGENTS.md, OPERATING-RULES.md, BUILD-ORDER.md, PROGRESS.md, feature_list.json) are the build harness, not product documentation."
+  ]
+}
