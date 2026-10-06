@@ -20,7 +20,7 @@ runtimes, other model profiles.
 
 ## All runs
 
-| Run | The idea | Runtime · profile | Features | Specs | Acceptance criteria | Build pack |
+| Run | The idea | Runtime · profile | Features | Specs | Acceptance criteria | Build it with |
 |---|---|---|---|---|---|---|
 | [Chairtime](chairtime/) | Booking link + card deposits for solo beauty pros | Claude Code · balanced | 30 | 219 | 2,996 | [lovable-pack](chairtime/.n2b/exports/lovable-pack/README.md) |
 | [Plateful](plateful/) | Family meal planner with AI suggestions | Claude Code · balanced | 25 | 196 | 2,292 | [agent-workspace](plateful/.n2b/exports/agent-workspace/README.md) |
@@ -30,6 +30,15 @@ Every run also has a `dev-brief` export for human teams. Every acceptance criter
 from spec to export, and a fidelity gate checks that before any export is marked done.
 
 <!-- Adding a run: append one row above (keep the columns), then one card below, then the run's own README.md. -->
+
+## Build one
+
+Everything you need to build a run is in one folder: `<run>/.n2b/exports/<pack>/`. Open that pack's README
+(the links in the table above). It says what each file is for and the order to use them in. Each pack carries
+its own copy of the blueprint under `docs/blueprint/`, so you don't need anything else from the run.
+
+The rest of the run folder (napkin, brief, features, specs, architecture, run log) is there to read: it shows
+how the blueprint was made and what it decided.
 
 ## The runs
 
