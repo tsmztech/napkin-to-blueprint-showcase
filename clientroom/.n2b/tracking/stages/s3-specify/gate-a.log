@@ -1,0 +1,9 @@
+=== Gate A run 2026-09-29T04:44:27Z ===
+Category 1 — Feature Folder Validation: 33 folders / 33 expected; every folder has feature-overview.md with document_type + feature_number; spec_count frontmatter matches files on disk in all 33 — 0 failures
+Category 2 — Per-Spec Structural Validation: 220 spec files; naming, frontmatter (document_type/spec_type/spec_id/parent_feature/produced_by/status: final), per-type required sections, Analytics section, non-empty Acceptance Criteria, no leaked template-artifact lines — 0 failures
+Category 3 — Cross-Spec Validation: six count fields present in 33 Briefs; Brief spec_count total 220 = 220 files; integration 7/7; notification 26/26; 220 unique spec IDs; 0 orphaned specs; reconciliation-log.md present; 0 unresolved-status markers matched — 0 failures
+Category 4 — Dependency Map Validation: map present; 33/33 features; Shared Entities section present; ## External Touchpoints present, every referenced Integration spec exists; 21 Contention lines for 21 shared entities; every map FEAT has a folder — 0 failures
+Category 5 — Design System Passthrough Validation: skipped (design_system_source: none — package ships design-agnostic); no stale design-system/ directory — 0 failures
+Category 6 — Platform-Parameters Registry Validation: 34 marked slugs = 34 registry rows (symmetric difference empty); 34/34 rows decide-before-build; 0 bare "fixed platform-wide"; 0 near-miss markers — 0 failures
+Result: 0 HARD FAIL, 0 SOFT FAIL
+(Note: checks executed read-only via Bash with verdict lines collected in the session scratchpad; this log written with the Write tool per CLAUDE.md rule 4 — no shell edits to tracking files.)
