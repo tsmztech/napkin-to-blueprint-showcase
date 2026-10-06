@@ -1,12 +1,9 @@
-# Runtime installs are recreated by `npx napkin-to-blueprint@latest --<runtime>`; only .n2b/ output is showcased
-.claude/
-.codex/
-.opencode/
-.cursor/
+# Runtime installs are recreated by `npx napkin-to-blueprint@latest --<runtime>`; only .n2b/ output is showcased.
+# Anchored to the top level of each run folder so nothing inside .n2b/ is ever ignored.
+/*/.claude/
+/*/.codex/
+/*/.opencode/
+/*/.cursor/
+/*/CLAUDE.md
 node_modules/
 .DS_Store
-
-# Size rule: keep the whole blueprint, but only the allowed export targets per run
-**/.n2b/exports/*
-!**/.n2b/exports/dev-brief/
-!**/.n2b/exports/lovable-pack/
