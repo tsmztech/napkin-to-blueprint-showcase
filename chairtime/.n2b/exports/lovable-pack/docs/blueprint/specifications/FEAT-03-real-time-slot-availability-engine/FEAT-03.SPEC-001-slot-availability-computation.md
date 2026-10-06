@@ -1,0 +1,152 @@
+---
+document_type: spec
+spec_type: automation
+spec_id: FEAT-03.SPEC-001
+spec_name: Slot Availability Computation
+spec_slug: slot-availability-computation
+parent_feature: FEAT-03
+parent_feature_name: Real-Time Slot Availability Engine
+priority_tier: Core
+produced_by: spec-writer
+status: final
+created: 2026-09-26
+acceptance_criteria_count: 12
+---
+
+# Automation Spec: Slot Availability Computation
+
+## Overview
+
+**Name:** Slot Availability Computation
+**ID:** FEAT-03.SPEC-001
+**Type:** Automation
+**Purpose:** Computes, live and on demand, the complete set of genuinely open time slots for a chosen service and date range by combining the Pro's working hours and buffer, existing Bookings, manual Time Blocks, Recurring Series occurrences, active Slot Holds, and the Pro's connected-calendar busy time.
+**Parent Feature:** FEAT-03 -- Real-Time Slot Availability Engine
+
+## Scope and Non-Goals
+
+**In Scope:**
+- Computing the complete open-slot list for one service and one date range, for exactly one Pro's schedule
+- Combining every constraint that removes availability: Availability Rule windows and buffer, Booking occupancy, Time Block spans, Recurring Series reserved occurrences, active Slot Holds, and Calendar Connection busy time
+- Applying the timing and fit rules defined in FEAT-03.SPEC-004 (duration+buffer fit, minimum notice, booking horizon, Pro-timezone labeling) to every candidate slot
+- Recomputing live on every request -- never serving a cached or stale list
+- Supplying the reduced-confidence flag from FEAT-03.SPEC-006 to the Pro-facing rendering when calendar sync has lapsed
+
+**Non-Goals:**
+- Rendering the slot list on a screen -- owned by FEAT-05 (Public Booking Page & Booking Flow), which is the sole consumer of this computation's output; this spec supplies the data and state contract FEAT-05's screens must satisfy, per this Brief's Shared UI Patterns
+- Multi-staff or multi-chair slot pooling -- excluded per scope-boundaries.md (SC-01): the product is "strictly single-operator for v1... probably forever," so this computation always resolves to exactly one Pro's single calendar
+- Deciding the calendar-sync degraded-mode fallback logic itself -- owned by FEAT-03.SPEC-006; this spec only consumes its output (the busy periods and the confidence flag)
+- Ranking, recommending, or reordering slots by any preference signal -- excluded by adjacency analysis: the feature's Description defines this as a deterministic, entirely-derived free/busy computation, not a recommendation engine
+
+## Trigger Definition
+
+| Trigger | Source Spec | Conditions | Available Data |
+|---------|-----------|------------|----------------|
+| Client selects a service and (implicitly) the visible date range | FEAT-05.SPEC-002 (Slot Selection), reached when the client picks a service on FEAT-05.SPEC-001 (Public Booking Page & Booking Flow, service selection step) | Fires every time a client opens or changes the service selection on the booking page, and every time the visible date window scrolls forward | Service ID, requested date range, the Pro Account whose page this is |
+| Client's slot list is showing and a slot elsewhere is taken or freed | FEAT-03.SPEC-002 (Slot Hold Creation & Checkout Reservation), FEAT-03.SPEC-003 (Slot Hold Expiration), FEAT-10 (Client-Initiated Cancel/Reschedule), FEAT-30 (Pro Booking Management) | Fires on a poll/refresh cycle of roughly one second while a client is viewing the list, per the Slot Search Responsiveness target | Same as above, re-evaluated against current data |
+| A Pro-side setup change takes effect | FEAT-02 (Availability & Working Hours Setup), FEAT-17 (Manual Time Blocking), FEAT-21 (Recurring/Standing Appointments) | Fires the next time any client requests the list after hours, a block, or a recurring series changes -- there is no separate recompute event because computation is always live | Current Availability Rule version, current Time Blocks, current Recurring Series occurrences |
+| Reschedule flow requests a fresh list | FEAT-10.SPEC-002 (Reschedule -- Select New Time) (Client-Initiated Cancel/Reschedule) | Fires when a client picks "reschedule" for an existing booking | Service ID (same as original booking), requested date range, excluding the booking's own currently-held time from being treated as a conflict against itself |
+
+## Processing Logic
+
+1. Receive the requested Service ID and date range from the triggering screen, scoped to exactly one Pro Account.
+2. Read the Service's duration and any buffer_override; read the current Availability Rule version's weekly_windows, default_buffer, minimum_booking_notice, and booking_horizon.
+3. Read all confirmed and pending Bookings for this Pro Account that fall within the requested date range plus the service duration on either edge.
+4. Read all active Time Blocks (including recurring-pattern occurrences) for this Pro Account within the requested date range.
+5. Read all future occurrences generated by any active Recurring Series for this Pro Account within the requested date range.
+6. Read all active Slot Holds (checkout holds from FEAT-03.SPEC-002 and Pro-created deposit-request holds from FEAT-03.SPEC-007) for this Pro Account.
+7. Read the busy periods supplied by FEAT-03.SPEC-006 for this Pro Account's connected personal calendar, and note the current confidence flag (Normal or Reduced).
+8. Generate the set of candidate start times within the Availability Rule's weekly working windows for the requested date range, at the Service's duration granularity.
+9. For each candidate start time, apply the validation rules from FEAT-03.SPEC-004: the full Service duration plus the applicable buffer (per-service override or default) must fit entirely inside one open working window; the candidate must be no closer than minimum_booking_notice from the current moment and no farther than booking_horizon; the candidate must not fall within a Booking, Time Block, Recurring Series occurrence, active Slot Hold, or Calendar Connection busy period.
+10. Exclude every candidate that fails any check in Step 9 from the result set.
+11. Label every remaining candidate's start time in the Pro Account's timezone, per FEAT-03.SPEC-004.
+12. Return the resulting open-slot list to the triggering screen, tagged with the current calendar-sync confidence flag for Pro-only surfacing (never shown to the client).
+
+## Outcome Definitions
+
+| Outcome | Condition | Data Changes | User Feedback | Affected Specs |
+|---------|-----------|-------------|---------------|----------------|
+| Open slots computed | One or more candidates pass all checks | None -- read-only computation | Client sees the live list of open times for the chosen service | FEAT-05 (booking page slot list) |
+| Fully booked | Zero candidates pass all checks within the requested range | None | Client sees a plain "fully booked, check back or view other services" message, per this feature's States field, never a blank grid | FEAT-05 |
+| Reduced-confidence computation | Calendar sync (FEAT-03.SPEC-006) is currently degraded | None | Pro-only banner reflecting reduced confidence on their own dashboard view of the schedule; the client sees the ordinary computed list with no indication anything is degraded | FEAT-03.SPEC-006 (source of the flag), FEAT-12 (Pro Daily Schedule Dashboard, Pro-visible banner) |
+| Computation failure | The computation cannot complete (e.g., a required input cannot be read) | None -- no partial or stale list is ever shown | Client sees a retry prompt, never a stale or incorrect slot list, per this feature's States field: "an incorrect slot is treated as worse than no slot list at all" | FEAT-05 |
+
+## Data Model
+
+**Reads:** Service (duration, buffer_override), Availability Rule (weekly_windows, default_buffer, minimum_booking_notice, booking_horizon, effective_from), Booking (start_time, duration, state -- excluding Cancelled/Expired states from occupancy), Time Block (start, end, recurrence), Recurring Series (generated occurrences), Slot Hold (service, start time, duration, expiry, state -- Active holds only), Calendar Connection (busy_periods, status) via FEAT-03.SPEC-006.
+**Creates:** None -- this spec performs no writes.
+**Updates:** None.
+**Deletes:** None.
+
+## Business Rules
+
+- Computation is always live, never cached: a Booking cancellation, a Time Block removal, or a working-hours change is reflected the very next time the list is computed (XBR-01), with no separate recompute automation needed.
+- A slot is only offered if it passes every rule in FEAT-03.SPEC-004 (duration+buffer fit, minimum notice, booking horizon) -- this spec never re-derives those rules, it applies them.
+- Every candidate slot excludes time held by an active Slot Hold of either kind (SPEC-002 or SPEC-007), so two clients (or a client and a Pro-side action) never see the same contested slot simultaneously offered as open (XBR-01, XBR-02).
+- The computation is scoped to exactly one Pro Account per invocation; it never merges or compares availability across Pro Accounts (scope-boundaries.md SC-03).
+- Reduced calendar-sync confidence changes nothing about which slots are computed as open -- it is a Pro-only trust signal, never a reason to withhold or alter the client-facing list (FEAT-03.SPEC-006).
+
+## Edge Cases
+
+- **Requested date range spans an Availability Rule version boundary** -- Each date in the range is evaluated against whichever Availability Rule version was effective for that date; a slot computed under an old version that no longer fits under the new one is simply not offered going forward.
+- **Service has no buffer_override** -- The Availability Rule's default_buffer applies uniformly.
+- **A Recurring Series occurrence and a one-off Booking would land on the same start time** -- This cannot occur: the Recurring Series occurrence itself reserves the slot at generation time (FEAT-21), so no second Booking can ever be created against it; the computation simply treats the occurrence as occupied.
+- **Calendar Connection has never been set up** -- Busy periods contribute nothing (an empty set); computation proceeds using only Chairtime-internal data, with no reduced-confidence flag (that flag applies only to a lapsed existing connection, per FEAT-03.SPEC-006).
+- **Concurrent trigger firing (two clients request the same service/date range at effectively the same time)** -- Each computation runs independently against the data visible at that instant; because Slot Holds are created synchronously by FEAT-03.SPEC-002 before either computation can return, the two results can differ only if a hold was created between the two reads, which is exactly the intended exclusion behavior, not a conflict.
+- **Trigger fires while a previous computation for the same client is still in flight** -- The client-facing screen is expected to display only the most recently returned result; an in-flight computation whose result is superseded by a newer request is simply discarded when it returns, never merged with the newer one.
+- **Requested date range extends beyond the booking_horizon** -- Only the portion of the range within the horizon is computed; dates beyond the horizon return no candidates for that portion, consistent with FEAT-03.SPEC-004.
+
+## Connected Specs
+
+| Connected Spec | Connection Type | Description |
+|----------------|----------------|-------------|
+| FEAT-03.SPEC-004 (Slot Validation & Timing Rules) | References (outbound) | Every candidate slot is validated against these fit, notice, horizon, and timezone rules |
+| FEAT-03.SPEC-002 (Slot Hold Creation & Checkout Reservation) | Affects (inbound) | Active checkout holds are read and excluded from the computed list |
+| FEAT-03.SPEC-007 (Pro-Created Deposit Request Hold & Expiration) | Affects (inbound) | Active Pro-created deposit-request holds are read and excluded from the computed list |
+| FEAT-03.SPEC-003 (Slot Hold Expiration) | Affects (inbound) | An expired hold's slot reappears the next time this computation runs |
+| FEAT-03.SPEC-006 (Calendar Busy-Time Consumption & Degraded Mode) | Triggered by (inbound) | Supplies busy periods and the sync-confidence flag consumed here |
+| FEAT-05 (Public Booking Page & Booking Flow) | Triggered by (inbound) / Affects (outbound) | The booking page invokes this computation on service selection and displays its result |
+| FEAT-10 (Client-Initiated Cancel/Reschedule) | Triggered by (inbound) / Affects (outbound) | Reschedule flow invokes this computation for a new time |
+| FEAT-30 (Pro Booking Management) | Affects (outbound) | Slot truth, with the Pro's notice/horizon exemption, is consumed when the Pro books or reschedules a client at the chair |
+
+## Analytics and Success Signals
+
+- **slot_list_computed** (service_id, date_range, result_count, computation_duration_ms) -- supports success-metrics.md: "Slot Search Responsiveness"
+- **slot_list_empty** (service_id, date_range) -- supports success-metrics.md: "Slot Search Responsiveness" (an empty result is still a completed, timely computation)
+- **slot_conflict_prevented** (service_id, candidate_start_time) -- supports success-metrics.md: "Zero Double-Booking Confidence"
+- **slot_computation_failed** (service_id, reason category) -- supports success-metrics.md: "Zero Double-Booking Confidence" (a failed computation must never silently surface an unsafe slot list -- this event measures how often the fail-safe path is exercised)
+
+## Acceptance Criteria
+
+**FEAT-03.SPEC-001-AC-01:** Given Riley opens Talia's booking page and selects a service, when the slot computation runs, then Riley sees only start times where the full service duration plus buffer fits inside Talia's open working hours with no conflicting Booking, Time Block, Recurring Series occurrence, active Slot Hold, or calendar busy time.
+
+**FEAT-03.SPEC-001-AC-02:** Given Talia has zero open time for the selected service across the visible date range, when the computation completes, then Riley sees a plain "fully booked, check back or view other services" message rather than a blank grid.
+
+**FEAT-03.SPEC-001-AC-03:** Given the computation cannot complete due to a read failure, when Riley is viewing the booking page, then Riley sees a retry prompt and no slot list -- never a stale or incorrect one.
+
+**FEAT-03.SPEC-001-AC-04:** Given Talia cancels an upcoming Booking, when Riley next requests the same service's slot list, then the freed time appears as open without any separate recompute action.
+
+**FEAT-03.SPEC-001-AC-05:** Given Talia's calendar sync (FEAT-03.SPEC-006) is currently in degraded mode, when Riley requests the slot list, then Riley sees the ordinary computed list with no indication of reduced confidence, while Talia's own dashboard shows the reduced-confidence banner.
+
+**FEAT-03.SPEC-001-AC-06:** Given a candidate start time falls within Talia's minimum_booking_notice, when the computation runs, then that candidate is excluded from Riley's list (per FEAT-03.SPEC-004).
+
+**FEAT-03.SPEC-001-AC-07:** Given a candidate start time falls beyond Talia's booking_horizon, when the computation runs, then that candidate is excluded from Riley's list (per FEAT-03.SPEC-004).
+
+**FEAT-03.SPEC-001-AC-08:** Given a slot is currently held by another client's in-progress checkout (FEAT-03.SPEC-002), when a second client requests the same service's list at effectively the same moment, then the held slot does not appear in the second client's result.
+
+**FEAT-03.SPEC-001-AC-09:** Given Talia has a Recurring Series generating a future occurrence inside the requested date range, when the computation runs, then that occurrence's exact time is excluded from the client-facing list.
+
+**FEAT-03.SPEC-001-AC-10:** Given Riley is rescheduling an existing booking (FEAT-10), when Riley requests a new time for the same service, then the computation excludes the same conflicts as a fresh booking would, without treating the booking's own current time as a self-conflict.
+
+**FEAT-03.SPEC-001-AC-11:** Given Talia changes her working hours mid-week (FEAT-02), when Riley requests the slot list afterward, then the list reflects the new hours immediately, with no separate propagation delay.
+
+**FEAT-03.SPEC-001-AC-12:** Given the requested date range extends beyond Talia's booking_horizon, when the computation runs, then only the in-horizon portion of the range returns candidates and the out-of-horizon portion returns none.
+
+**Coverage Summary Table:**
+
+| Area | Items Covered | Total |
+|------|--------------|-------|
+| Trigger Paths | 4 | 4 |
+| Outcome Paths | 4 | 4 |
+| Business Rules | 5 | 5 |
+| Edge Cases | 7 | 7 |

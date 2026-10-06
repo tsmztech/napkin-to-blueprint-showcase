@@ -1,0 +1,298 @@
+---
+target: lovable-pack
+exported_at: 2026-10-02T16:35:30Z
+package_version: 4
+files:
+  - AGENTS.md
+  - KNOWLEDGE.md
+  - PROMPTS.md
+  - README.md
+  - docs/blueprint/BRIEF.md
+  - docs/blueprint/architecture/database-schema.md
+  - docs/blueprint/architecture/technical-architecture.md
+  - docs/blueprint/architecture/technical-feasibility.md
+  - docs/blueprint/architecture/technical-profile.md
+  - docs/blueprint/architecture/technology-landscape.md
+  - docs/blueprint/features/assumptions-constraints.md
+  - docs/blueprint/features/market-research.md
+  - docs/blueprint/features/product-features.md
+  - docs/blueprint/features/scope-boundaries.md
+  - docs/blueprint/features/success-metrics.md
+  - docs/blueprint/features/user-journeys.md
+  - docs/blueprint/features/user-persona.md
+  - docs/blueprint/specifications/FEAT-01-service-pricing-management/FEAT-01.SPEC-001-service-list.md
+  - docs/blueprint/specifications/FEAT-01-service-pricing-management/FEAT-01.SPEC-002-add-service.md
+  - docs/blueprint/specifications/FEAT-01-service-pricing-management/FEAT-01.SPEC-003-edit-service.md
+  - docs/blueprint/specifications/FEAT-01-service-pricing-management/FEAT-01.SPEC-004-service-field-deposit-rule-validation.md
+  - docs/blueprint/specifications/FEAT-01-service-pricing-management/FEAT-01.SPEC-005-price-deposit-lock-at-booking-time.md
+  - docs/blueprint/specifications/FEAT-01-service-pricing-management/FEAT-01.SPEC-006-archive-impact-check.md
+  - docs/blueprint/specifications/FEAT-01-service-pricing-management/feature-overview.md
+  - docs/blueprint/specifications/FEAT-02-availability-working-hours-setup/FEAT-02.SPEC-001-working-hours-buffer-notice-horizon-setup.md
+  - docs/blueprint/specifications/FEAT-02-availability-working-hours-setup/FEAT-02.SPEC-002-per-service-buffer-override.md
+  - docs/blueprint/specifications/FEAT-02-availability-working-hours-setup/FEAT-02.SPEC-003-availability-rule-versioning.md
+  - docs/blueprint/specifications/FEAT-02-availability-working-hours-setup/FEAT-02.SPEC-004-confirmed-booking-conflict-flagging.md
+  - docs/blueprint/specifications/FEAT-02-availability-working-hours-setup/FEAT-02.SPEC-005-availability-setup-validation-limits.md
+  - docs/blueprint/specifications/FEAT-02-availability-working-hours-setup/feature-overview.md
+  - docs/blueprint/specifications/FEAT-03-real-time-slot-availability-engine/FEAT-03.SPEC-001-slot-availability-computation.md
+  - docs/blueprint/specifications/FEAT-03-real-time-slot-availability-engine/FEAT-03.SPEC-002-slot-hold-creation-checkout-reservation.md
+  - docs/blueprint/specifications/FEAT-03-real-time-slot-availability-engine/FEAT-03.SPEC-003-slot-hold-expiration.md
+  - docs/blueprint/specifications/FEAT-03-real-time-slot-availability-engine/FEAT-03.SPEC-004-slot-validation-timing-rules.md
+  - docs/blueprint/specifications/FEAT-03-real-time-slot-availability-engine/FEAT-03.SPEC-005-slot-contention-resolution-rules.md
+  - docs/blueprint/specifications/FEAT-03-real-time-slot-availability-engine/FEAT-03.SPEC-006-calendar-busy-time-consumption-degraded-mode.md
+  - docs/blueprint/specifications/FEAT-03-real-time-slot-availability-engine/FEAT-03.SPEC-007-pro-created-deposit-request-hold-expiration.md
+  - docs/blueprint/specifications/FEAT-03-real-time-slot-availability-engine/feature-overview.md
+  - docs/blueprint/specifications/FEAT-04-two-way-calendar-sync/FEAT-04.SPEC-001-calendar-connection-setup.md
+  - docs/blueprint/specifications/FEAT-04-two-way-calendar-sync/FEAT-04.SPEC-002-calendar-connection-status-management.md
+  - docs/blueprint/specifications/FEAT-04-two-way-calendar-sync/FEAT-04.SPEC-003-calendar-provider-sync.md
+  - docs/blueprint/specifications/FEAT-04-two-way-calendar-sync/FEAT-04.SPEC-004-busy-time-availability-feed.md
+  - docs/blueprint/specifications/FEAT-04-two-way-calendar-sync/FEAT-04.SPEC-005-booking-to-calendar-sync.md
+  - docs/blueprint/specifications/FEAT-04-two-way-calendar-sync/FEAT-04.SPEC-006-sync-health-monitor-reconciliation.md
+  - docs/blueprint/specifications/FEAT-04-two-way-calendar-sync/FEAT-04.SPEC-007-calendar-reconnection-alert.md
+  - docs/blueprint/specifications/FEAT-04-two-way-calendar-sync/FEAT-04.SPEC-008-calendar-connection-rules.md
+  - docs/blueprint/specifications/FEAT-04-two-way-calendar-sync/feature-overview.md
+  - docs/blueprint/specifications/FEAT-05-public-booking-page-booking-flow/FEAT-05.SPEC-001-public-booking-page-landing-service-list.md
+  - docs/blueprint/specifications/FEAT-05-public-booking-page-booking-flow/FEAT-05.SPEC-002-slot-selection.md
+  - docs/blueprint/specifications/FEAT-05-public-booking-page-booking-flow/FEAT-05.SPEC-003-client-details-consent.md
+  - docs/blueprint/specifications/FEAT-05-public-booking-page-booking-flow/FEAT-05.SPEC-004-policy-acknowledgment-deposit-checkout.md
+  - docs/blueprint/specifications/FEAT-05-public-booking-page-booking-flow/FEAT-05.SPEC-005-booking-confirmation.md
+  - docs/blueprint/specifications/FEAT-05-public-booking-page-booking-flow/FEAT-05.SPEC-006-slot-hold-re-validation-at-checkout.md
+  - docs/blueprint/specifications/FEAT-05-public-booking-page-booking-flow/FEAT-05.SPEC-007-booking-details-field-validation.md
+  - docs/blueprint/specifications/FEAT-05-public-booking-page-booking-flow/FEAT-05.SPEC-008-booking-page-availability-gate.md
+  - docs/blueprint/specifications/FEAT-05-public-booking-page-booking-flow/FEAT-05.SPEC-009-policy-acknowledgment-capture-integrity-check.md
+  - docs/blueprint/specifications/FEAT-05-public-booking-page-booking-flow/feature-overview.md
+  - docs/blueprint/specifications/FEAT-06-client-booking-identity/FEAT-06.SPEC-001-access-link-request.md
+  - docs/blueprint/specifications/FEAT-06-client-booking-identity/FEAT-06.SPEC-002-access-link-validation-redemption.md
+  - docs/blueprint/specifications/FEAT-06-client-booking-identity/FEAT-06.SPEC-003-my-bookings-list.md
+  - docs/blueprint/specifications/FEAT-06-client-booking-identity/FEAT-06.SPEC-004-booking-detail-via-manage-link.md
+  - docs/blueprint/specifications/FEAT-06-client-booking-identity/FEAT-06.SPEC-005-consent-email-preferences.md
+  - docs/blueprint/specifications/FEAT-06-client-booking-identity/FEAT-06.SPEC-006-access-link-delivery.md
+  - docs/blueprint/specifications/FEAT-06-client-booking-identity/FEAT-06.SPEC-007-access-link-lifecycle-scope-rules.md
+  - docs/blueprint/specifications/FEAT-06-client-booking-identity/FEAT-06.SPEC-008-client-identity-privacy-isolation-rule.md
+  - docs/blueprint/specifications/FEAT-06-client-booking-identity/feature-overview.md
+  - docs/blueprint/specifications/FEAT-07-deposit-payment-at-booking/FEAT-07.SPEC-001-deposit-payment.md
+  - docs/blueprint/specifications/FEAT-07-deposit-payment-at-booking/FEAT-07.SPEC-002-deposit-capture-booking-confirmation.md
+  - docs/blueprint/specifications/FEAT-07-deposit-payment-at-booking/FEAT-07.SPEC-003-deposit-amount-eligibility-rules.md
+  - docs/blueprint/specifications/FEAT-07-deposit-payment-at-booking/FEAT-07.SPEC-004-payment-outcome-consistency-idempotency.md
+  - docs/blueprint/specifications/FEAT-07-deposit-payment-at-booking/FEAT-07.SPEC-005-card-deposit-charge-payout-routing.md
+  - docs/blueprint/specifications/FEAT-07-deposit-payment-at-booking/feature-overview.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-001-booking-confirmation-message.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-002-appointment-reminder-message.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-003-reminder-reply-acknowledgment.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-004-booking-change-refund-notice.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-005-pro-booking-activity-notification.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-006-pro-attention-alert.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-007-reminder-scheduling-timing-window-enforcement.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-008-reminder-reply-routing.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-009-message-delivery-retry-fallback.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-010-booking-specific-manage-link-issuance.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-011-messaging-consent-channel-selection-rule.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-012-transactional-text-messaging-capability.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/FEAT-08.SPEC-013-transactional-email-capability.md
+  - docs/blueprint/specifications/FEAT-08-automated-booking-messaging/feature-overview.md
+  - docs/blueprint/specifications/FEAT-09-cancellation-no-show-policy-engine/FEAT-09.SPEC-001-cancellation-policy-setup.md
+  - docs/blueprint/specifications/FEAT-09-cancellation-no-show-policy-engine/FEAT-09.SPEC-002-policy-versioning-cutoff-rendering.md
+  - docs/blueprint/specifications/FEAT-09-cancellation-no-show-policy-engine/FEAT-09.SPEC-003-deposit-outcome-rules.md
+  - docs/blueprint/specifications/FEAT-09-cancellation-no-show-policy-engine/FEAT-09.SPEC-004-cancellation-no-show-outcome-evaluation.md
+  - docs/blueprint/specifications/FEAT-09-cancellation-no-show-policy-engine/FEAT-09.SPEC-005-automatic-deposit-refund.md
+  - docs/blueprint/specifications/FEAT-09-cancellation-no-show-policy-engine/FEAT-09.SPEC-006-refund-idempotency-retry-rule.md
+  - docs/blueprint/specifications/FEAT-09-cancellation-no-show-policy-engine/feature-overview.md
+  - docs/blueprint/specifications/FEAT-10-client-initiated-cancel-reschedule/FEAT-10.SPEC-001-cancel-booking.md
+  - docs/blueprint/specifications/FEAT-10-client-initiated-cancel-reschedule/FEAT-10.SPEC-002-reschedule-select-new-time.md
+  - docs/blueprint/specifications/FEAT-10-client-initiated-cancel-reschedule/FEAT-10.SPEC-003-reschedule-outcome-confirm.md
+  - docs/blueprint/specifications/FEAT-10-client-initiated-cancel-reschedule/FEAT-10.SPEC-004-booking-update-commit.md
+  - docs/blueprint/specifications/FEAT-10-client-initiated-cancel-reschedule/FEAT-10.SPEC-005-cancellation-window-eligibility-rule.md
+  - docs/blueprint/specifications/FEAT-10-client-initiated-cancel-reschedule/FEAT-10.SPEC-006-cancellation-reschedule-notification.md
+  - docs/blueprint/specifications/FEAT-10-client-initiated-cancel-reschedule/feature-overview.md
+  - docs/blueprint/specifications/FEAT-11-no-show-marking-deposit-forfeiture/FEAT-11.SPEC-001-no-show-mark-undo-prompt.md
+  - docs/blueprint/specifications/FEAT-11-no-show-marking-deposit-forfeiture/FEAT-11.SPEC-002-no-show-marking-deposit-forfeiture.md
+  - docs/blueprint/specifications/FEAT-11-no-show-marking-deposit-forfeiture/FEAT-11.SPEC-003-no-show-mark-undo.md
+  - docs/blueprint/specifications/FEAT-11-no-show-marking-deposit-forfeiture/FEAT-11.SPEC-004-no-show-marking-window-authorization-rules.md
+  - docs/blueprint/specifications/FEAT-11-no-show-marking-deposit-forfeiture/feature-overview.md
+  - docs/blueprint/specifications/FEAT-12-pro-daily-schedule-dashboard/FEAT-12.SPEC-001-todays-upcoming-schedule.md
+  - docs/blueprint/specifications/FEAT-12-pro-daily-schedule-dashboard/FEAT-12.SPEC-002-attention-list.md
+  - docs/blueprint/specifications/FEAT-12-pro-daily-schedule-dashboard/FEAT-12.SPEC-003-past-bookings-browse.md
+  - docs/blueprint/specifications/FEAT-12-pro-daily-schedule-dashboard/FEAT-12.SPEC-004-auto-completion-sweep.md
+  - docs/blueprint/specifications/FEAT-12-pro-daily-schedule-dashboard/FEAT-12.SPEC-005-attention-flag-aggregation.md
+  - docs/blueprint/specifications/FEAT-12-pro-daily-schedule-dashboard/FEAT-12.SPEC-006-booking-completion-rules.md
+  - docs/blueprint/specifications/FEAT-12-pro-daily-schedule-dashboard/FEAT-12.SPEC-007-balance-due-status-display-rules.md
+  - docs/blueprint/specifications/FEAT-12-pro-daily-schedule-dashboard/FEAT-12.SPEC-008-dashboard-access-authorization.md
+  - docs/blueprint/specifications/FEAT-12-pro-daily-schedule-dashboard/feature-overview.md
+  - docs/blueprint/specifications/FEAT-13-client-record-management/FEAT-13.SPEC-001-client-record-detail.md
+  - docs/blueprint/specifications/FEAT-13-client-record-management/FEAT-13.SPEC-002-client-contact-edit.md
+  - docs/blueprint/specifications/FEAT-13-client-record-management/FEAT-13.SPEC-003-client-deletion-confirmation.md
+  - docs/blueprint/specifications/FEAT-13-client-record-management/FEAT-13.SPEC-004-client-deletion-execution.md
+  - docs/blueprint/specifications/FEAT-13-client-record-management/FEAT-13.SPEC-005-client-field-validation-access-rules.md
+  - docs/blueprint/specifications/FEAT-13-client-record-management/FEAT-13.SPEC-006-deletion-eligibility-retention-rule.md
+  - docs/blueprint/specifications/FEAT-13-client-record-management/feature-overview.md
+  - docs/blueprint/specifications/FEAT-14-messaging-consent-management/FEAT-14.SPEC-001-consent-and-preferences.md
+  - docs/blueprint/specifications/FEAT-14-messaging-consent-management/FEAT-14.SPEC-002-opt-out-link-landing.md
+  - docs/blueprint/specifications/FEAT-14-messaging-consent-management/FEAT-14.SPEC-003-consent-capture-at-booking.md
+  - docs/blueprint/specifications/FEAT-14-messaging-consent-management/FEAT-14.SPEC-004-opt-out-stop-processing.md
+  - docs/blueprint/specifications/FEAT-14-messaging-consent-management/FEAT-14.SPEC-005-consent-re-grant-action.md
+  - docs/blueprint/specifications/FEAT-14-messaging-consent-management/FEAT-14.SPEC-006-concurrent-consent-update-resolution.md
+  - docs/blueprint/specifications/FEAT-14-messaging-consent-management/FEAT-14.SPEC-007-textability-determination-rule.md
+  - docs/blueprint/specifications/FEAT-14-messaging-consent-management/FEAT-14.SPEC-008-phone-number-change-consent-invalidation-rule.md
+  - docs/blueprint/specifications/FEAT-14-messaging-consent-management/FEAT-14.SPEC-009-opt-out-confirmation-message.md
+  - docs/blueprint/specifications/FEAT-14-messaging-consent-management/feature-overview.md
+  - docs/blueprint/specifications/FEAT-15-pro-onboarding-setup-wizard/FEAT-15.SPEC-001-setup-wizard-shell-step-navigation-guidance.md
+  - docs/blueprint/specifications/FEAT-15-pro-onboarding-setup-wizard/FEAT-15.SPEC-002-cancellation-policy-default-first-version-setup-step.md
+  - docs/blueprint/specifications/FEAT-15-pro-onboarding-setup-wizard/FEAT-15.SPEC-003-go-live-preview-booking-link-hand-over.md
+  - docs/blueprint/specifications/FEAT-15-pro-onboarding-setup-wizard/FEAT-15.SPEC-004-setup-progress-tracking-resume.md
+  - docs/blueprint/specifications/FEAT-15-pro-onboarding-setup-wizard/FEAT-15.SPEC-005-go-live-evaluation-booking-link-activation.md
+  - docs/blueprint/specifications/FEAT-15-pro-onboarding-setup-wizard/FEAT-15.SPEC-006-setup-step-order-optional-step-rules.md
+  - docs/blueprint/specifications/FEAT-15-pro-onboarding-setup-wizard/FEAT-15.SPEC-007-go-live-prerequisite-rule-xbr-26-authority.md
+  - docs/blueprint/specifications/FEAT-15-pro-onboarding-setup-wizard/FEAT-15.SPEC-008-onboarding-welcome-confirmation.md
+  - docs/blueprint/specifications/FEAT-15-pro-onboarding-setup-wizard/feature-overview.md
+  - docs/blueprint/specifications/FEAT-16-booking-payment-activity-record/FEAT-16.SPEC-001-booking-activity-timeline.md
+  - docs/blueprint/specifications/FEAT-16-booking-payment-activity-record/FEAT-16.SPEC-002-activity-event-recording.md
+  - docs/blueprint/specifications/FEAT-16-booking-payment-activity-record/FEAT-16.SPEC-003-card-issuer-dispute-integration.md
+  - docs/blueprint/specifications/FEAT-16-booking-payment-activity-record/FEAT-16.SPEC-004-dispute-summary-download.md
+  - docs/blueprint/specifications/FEAT-16-booking-payment-activity-record/FEAT-16.SPEC-005-activity-record-immutability-visibility-rules.md
+  - docs/blueprint/specifications/FEAT-16-booking-payment-activity-record/feature-overview.md
+  - docs/blueprint/specifications/FEAT-17-manual-time-blocking/FEAT-17.SPEC-001-create-edit-time-block.md
+  - docs/blueprint/specifications/FEAT-17-manual-time-blocking/FEAT-17.SPEC-002-manage-time-blocks.md
+  - docs/blueprint/specifications/FEAT-17-manual-time-blocking/FEAT-17.SPEC-003-time-block-conflict-review.md
+  - docs/blueprint/specifications/FEAT-17-manual-time-blocking/FEAT-17.SPEC-004-time-block-save-commit-conflict-detection.md
+  - docs/blueprint/specifications/FEAT-17-manual-time-blocking/FEAT-17.SPEC-005-recurring-time-block-occurrence-generation.md
+  - docs/blueprint/specifications/FEAT-17-manual-time-blocking/FEAT-17.SPEC-006-time-block-conflict-resolution-commit.md
+  - docs/blueprint/specifications/FEAT-17-manual-time-blocking/FEAT-17.SPEC-007-time-block-removal-expiry.md
+  - docs/blueprint/specifications/FEAT-17-manual-time-blocking/FEAT-17.SPEC-008-time-block-validation-conflict-handling-rules.md
+  - docs/blueprint/specifications/FEAT-17-manual-time-blocking/feature-overview.md
+  - docs/blueprint/specifications/FEAT-18-pro-subscription-billing-account-management/FEAT-18.SPEC-001-subscribe-screen.md
+  - docs/blueprint/specifications/FEAT-18-pro-subscription-billing-account-management/FEAT-18.SPEC-002-billing-subscription-management-screen.md
+  - docs/blueprint/specifications/FEAT-18-pro-subscription-billing-account-management/FEAT-18.SPEC-003-subscription-renewal-payment-failure-processing.md
+  - docs/blueprint/specifications/FEAT-18-pro-subscription-billing-account-management/FEAT-18.SPEC-004-subscription-lapse-account-pause-trigger.md
+  - docs/blueprint/specifications/FEAT-18-pro-subscription-billing-account-management/FEAT-18.SPEC-005-subscription-billing-rules.md
+  - docs/blueprint/specifications/FEAT-18-pro-subscription-billing-account-management/FEAT-18.SPEC-006-subscription-billing-integration.md
+  - docs/blueprint/specifications/FEAT-18-pro-subscription-billing-account-management/FEAT-18.SPEC-007-subscription-billing-notifications.md
+  - docs/blueprint/specifications/FEAT-18-pro-subscription-billing-account-management/feature-overview.md
+  - docs/blueprint/specifications/FEAT-19-platform-support-read-only-access/FEAT-19.SPEC-001-pro-account-lookup-support-session-entry.md
+  - docs/blueprint/specifications/FEAT-19-platform-support-read-only-access/FEAT-19.SPEC-002-support-view-logging.md
+  - docs/blueprint/specifications/FEAT-19-platform-support-read-only-access/FEAT-19.SPEC-003-support-access-log.md
+  - docs/blueprint/specifications/FEAT-19-platform-support-read-only-access/FEAT-19.SPEC-004-support-session-scope-access-rules.md
+  - docs/blueprint/specifications/FEAT-19-platform-support-read-only-access/feature-overview.md
+  - docs/blueprint/specifications/FEAT-20-waitlist-for-cancelled-slots/FEAT-20.SPEC-001-join-waitlist.md
+  - docs/blueprint/specifications/FEAT-20-waitlist-for-cancelled-slots/FEAT-20.SPEC-002-my-waitlists.md
+  - docs/blueprint/specifications/FEAT-20-waitlist-for-cancelled-slots/FEAT-20.SPEC-003-waitlist-entry-validation-limits.md
+  - docs/blueprint/specifications/FEAT-20-waitlist-for-cancelled-slots/FEAT-20.SPEC-004-waitlist-priority-claim-window-rule.md
+  - docs/blueprint/specifications/FEAT-20-waitlist-for-cancelled-slots/FEAT-20.SPEC-005-cancellation-triggered-waitlist-matching.md
+  - docs/blueprint/specifications/FEAT-20-waitlist-for-cancelled-slots/FEAT-20.SPEC-006-waitlist-claim-conversion.md
+  - docs/blueprint/specifications/FEAT-20-waitlist-for-cancelled-slots/FEAT-20.SPEC-007-waitlist-entry-expiry.md
+  - docs/blueprint/specifications/FEAT-20-waitlist-for-cancelled-slots/FEAT-20.SPEC-008-waitlist-opening-notification.md
+  - docs/blueprint/specifications/FEAT-20-waitlist-for-cancelled-slots/FEAT-20.SPEC-009-waitlist-expiry-notification.md
+  - docs/blueprint/specifications/FEAT-20-waitlist-for-cancelled-slots/feature-overview.md
+  - docs/blueprint/specifications/FEAT-21-recurring-standing-appointments/FEAT-21.SPEC-001-set-up-recurring-series.md
+  - docs/blueprint/specifications/FEAT-21-recurring-standing-appointments/FEAT-21.SPEC-002-my-recurring-series.md
+  - docs/blueprint/specifications/FEAT-21-recurring-standing-appointments/FEAT-21.SPEC-003-recurring-series-setup-generation-limits.md
+  - docs/blueprint/specifications/FEAT-21-recurring-standing-appointments/FEAT-21.SPEC-004-occurrence-generation-conflict-handling.md
+  - docs/blueprint/specifications/FEAT-21-recurring-standing-appointments/FEAT-21.SPEC-005-occurrence-deposit-request-release.md
+  - docs/blueprint/specifications/FEAT-21-recurring-standing-appointments/FEAT-21.SPEC-006-series-occurrence-cancellation-rules.md
+  - docs/blueprint/specifications/FEAT-21-recurring-standing-appointments/FEAT-21.SPEC-007-occurrence-generated-notification.md
+  - docs/blueprint/specifications/FEAT-21-recurring-standing-appointments/FEAT-21.SPEC-008-occurrence-time-change-advance-notice.md
+  - docs/blueprint/specifications/FEAT-21-recurring-standing-appointments/FEAT-21.SPEC-009-occurrence-deposit-lifecycle-notification.md
+  - docs/blueprint/specifications/FEAT-21-recurring-standing-appointments/FEAT-21.SPEC-010-pro-recurring-series-management.md
+  - docs/blueprint/specifications/FEAT-21-recurring-standing-appointments/feature-overview.md
+  - docs/blueprint/specifications/FEAT-22-in-app-balance-payment/FEAT-22.SPEC-001-balance-payment.md
+  - docs/blueprint/specifications/FEAT-22-in-app-balance-payment/FEAT-22.SPEC-002-balance-capture-booking-status-update.md
+  - docs/blueprint/specifications/FEAT-22-in-app-balance-payment/FEAT-22.SPEC-003-balance-amount-eligibility-rules.md
+  - docs/blueprint/specifications/FEAT-22-in-app-balance-payment/FEAT-22.SPEC-004-balance-payment-outcome-consistency-cancellation-contention.md
+  - docs/blueprint/specifications/FEAT-22-in-app-balance-payment/FEAT-22.SPEC-005-balance-charge-payout-routing-refund.md
+  - docs/blueprint/specifications/FEAT-22-in-app-balance-payment/feature-overview.md
+  - docs/blueprint/specifications/FEAT-23-tipping-at-checkout/FEAT-23.SPEC-001-tip-selection.md
+  - docs/blueprint/specifications/FEAT-23-tipping-at-checkout/FEAT-23.SPEC-002-tip-amount-validation.md
+  - docs/blueprint/specifications/FEAT-23-tipping-at-checkout/FEAT-23.SPEC-003-tip-payout-refund-rule.md
+  - docs/blueprint/specifications/FEAT-23-tipping-at-checkout/feature-overview.md
+  - docs/blueprint/specifications/FEAT-24-client-list-search-filter/FEAT-24.SPEC-001-client-search-filter.md
+  - docs/blueprint/specifications/FEAT-24-client-list-search-filter/FEAT-24.SPEC-002-search-match-filter-derivation-rules.md
+  - docs/blueprint/specifications/FEAT-24-client-list-search-filter/feature-overview.md
+  - docs/blueprint/specifications/FEAT-25-booking-revenue-insights/FEAT-25.SPEC-001-insights-summary-screen.md
+  - docs/blueprint/specifications/FEAT-25-booking-revenue-insights/FEAT-25.SPEC-002-period-insights-aggregation.md
+  - docs/blueprint/specifications/FEAT-25-booking-revenue-insights/FEAT-25.SPEC-003-insights-derivation-period-access-rules.md
+  - docs/blueprint/specifications/FEAT-25-booking-revenue-insights/FEAT-25.SPEC-004-historical-aggregate-maintenance.md
+  - docs/blueprint/specifications/FEAT-25-booking-revenue-insights/feature-overview.md
+  - docs/blueprint/specifications/FEAT-26-whatsapp-reminders/FEAT-26.SPEC-001-whatsapp-channel-preference.md
+  - docs/blueprint/specifications/FEAT-26-whatsapp-reminders/FEAT-26.SPEC-002-whatsapp-send-delivery-status-capability.md
+  - docs/blueprint/specifications/FEAT-26-whatsapp-reminders/FEAT-26.SPEC-003-whatsapp-delivery-fallback.md
+  - docs/blueprint/specifications/FEAT-26-whatsapp-reminders/FEAT-26.SPEC-004-whatsapp-channel-eligibility-consent-rule.md
+  - docs/blueprint/specifications/FEAT-26-whatsapp-reminders/feature-overview.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-001-profile-booking-page-settings.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-002-booking-link-rename.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-003-timezone-currency-settings.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-004-pause-bookings.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-005-notification-preferences.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-006-help-request.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-007-booking-link-name-validation-uniqueness-rule.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-008-currency-lock-rule.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-009-pause-state-precedence-rule.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-010-booking-link-forwarding-reservation-expiry.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-011-automatic-pause-resume.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-012-profile-photo-storage-capability.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/FEAT-27.SPEC-013-help-request-acknowledgment.md
+  - docs/blueprint/specifications/FEAT-27-pro-profile-booking-page-settings/feature-overview.md
+  - docs/blueprint/specifications/FEAT-28-payout-account-connection-payout-visibility/FEAT-28.SPEC-001-payout-account-connection.md
+  - docs/blueprint/specifications/FEAT-28-payout-account-connection-payout-visibility/FEAT-28.SPEC-002-payout-status-money-dashboard.md
+  - docs/blueprint/specifications/FEAT-28-payout-account-connection-payout-visibility/FEAT-28.SPEC-003-payout-account-status-processing.md
+  - docs/blueprint/specifications/FEAT-28-payout-account-connection-payout-visibility/FEAT-28.SPEC-004-payout-account-eligibility-constraints.md
+  - docs/blueprint/specifications/FEAT-28-payout-account-connection-payout-visibility/FEAT-28.SPEC-005-money-list-composition-net-calculation.md
+  - docs/blueprint/specifications/FEAT-28-payout-account-connection-payout-visibility/FEAT-28.SPEC-006-payout-account-connection-verification.md
+  - docs/blueprint/specifications/FEAT-28-payout-account-connection-payout-visibility/FEAT-28.SPEC-007-payout-status-notification.md
+  - docs/blueprint/specifications/FEAT-28-payout-account-connection-payout-visibility/feature-overview.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-001-sign-in-screen.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-002-account-recovery-screen.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-003-account-sign-in-settings-screen.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-004-data-export-screen.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-005-account-closure-reopening-screen.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-006-session-device-management.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-007-data-export-generation.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-008-account-closure-orchestration.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-009-account-reopening.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-010-contact-detail-change-processing.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-011-sign-in-recovery-rules.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-012-contact-change-confirmation-rules.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-013-account-closure-retention-rules.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-014-sign-in-code-notification.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-015-new-device-sign-in-alert.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-016-contact-change-confirmation-notification.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/FEAT-29.SPEC-017-account-closure-deletion-notifications.md
+  - docs/blueprint/specifications/FEAT-29-pro-sign-in-account-lifecycle/feature-overview.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-001-cancel-booking-pro-initiated.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-002-reschedule-booking-pro-initiated.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-003-goodwill-deposit-refund.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-004-book-client-in.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-005-cancel-several-bookings-at-once.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-006-pro-booking-action-rules.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-007-pro-cancel-reschedule-commit.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-008-bulk-cancellation-commit.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-009-goodwill-refund-commit.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-010-pro-created-booking-deposit-request-hold.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-011-goodwill-bulk-cancellation-refund-execution.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-012-pro-action-client-notice.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/FEAT-30.SPEC-013-deposit-request-expiry-notice.md
+  - docs/blueprint/specifications/FEAT-30-pro-booking-management/feature-overview.md
+  - docs/blueprint/specifications/feature-dependency-map.md
+  - docs/blueprint/specifications/platform-parameters.md
+  - docs/blueprint/specifications/reconciliation-log.md
+feature_count: 30
+spec_count: 219
+ac_count: 2996
+fidelity_result: pass
+---
+
+# Export Receipt — lovable-pack
+
+This receipt certifies that the `lovable-pack` export in this directory was rendered from
+the canonical blueprint package at `package_version` 4, and passed the export
+fidelity gate: bash reconciliation of the FEAT / SPEC / AC / XBR / ADR / SC / ASMP rosters
+(4a) and the semantic fidelity review (4b, see `FIDELITY-REPORT.md` alongside this file).
+
+**Staleness** is judged by comparing this receipt's `package_version` against the current
+`package_version` in `.n2b/tracking/MANIFEST.md`: equal → this export is current; behind →
+the canonical package has changed since this render and the export is stale. Refresh it any
+time with `/n2b:s5-export lovable-pack` — refreshing one target never touches any other
+target's export.
+
+This file is the deliverable-side receipt (its tracking-side counterpart lives at
+`.n2b/tracking/stages/s5-export/lovable-pack.md`, template
+`n2b/templates/tracking/export-target-tracker.md`). Its presence marks the target complete
+for `stage-resume-s5` classification; it is written once per passing render and replaced
+only by a user-confirmed per-target refresh.

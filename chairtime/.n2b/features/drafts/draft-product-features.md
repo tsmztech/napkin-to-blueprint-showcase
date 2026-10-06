@@ -3,7 +3,7 @@ document_type: product-features
 produced_by: product-visionary
 variant: draft
 status: draft
-created: 2026-09-21
+created: 2026-09-26
 coherence_check: passed
 ---
 
@@ -11,108 +11,115 @@ coherence_check: passed
 
 ## Summary
 
-This product includes 29 features: 17 Core, 4 Important, 8 Nice-to-Have. By phase: 19 MVP, 2 v1, 8 Later. By type: 20 User-Facing, 6 Platform, 3 Lifecycle. The product manages 13 domain entities. Core features close the end-to-end loop the brief describes — a client books and pays a deposit against a genuinely free slot, and the Pro runs her day off a clean, trustworthy list — plus the account, calendar-sync, and business-configuration scaffolding that loop depends on. Important features remove the two gaps that would otherwise resurface the brief's original pain points (no dispute record, no way to leave cleanly). Nice-to-Have features answer the brief's own open questions (waitlist, tipping, in-app balance payment, recurring bookings, a second messaging channel) plus two domain-standard conveniences (import, export) — all deferred to v1 or Later rather than dropped, so nothing the brief raised is silently lost.
+This product defines 26 features: 12 Core, 7 Important, 7 Nice-to-Have. By phase: 17 MVP, 6 v1, 3 Later. By type: 18 User-Facing, 6 Platform, 2 Lifecycle. The product manages 14 domain entities. Core features close the end-to-end value loop the founder named — a client books and pays a deposit in under a minute, and a no-show is handled automatically under the pro's own policy; Important features cover the supporting record-keeping, setup, consent, and billing machinery a real business needs; Nice-to-Have features answer the brief's open questions (waitlist, recurring appointments, in-app balance payment, tipping) and later-market polish (search, insights, WhatsApp).
 
 ## Domain Entity Inventory
 
-### Entity: Pro Profile
-- **Description:** The business identity of a single Pro — display name, bio-link handle, timezone, and currency.
-- **Lifecycle:** Created -> Active -> (rare) Closed
-- **Created by:** Pro Onboarding & Setup (FEAT-13)
-- **Managed by:** Pro Account & Authentication (FEAT-14), Account Closure & Client Data Deletion (FEAT-20)
-- **Referenced by:** Public Booking Page (FEAT-01), Pro Daily Dashboard (FEAT-07), Operator Support Console (FEAT-21)
+### Entity: Pro Account
+- **Description:** The solo professional's account — identity, timezone, currency, and the subscription that keeps the account active.
+- **Lifecycle:** Created (signup) -> Active -> (optionally) Paused/Cancelled (subscription lapse)
+- **Created by:** Pro Onboarding & Setup Wizard (FEAT-15)
+- **Managed by:** Pro Subscription Billing & Account Management (FEAT-18)
+- **Referenced by:** nearly every feature; directly by Service & Pricing Management (FEAT-01), Availability & Working Hours Setup (FEAT-02), Public Booking Page & Booking Flow (FEAT-05), Platform Support Read-Only Access (FEAT-19)
 
 ### Entity: Service
-- **Description:** A bookable offering the Pro sells — name, price, duration, and which deposit rule applies to it.
-- **Lifecycle:** Created -> Active -> Archived (kept for historical bookings, hidden from new booking)
-- **Created by:** Business Settings & Policy Configuration (FEAT-09)
-- **Managed by:** Business Settings & Policy Configuration (FEAT-09)
-- **Referenced by:** Public Booking Page (FEAT-01), Live Availability & Slot Booking (FEAT-02), Recurring Appointment Booking (FEAT-26)
+- **Description:** A bookable offering the pro sells — name, price, duration, and its deposit rule.
+- **Lifecycle:** Created -> Active -> (optionally) Archived (hidden from new bookings, retained on past bookings)
+- **Created by:** Service & Pricing Management (FEAT-01)
+- **Managed by:** Service & Pricing Management (FEAT-01)
+- **Referenced by:** Public Booking Page & Booking Flow (FEAT-05), Real-Time Slot Availability Engine (FEAT-03), Deposit Payment at Booking (FEAT-07), Booking & Revenue Insights (FEAT-25)
 
-### Entity: Cancellation & Deposit Policy
-- **Description:** The Pro's rule set for a booking: deposit amount or percentage, and the cancellation window before forfeiture applies.
-- **Lifecycle:** Created -> Active -> Updated (new bookings use the current version; existing bookings keep the version agreed at booking time)
-- **Created by:** Business Settings & Policy Configuration (FEAT-09)
-- **Managed by:** Business Settings & Policy Configuration (FEAT-09)
-- **Referenced by:** Deposit Payment at Booking (FEAT-04), Client Self-Service Reschedule & Cancellation (FEAT-06), No-Show & Cancellation Deposit Handling (FEAT-08), Booking Record & Dispute Trail (FEAT-18)
+### Entity: Availability Rule
+- **Description:** The pro's recurring working hours and per-service buffer time.
+- **Lifecycle:** Created -> Active -> Edited (versioned by effective date so past bookings are unaffected)
+- **Created by:** Availability & Working Hours Setup (FEAT-02)
+- **Managed by:** Availability & Working Hours Setup (FEAT-02)
+- **Referenced by:** Real-Time Slot Availability Engine (FEAT-03)
 
-### Entity: Working Hours & Buffer Rule
-- **Description:** The Pro's weekly working hours and the buffer time required between consecutive bookings.
-- **Lifecycle:** Created -> Active -> Updated
-- **Created by:** Business Settings & Policy Configuration (FEAT-09)
-- **Managed by:** Business Settings & Policy Configuration (FEAT-09)
-- **Referenced by:** Live Availability & Slot Booking (FEAT-02)
-
-### Entity: Blocked Time
-- **Description:** A manually-created span of time the Pro marks unavailable (personal time, travel, a held slot).
-- **Lifecycle:** Created -> Active -> Removed
-- **Created by:** Pro Manual Schedule Blocking (FEAT-10)
-- **Managed by:** Pro Manual Schedule Blocking (FEAT-10)
-- **Referenced by:** Live Availability & Slot Booking (FEAT-02)
+### Entity: Time Block
+- **Description:** A manually blocked span of time (personal time off, a held slot) that removes availability without a booking.
+- **Lifecycle:** Created -> Active -> Expired/Deleted
+- **Created by:** Manual Time Blocking (FEAT-17)
+- **Managed by:** Manual Time Blocking (FEAT-17)
+- **Referenced by:** Real-Time Slot Availability Engine (FEAT-03)
 
 ### Entity: Calendar Connection
-- **Description:** The link between a Pro's account and their personal external calendar, used to pull busy times in and push confirmed bookings out.
-- **Lifecycle:** Connected -> Active (syncing) -> Disconnected
-- **Created by:** Two-Way Calendar Sync (FEAT-12)
-- **Managed by:** Two-Way Calendar Sync (FEAT-12)
-- **Referenced by:** Live Availability & Slot Booking (FEAT-02), Pro Onboarding & Setup (FEAT-13)
+- **Description:** The link between a Pro Account and their personal Google or Apple calendar, used to read busy times and write confirmed bookings.
+- **Lifecycle:** Connected -> Active (syncing) -> Disconnected (reconnection required)
+- **Created by:** Two-Way Calendar Sync (FEAT-04)
+- **Managed by:** Two-Way Calendar Sync (FEAT-04)
+- **Referenced by:** Real-Time Slot Availability Engine (FEAT-03)
+
+### Entity: Client
+- **Description:** A record of a person who has booked (or attempted to book) with a specific pro — contact details, notes, and booking history with that pro only.
+- **Lifecycle:** Created (first booking) -> Active -> Deleted (on request)
+- **Created by:** Public Booking Page & Booking Flow (FEAT-05)
+- **Managed by:** Client Record Management (FEAT-13)
+- **Referenced by:** Client Booking Identity (FEAT-06), Pro Daily Schedule Dashboard (FEAT-12), Client List Search & Filter (FEAT-24)
 
 ### Entity: Booking
-- **Description:** A single scheduled appointment — service, time, Pro, Client, and current status (pending payment, confirmed, completed, rescheduled, cancelled-in-window, cancelled-out-of-window, no-show).
-- **Lifecycle:** Pending payment -> Confirmed -> (Completed | Rescheduled | Cancelled-in-window | Cancelled-out-of-window | No-show)
-- **Created by:** Deposit Payment at Booking (FEAT-04) confirms a booking begun in Live Availability & Slot Booking (FEAT-02); Recurring Appointment Booking (FEAT-26) creates a linked series
-- **Managed by:** Client Self-Service Reschedule & Cancellation (FEAT-06), No-Show & Cancellation Deposit Handling (FEAT-08), Pro Manual Schedule Blocking (FEAT-10) indirectly through availability
-- **Referenced by:** Pro Daily Dashboard (FEAT-07), Booking Confirmation & Reminders (FEAT-05), Booking Record & Dispute Trail (FEAT-18), Client Self-Service Booking History (FEAT-19), Simple Business Insights (FEAT-27), Data Export (FEAT-28)
+- **Description:** A confirmed (or attempted) appointment: service, time, client, deposit status, and current lifecycle state.
+- **Lifecycle:** Pending Payment -> Confirmed -> (Completed | Cancelled | No-Show | Rescheduled)
+- **Created by:** Public Booking Page & Booking Flow (FEAT-05)
+- **Managed by:** Client-Initiated Cancel/Reschedule (FEAT-10), No-Show Marking & Deposit Forfeiture (FEAT-11), Pro Daily Schedule Dashboard (FEAT-12)
+- **Referenced by:** Real-Time Slot Availability Engine (FEAT-03), Automated Booking Messaging (FEAT-08), Cancellation & No-Show Policy Engine (FEAT-09), Booking & Payment Activity Record (FEAT-16), Booking & Revenue Insights (FEAT-25), Recurring/Standing Appointments (FEAT-21), Waitlist for Cancelled Slots (FEAT-20)
 
-### Entity: Deposit/Payment Record
-- **Description:** The money side of a booking — deposit amount, payment status (pending, held, forfeited, refunded), and, for the Pro, the subscription charge history.
-- **Lifecycle:** Pending -> Paid -> (Refunded | Forfeited)
-- **Created by:** Deposit Payment at Booking (FEAT-04)
-- **Managed by:** No-Show & Cancellation Deposit Handling (FEAT-08), Pro Subscription & Billing (FEAT-17) for the separate subscription charge
-- **Referenced by:** Pro Daily Dashboard (FEAT-07), Booking Record & Dispute Trail (FEAT-18), Simple Business Insights (FEAT-27), In-App Balance Payment (FEAT-25)
+### Entity: Deposit Transaction
+- **Description:** The record of a client's card deposit for one booking — amount, status (held/captured/refunded/forfeited), and its outcome.
+- **Lifecycle:** Authorized -> Captured -> (Refunded | Forfeited)
+- **Created by:** Deposit Payment at Booking (FEAT-07)
+- **Managed by:** Cancellation & No-Show Policy Engine (FEAT-09), No-Show Marking & Deposit Forfeiture (FEAT-11)
+- **Referenced by:** Booking & Payment Activity Record (FEAT-16), Booking & Revenue Insights (FEAT-25), In-App Balance Payment (FEAT-22)
 
-### Entity: Client Record
-- **Description:** A Pro's private record of one client — name, phone number, and freeform notes — built from bookings made with that Pro.
-- **Lifecycle:** Created -> Active -> Deleted (on request)
-- **Created by:** Client Identity & Booking Details Capture (FEAT-03) on a client's first booking; Client List Import (FEAT-22) in bulk
-- **Managed by:** Client Record Management (FEAT-11)
-- **Referenced by:** Pro Daily Dashboard (FEAT-07), Account Closure & Client Data Deletion (FEAT-20), Data Export (FEAT-28)
+### Entity: Cancellation Policy
+- **Description:** The pro's own rule set: the cancellation/reschedule window and what happens to the deposit inside vs. outside it.
+- **Lifecycle:** Created (during onboarding) -> Active -> Edited (versioned; a booking is always governed by the policy in force when it was made)
+- **Created by:** Pro Onboarding & Setup Wizard (FEAT-15)
+- **Managed by:** Cancellation & No-Show Policy Engine (FEAT-09)
+- **Referenced by:** Public Booking Page & Booking Flow (FEAT-05), Client-Initiated Cancel/Reschedule (FEAT-10), No-Show Marking & Deposit Forfeiture (FEAT-11)
 
-### Entity: Messaging Consent Record
-- **Description:** A record of a client's explicit agreement to receive text (or, later, WhatsApp) messages, captured at the moment of booking.
-- **Lifecycle:** Granted -> Active -> Withdrawn
-- **Created by:** Client Identity & Booking Details Capture (FEAT-03)
-- **Managed by:** SMS Messaging & Consent Capability (FEAT-16)
-- **Referenced by:** Booking Confirmation & Reminders (FEAT-05), WhatsApp Messaging Channel (FEAT-29)
+### Entity: Messaging Consent
+- **Description:** A client's explicit opt-in (or opt-out) to receive text messages from a specific pro, and its timestamp/scope.
+- **Lifecycle:** Granted -> Active -> Revoked
+- **Created by:** Public Booking Page & Booking Flow (FEAT-05) (captured at booking)
+- **Managed by:** Messaging Consent Management (FEAT-14)
+- **Referenced by:** Automated Booking Messaging (FEAT-08)
+
+### Entity: Message
+- **Description:** A record of a single notification sent (confirmation, reminder, cancellation notice) — channel, content summary, delivery status.
+- **Lifecycle:** Queued -> Sent -> (Delivered | Failed)
+- **Created by:** Automated Booking Messaging (FEAT-08)
+- **Managed by:** N/A -- messages are immutable once sent
+- **Referenced by:** Booking & Payment Activity Record (FEAT-16)
 
 ### Entity: Subscription
-- **Description:** The Pro's own paid plan with the platform — status (active, past due, cancelled) and billing history.
-- **Lifecycle:** Trial/Active -> Past Due -> (Reinstated | Cancelled)
-- **Created by:** Pro Subscription & Billing (FEAT-17)
-- **Managed by:** Pro Subscription & Billing (FEAT-17)
-- **Referenced by:** Payment Processing Capability (FEAT-15), Pro Onboarding & Setup (FEAT-13)
+- **Description:** The pro's own paid plan with Chairtime — status, billing cycle, and payment method on file.
+- **Lifecycle:** Trial/Signup -> Active -> (Payment Failed) -> (Cancelled)
+- **Created by:** Pro Onboarding & Setup Wizard (FEAT-15)
+- **Managed by:** Pro Subscription Billing & Account Management (FEAT-18)
+- **Referenced by:** Platform Support Read-Only Access (FEAT-19)
 
 ### Entity: Waitlist Entry
-- **Description:** A client's request to be notified if an earlier slot opens up for a given service and date range.
-- **Lifecycle:** Requested -> (Offered -> Booked | Expired) | Withdrawn
-- **Created by:** Cancellation Waitlist (FEAT-23)
-- **Managed by:** Cancellation Waitlist (FEAT-23)
-- **Referenced by:** Live Availability & Slot Booking (FEAT-02)
+- **Description:** A client's standing request to be notified if a specific service/day opens up from a cancellation.
+- **Lifecycle:** Requested -> Notified -> (Converted to Booking | Expired)
+- **Created by:** Waitlist for Cancelled Slots (FEAT-20)
+- **Managed by:** Waitlist for Cancelled Slots (FEAT-20)
+- **Referenced by:** Client-Initiated Cancel/Reschedule (FEAT-10) (a cancellation can trigger a waitlist notification)
 
-### Entity: Tip
-- **Description:** An optional extra amount a client adds at checkout, on top of the deposit or balance.
-- **Lifecycle:** N/A -- created once at checkout, immutable thereafter
-- **Created by:** In-App Tipping at Checkout (FEAT-24)
-- **Managed by:** N/A -- once captured, a tip is not edited, only refunded as part of a broader payment reversal
-- **Referenced by:** Pro Daily Dashboard (FEAT-07), Simple Business Insights (FEAT-27)
+### Entity: Recurring Series
+- **Description:** A standing pattern ("every 3 weeks") that generates individual Bookings on a schedule.
+- **Lifecycle:** Created -> Active -> (Paused | Ended)
+- **Created by:** Recurring/Standing Appointments (FEAT-21)
+- **Managed by:** Recurring/Standing Appointments (FEAT-21)
+- **Referenced by:** Real-Time Slot Availability Engine (FEAT-03) (reserves future slots)
 
 ## Core Features
 
-### Public Booking Page
+### Service & Pricing Management
 
 **ID:** FEAT-01
 
-**Description:** The page a client lands on after tapping the Pro's Instagram bio link: the Pro's name, their services with prices and durations, and the deposit rule stated in plain words — everything needed to decide before picking a time.
+**Description:** The Pro defines the services they offer — name, price, duration, and the deposit rule for that service (fixed amount or percentage) — and controls which services are currently bookable.
 
 **Priority:** Core
 
@@ -120,41 +127,40 @@ This product includes 29 features: 17 Core, 4 Important, 8 Nice-to-Have. By phas
 
 **Type:** User-Facing
 
-**Rationale:** This is the brief's literal entry point — "you tap the link in the pro's Instagram bio... and see the pro's name, their services with prices and durations, and the deposit rule in plain words" (BRIEF.md, The Experience). MVP: without this page nothing else in the product is reachable.
+**Rationale:** Directly required by BRIEF.md's Vision: a client "picks a service" with "prices and how long each takes" stated in plain words before booking. Without this, the booking page has nothing to show. MVP: the product cannot function without at least one bookable service.
 
-**Connected Entities:** Pro Profile (read), Service (read), Cancellation & Deposit Policy (read)
+**Connected Entities:** Service (create, read, update, archive)
 
 **Key Capabilities:**
-- View services and prices -- Client sees every bookable service with its price and duration
-- View deposit rule -- Client sees the deposit amount or percentage and cancellation policy before proceeding
-- Enter the booking flow -- Client moves from browsing to picking a time
+- Add a service — name, price, duration, and its deposit rule (fixed amount or percentage of price)
+- Edit a service — update price, duration, or deposit rule for future bookings without altering past ones
+- Archive a service — hide it from new bookings while keeping history intact
+- Reorder services as they appear on the booking page
 
 **Primary Flows & Alternates:**
-- Happy path: client taps the bio link -> page loads inside Instagram's in-app browser -> client reads services, prices, and the deposit rule -> selects a service to continue into slot selection
-- No services configured yet: page shows a plain "this Pro hasn't set up booking yet" message rather than an empty or broken layout
-- Returning client: the page is identical on every visit — no login, no personalization that would slow the path to booking
+- Happy path: Pro adds a service with name, price, duration, and deposit rule; it immediately appears on the public booking page.
+- Alternate: Pro edits a live service's price; existing confirmed bookings keep the price and deposit that were agreed at booking time.
+- Alternate: Pro archives a service with upcoming bookings; those bookings are honored and shown as-is, but the service disappears from new booking choices.
 
-**States:** Empty: if the Pro has not configured any services, the page shows a clear "not yet available for booking" message instead of a blank list. Loading: services and the deposit rule render within roughly a second; a lightweight placeholder is shown while they load. Error: if the page fails to load Pro data, a plain retry message appears — never a raw error. Offline-degraded: the page requires connectivity to load initial data; a clear "check your connection" message appears rather than a silent failure.
+**States:** Empty: a new Pro Account with zero services sees a guided prompt to add their first service rather than a blank list. Loading: N/A — service lists are small (a handful to a few dozen) and load instantly. Error: a failed save keeps the entered values on screen with a clear retry action. Offline-degraded: N/A — this is a setup screen used on a stable connection between clients, not a mobile in-the-moment flow.
 
-**Validation & Limits:** No user input on this page — it is a read-only landing view; the only constraint is that at least one active service must exist for the page to allow booking to proceed.
+**Validation & Limits:** Service name required (1–80 characters); price must be a positive amount; duration required and must be a positive number of minutes; deposit rule must be either a fixed amount less than the service price or a percentage between 1–100%.
 
-**Access:** Per the Access Matrix in user-persona.md, this is public — any Client (Own-only scope) can view it without identity; Mara (Full) manages what appears here through Business Settings & Policy Configuration. There is no "unauthorized" state — the page is designed to be openly shareable.
+**Access:** The Pro has Full access per the Access Matrix in user-persona.md. Clients never see a setup view — they see only the resulting public list of bookable services. Platform Operator (Support) has View-only access for troubleshooting.
 
-**Communications:** N/A — this page sends no messages; it is a passive landing view.
+**Communications:** N/A — this is a setup action with no notification of its own.
 
-**Data Notes:** Displayed: service names, prices, durations, and the deposit rule. Source: read directly from Business Settings & Policy Configuration (FEAT-09); no data is captured here.
+**Data Notes:** Captured: name, price, duration, deposit rule. Displayed: the pro's own service list and, publicly, the client-facing service list on the booking page. Derived: none. Source: pro input only.
 
-**Interactions:** Depends on Business Settings & Policy Configuration (FEAT-09) for services and policy; feeds into Live Availability & Slot Booking (FEAT-02) once a service is selected.
+**Interactions:** Feeds Public Booking Page & Booking Flow (FEAT-05), Real-Time Slot Availability Engine (FEAT-03) (service duration drives slot length), and Deposit Payment at Booking (FEAT-07) (deposit rule).
 
-**Signals:** booking_page_viewed, service_selected.
+**Signals:** service_added, service_edited, service_archived.
 
----
-
-### Live Availability & Slot Booking
+### Availability & Working Hours Setup
 
 **ID:** FEAT-02
 
-**Description:** After picking a service, the client sees only genuinely free times — a live view that accounts for existing bookings, the Pro's working hours and buffer time, manually blocked time, and any busy time from the Pro's connected personal calendar. Double-booking is never possible from this view.
+**Description:** The Pro sets their recurring working hours and the buffer time they need between clients, forming the base schedule the availability engine works from.
 
 **Priority:** Core
 
@@ -162,422 +168,39 @@ This product includes 29 features: 17 Core, 4 Important, 8 Nice-to-Have. By phas
 
 **Type:** User-Facing
 
-**Rationale:** The brief names double-booking integrity as a non-negotiable quality: "the moment it silently double-books... the pro is gone" (BRIEF.md, Scale & Non-Functional Expectations). This feature is the mechanism that makes that promise true. MVP: the core booking loop cannot function without it.
+**Rationale:** BRIEF.md's Target Users & Roles states the Pro sets "working hours, buffer time between clients" as a core setup action. MVP: real-time availability has nothing to compute from without it.
 
-**Connected Entities:** Booking (read, for existing holds), Working Hours & Buffer Rule (read), Blocked Time (read), Calendar Connection (read), Waitlist Entry (update, when a slot releases)
+**Connected Entities:** Availability Rule (create, update)
 
 **Key Capabilities:**
-- View free slots for a chosen service -- Client sees only times that are actually available, given the service's duration
-- Hold a slot during checkout -- The chosen slot is reserved for the duration of the booking flow so two clients cannot claim it at once
+- Set weekly working hours (per day of week, with multiple windows per day allowed)
+- Set default buffer time applied between consecutive bookings
+- Override buffer time per service where a service genuinely needs more or less
 
 **Primary Flows & Alternates:**
-- Happy path: client picks a service -> sees a calendar of days and free times -> picks Thursday 2:30pm -> the slot is held while the client completes booking details and payment
-- Slot taken during checkout: if another client completes payment for the same slot first, the held client sees an immediate "just booked, please pick another time" message rather than a failed payment
-- No slots in the visible window: client can page forward to later dates rather than hitting a dead end
+- Happy path: Pro sets hours for each working day and a default buffer; the change is reflected in bookable slots going forward immediately.
+- Alternate: Pro closes a normally-working day for a one-off reason using Manual Time Blocking (FEAT-17) rather than editing the recurring rule.
+- Alternate: Pro changes hours mid-week; already-confirmed bookings outside the new hours are never silently cancelled — they remain honored and flagged for the Pro's attention.
 
-**States:** Empty: a day or week with no free slots shows "fully booked — try another date" rather than a blank grid. Loading: slot computation shows a brief loading indicator, expected within about a second. Error: if availability cannot be computed (e.g., calendar sync is temporarily unreachable), the page falls back to internally-known bookings and buffers only, and shows a discreet notice that externally-blocked time may not be reflected, rather than presenting slots that turn out to be double-booked. Offline-degraded: slot selection requires connectivity; the client sees a clear "reconnect to see live availability" message.
+**States:** Empty: a brand-new account has no hours set and cannot be booked until at least one working window exists; the setup wizard (FEAT-15) makes this the first required step. Loading: N/A — instant, small dataset. Error: a save failure preserves entered values with a retry option. Offline-degraded: N/A — setup screen, not an in-the-moment mobile flow.
 
-**Validation & Limits:** A slot is only offered if the full service duration plus buffer fits before the next booking or blocked period; a held slot expires after a short checkout window (long enough to complete payment, short enough that it does not lock out other clients if abandoned).
+**Validation & Limits:** Each working window requires a start time before its end time; buffer time must be zero or a positive number of minutes; overlapping windows on the same day are rejected with a clear message.
 
-**Access:** Any Client (Own-only per the Access Matrix) can view and hold slots for the Pro whose page they are on; Mara (Full) sees the same computed availability reflected in her own schedule view.
+**Access:** The Pro has Full access. Clients never see this screen, only its effect (available times). Platform Operator (Support) has View-only access.
 
-**Communications:** N/A — this feature has no messages of its own; confirmation is handled by Booking Confirmation & Reminders (FEAT-05) once a slot converts to a paid booking.
+**Communications:** N/A — a setup action, not a notification trigger.
 
-**Data Notes:** Displayed: computed free slots. Derived: entirely computed from existing Bookings, Working Hours & Buffer Rule, Blocked Time, and Calendar Connection busy time — no new data is captured here beyond the temporary hold.
+**Data Notes:** Captured: weekly hours and buffer settings. Displayed: on the Pro's own setup screen. Derived: none directly, but this data is the primary input the availability engine derives free slots from. Source: pro input only.
 
-**Interactions:** Depends on Business Settings & Policy Configuration (FEAT-09), Pro Manual Schedule Blocking (FEAT-10), and Two-Way Calendar Sync (FEAT-12); feeds Client Identity & Booking Details Capture (FEAT-03); also consulted by Cancellation Waitlist (FEAT-23) and Recurring Appointment Booking (FEAT-26).
+**Interactions:** Feeds Real-Time Slot Availability Engine (FEAT-03).
 
-**Signals:** slots_viewed, slot_held, slot_hold_expired, slot_conflict_detected.
+**Signals:** availability_hours_updated, buffer_time_updated.
 
----
-
-### Client Identity & Booking Details Capture
+### Real-Time Slot Availability Engine
 
 **ID:** FEAT-03
 
-**Description:** Once a slot is held, the client provides just enough to be identified and reachable — name and phone number — and explicitly agrees to receive texts and to the cancellation policy. No password or account creation is involved; the phone number itself, verified with a one-time code sent to it, is the client's identity for future visits to this Pro.
-
-**Priority:** Core
-
-**Phase:** MVP
-
-**Type:** User-Facing
-
-**Rationale:** The brief is explicit that the client "must not need a password-style account just to book" and names "phone number plus a magic link" as its own leading candidate for "the lightest workable identity" (BRIEF.md, Target Users & Roles; Open Questions). This feature resolves that open question in the brief's own preferred direction. MVP: identity and consent capture sit directly in the booking path.
-
-**Connected Entities:** Client Record (create), Messaging Consent Record (create), Booking (update, attaching client identity to the held slot)
-
-**Key Capabilities:**
-- Enter name and phone -- Client provides the minimum identifying details
-- Verify by phone -- A one-time code confirms the phone number without a password
-- Agree to texts and policy -- Client gives explicit, recorded consent to messaging and to the cancellation policy before paying
-
-**Primary Flows & Alternates:**
-- Happy path: client enters name and phone -> receives and enters a one-time code -> reviews and checks agreement to texts and the cancellation policy -> proceeds to payment
-- Returning client: a phone number matching an existing Client Record for this Pro pre-fills the name and skips straight to verification, recognizing the client without a password
-- Code not received: client can request the code again after a short cooldown, with a plain-language note to check the number entered
-
-**States:** Empty: N/A — this is a form-entry step with no list or collection to be empty. Loading: code delivery shows a brief "sending code" state; verification shows an immediate check. Error: an incorrect or expired code gives a clear retry message without discarding the name/phone already entered. Offline-degraded: this step requires connectivity to send and verify the code; a clear message asks the client to reconnect.
-
-**Validation & Limits:** Name required (1–100 characters); phone number required and must be a valid, deliverable format; the one-time code expires after a short window and allows a limited number of attempts before requiring a fresh code; consent to texts and to the cancellation policy are both required checkboxes — payment cannot proceed without them.
-
-**Access:** Any Client (Own-only) can complete this step for themselves only; Mara (Full, per Client Records) later sees the resulting Client Record but does not participate in this step.
-
-**Communications:** Sends the one-time verification code by text at this step (distinct from the later booking confirmation).
-
-**Data Notes:** Captured: name, phone number, consent to messaging, consent to cancellation policy, and the specific policy version agreed to. Displayed: pre-filled name for a recognized returning phone number. Source: entirely user-entered at this step.
-
-**Interactions:** Depends on Live Availability & Slot Booking (FEAT-02) for the held slot; depends on SMS Messaging & Consent Capability (FEAT-16) to deliver the verification code; feeds Deposit Payment at Booking (FEAT-04) and Client Record Management (FEAT-11).
-
-**Signals:** identity_form_started, phone_verified, phone_verification_failed, consent_recorded.
-
----
-
-### Deposit Payment at Booking
-
-**ID:** FEAT-04
-
-**Description:** The client pays the required deposit by card to convert a held slot into a confirmed, protected booking. The product itself never sees or stores the card number — the payment-processing capability owns that.
-
-**Priority:** Core
-
-**Phase:** MVP
-
-**Type:** User-Facing
-
-**Rationale:** The brief's central mechanism — "pay a card deposit under the pro's own cancellation policy" — is what makes a booking real instead of a DM promise (BRIEF.md, Vision). MVP: this is the moment the product's entire value proposition (deposit-first booking) is delivered.
-
-**Connected Entities:** Deposit/Payment Record (create), Booking (update, from held to confirmed), Cancellation & Deposit Policy (read, to determine the deposit amount)
-
-**Key Capabilities:**
-- Pay the deposit -- Client enters card details (handled entirely by the payment-processing capability) and confirms payment
-- See the deposit amount clearly -- Client sees exactly what will be charged before confirming, matching the amount shown on the Public Booking Page
-
-**Primary Flows & Alternates:**
-- Happy path: client reviews the deposit amount -> completes card payment -> booking converts from held to confirmed within the same screen, in under a minute total from link tap to done
-- Payment declined: client sees a plain decline message and can retry with different card details without losing the held slot, as long as the hold has not expired
-- Hold expires during payment: if the slot's temporary hold lapses before payment completes, the client is told the slot is no longer guaranteed and returned to slot selection rather than being charged for a slot that may now be gone
-
-**States:** Empty: N/A — this is a single-purpose payment action, not a list. Loading: a brief "processing payment" state is shown; the client is never left uncertain whether payment went through. Error: a failed or declined payment shows a clear reason where the processor provides one, and a retry path that does not require re-entering booking details. Offline-degraded: payment requires connectivity; a lost connection mid-payment resolves to a definite confirmed-or-not state on reconnect rather than an ambiguous one — the client is never double-charged.
-
-**Validation & Limits:** The deposit amount charged must exactly match the amount or percentage configured for the selected service; a booking is not marked confirmed until payment is verified as successfully captured.
-
-**Access:** Any Client (Own-only) pays only for their own booking; Mara (Full) sees the resulting paid status on her dashboard but does not participate in or see card details during this step.
-
-**Communications:** N/A directly — payment success triggers Booking Confirmation & Reminders (FEAT-05), which owns the client-facing message.
-
-**Data Notes:** Captured: deposit amount charged and payment status. Source: the amount is derived from the service's configured deposit rule; card handling itself is delegated entirely to the payment-processing capability and never touches the product's own records.
-
-**Interactions:** Depends on Client Identity & Booking Details Capture (FEAT-03) and Payment Processing Capability (FEAT-15); confirms the Booking read by Live Availability & Slot Booking (FEAT-02); feeds Pro Daily Dashboard (FEAT-07) and Booking Record & Dispute Trail (FEAT-18).
-
-**Signals:** deposit_payment_started, deposit_payment_succeeded, deposit_payment_failed, booking_confirmed.
-
----
-
-### Booking Confirmation & Reminders
-
-**ID:** FEAT-05
-
-**Description:** The moment a booking is confirmed, the client gets an immediate text confirmation. Two days before the appointment, a reminder text arrives with a one-tap choice: "I'll be there" or "I need to reschedule."
-
-**Priority:** Core
-
-**Phase:** MVP
-
-**Type:** User-Facing
-
-**Rationale:** The brief describes this exactly: "a confirmation text lands immediately... two days before, a reminder arrives with a one-tap 'I'll be there / I need to reschedule'" (BRIEF.md, The Experience). This is the feature that replaces Mara's manual, late-night reminder texting. MVP: it directly answers the brief's stated problem of hand-sent reminders.
-
-**Connected Entities:** Booking (read), Messaging Consent Record (read)
-
-**Key Capabilities:**
-- Send instant confirmation -- Client receives a text the moment a deposit payment succeeds
-- Send a timed reminder -- Client receives a reminder text two days ahead of the appointment
-- One-tap response -- Client can confirm attendance or start a reschedule directly from the reminder
-
-**Primary Flows & Alternates:**
-- Happy path: booking confirms -> confirmation text sends immediately -> two days before the appointment, a reminder text sends with "I'll be there" / "I need to reschedule" -> client taps one, and the outcome is reflected instantly on Mara's dashboard
-- Consent withdrawn: if a client has withdrawn messaging consent since booking, no reminder is sent, and the booking still stands — attendance simply is not nudged
-- Very-short-notice booking: if a booking is made less than two days out, only the confirmation is sent; no reminder window exists to schedule
-
-**States:** Empty: N/A — this is an outbound messaging feature with no list view of its own. Loading: N/A — message sending is near-instantaneous and has no user-facing loading state. Error: if a confirmation or reminder fails to deliver, the booking itself is unaffected and Mara's dashboard shows the delivery gap so she is not blindsided. Offline-degraded: N/A — sending happens server-side regardless of the client's own connectivity at send time.
-
-**Validation & Limits:** A reminder is only scheduled if messaging consent is active at send time; reminder timing is fixed at two days before the appointment (not user-configurable in this feature).
-
-**Access:** Each Client (Own-only) receives messages only about their own bookings; Mara (Full, via the dashboard) sees whether messages were sent and how the client responded, but does not compose them herself.
-
-**Communications:** This feature is entirely communications: an instant confirmation text and a timed reminder text, both to the client.
-
-**Data Notes:** Displayed to the Pro: confirmation/reminder send status and the client's reminder response. Derived: reminder send time is computed from the booking's appointment time. Source: Booking data and Messaging Consent Record.
-
-**Interactions:** Depends on Deposit Payment at Booking (FEAT-04) for the trigger and SMS Messaging & Consent Capability (FEAT-16) for delivery; a client's "I need to reschedule" tap hands off to Client Self-Service Reschedule & Cancellation (FEAT-06); may also use WhatsApp Messaging Channel (FEAT-29) once available.
-
-**Signals:** confirmation_sent, reminder_sent, reminder_response_received (attending / rescheduling), message_delivery_failed.
-
----
-
-### Client Self-Service Reschedule & Cancellation
-
-**ID:** FEAT-06
-
-**Description:** From the reminder, or by returning to their booking, a client can move their appointment to a new available time or cancel it — automatically respecting the Pro's cancellation window without either party negotiating by hand.
-
-**Priority:** Core
-
-**Phase:** MVP
-
-**Type:** User-Facing
-
-**Rationale:** The brief states the client "reschedules or cancels within the policy window" as a core capability (BRIEF.md, Target Users & Roles), and the whole product's promise is that "nobody negotiated anything" (BRIEF.md, The Experience). MVP: without self-service reschedule, every plan change reverts to a DM, defeating the product's purpose.
-
-**Connected Entities:** Booking (update), Cancellation & Deposit Policy (read)
-
-**Key Capabilities:**
-- Reschedule to a new slot -- Client picks a new genuinely-free time for the same service
-- Cancel a booking -- Client cancels outright, with the outcome (refund or forfeiture) determined by the cancellation window
-- See the policy outcome before confirming -- Client is shown, before finalizing, whether the change is inside or outside the free window
-
-**Primary Flows & Alternates:**
-- Happy path: client taps "I need to reschedule" from the reminder (or opens their booking directly) -> is shown current live availability -> picks a new time -> the original slot releases and the new one holds, with no new payment required if within policy
-- Cancel inside the window: client cancels with time to spare -> deposit is refunded automatically, per policy
-- Cancel or reschedule outside the window: client is shown plainly, before confirming, that the deposit will be forfeited or that rescheduling this close counts as the one change allowed near the appointment — the outcome is never a surprise after the fact
-
-**States:** Empty: N/A — a single booking is being acted on, not a list. Loading: available new slots load with the same brief indicator as initial booking. Error: if a reschedule fails partway (e.g., the newly chosen slot is claimed by someone else first), the original booking remains untouched and the client is asked to pick again. Offline-degraded: this action requires connectivity; a lost connection leaves the original booking exactly as it was.
-
-**Validation & Limits:** Whether an action is treated as "inside" or "outside" the window is evaluated against the exact cancellation-window rule configured for that booking's service at the time it was booked; a booking may be rescheduled to another genuinely free slot only — never into an already-taken one.
-
-**Access:** Any Client (Own-only) can reschedule or cancel only their own booking; Mara (Full) can also reschedule or cancel any booking on her side (see Pro Daily Dashboard, FEAT-07) but that is described there, not here.
-
-**Communications:** A confirmation text is sent for the new time on reschedule, or a cancellation acknowledgment (with refund or forfeiture stated plainly) on cancel.
-
-**Data Notes:** Captured: the new time (on reschedule) or the cancellation action and timestamp. Derived: refund-vs-forfeit outcome, computed against the Cancellation & Deposit Policy in force at booking time. Source: client action plus policy lookup.
-
-**Interactions:** Depends on Live Availability & Slot Booking (FEAT-02) for new slots and Business Settings & Policy Configuration (FEAT-09) for the window rule; feeds No-Show & Cancellation Deposit Handling (FEAT-08) for the forfeiture path and Cancellation Waitlist (FEAT-23) by releasing a slot.
-
-**Signals:** reschedule_started, reschedule_completed, cancellation_completed_refunded, cancellation_completed_forfeited.
-
----
-
-### Pro Daily Dashboard
-
-**ID:** FEAT-07
-
-**Description:** Mara's main working view: today's list of bookings, each showing a paid badge, any client note, and how much is still due at the chair — designed to be glanced at between clients, not studied.
-
-**Priority:** Core
-
-**Phase:** MVP
-
-**Type:** User-Facing
-
-**Rationale:** The brief describes this precisely: "the pro glances at their phone between clients and sees today's list, each booking with a paid badge, a client note, and how much is still due at the chair" (BRIEF.md, The Experience). MVP: this is Mara's primary daily reason to open the product at all.
-
-**Connected Entities:** Booking (read), Deposit/Payment Record (read), Client Record (read), Tip (read)
-
-**Key Capabilities:**
-- View today's bookings -- Mara sees every booking for the current day in order
-- See paid status at a glance -- Each booking shows a clear paid/unpaid badge
-- See client notes -- Any note Mara has kept on that client appears with the booking
-- See balance due -- Mara sees the remaining amount owed at the chair for each booking
-- Navigate to other days -- Mara can look ahead or back from today
-
-**Primary Flows & Alternates:**
-- Happy path: Mara opens the product between clients -> sees today's remaining bookings in time order -> glances at paid badges and notes -> knows exactly what to expect from the next client
-- No bookings today: dashboard shows a plain "nothing booked today" state, not a blank or broken screen
-- A booking changed since last look: a client-initiated reschedule or cancellation is reflected immediately, so Mara is never working from a stale list
-
-**States:** Empty: a day with no bookings shows an explicit "no bookings today" message. Loading: today's list renders within about a second; a lightweight placeholder covers the brief gap. Error: if the list cannot load, Mara sees the last successfully loaded version of today with a retry option, never a blank dashboard. Offline-degraded: the most recently loaded day remains viewable read-only; actions that change data (marking no-show, etc.) are disabled until connectivity returns, with a clear notice why.
-
-**Validation & Limits:** No direct input on this view beyond navigation between days; the day range Mara can browse is unlimited in the past and future, bounded only by what data exists.
-
-**Access:** Only Mara (Full, per the Access Matrix) sees this view; Taylor and other clients have no access to it at all — they see only their own bookings via Client Self-Service Booking History (FEAT-19). The Operator (View, read-only) may see an equivalent read-only rendering strictly for troubleshooting a specific Pro's reported issue.
-
-**Communications:** N/A — this is a viewing surface; it triggers no messages of its own.
-
-**Data Notes:** Displayed: booking time, service, client name, paid badge, client note, and balance due. Source: aggregated read from Booking, Deposit/Payment Record, Client Record, and Tip; nothing is captured here except the day-navigation choice.
-
-**Interactions:** Depends on Deposit Payment at Booking (FEAT-04), Client Record Management (FEAT-11), No-Show & Cancellation Deposit Handling (FEAT-08), and In-App Tipping at Checkout (FEAT-24); feeds Operator Support Console (FEAT-21) and Data Export (FEAT-28).
-
-**Signals:** dashboard_viewed, day_navigated, empty_day_viewed.
-
----
-
-### No-Show & Cancellation Deposit Handling
-
-**ID:** FEAT-08
-
-**Description:** When a client doesn't turn up, Mara marks the no-show in one tap and the deposit stays with her automatically. A cancellation made outside the policy window forfeits the deposit on its own, with no action required from Mara at all.
-
-**Priority:** Core
-
-**Phase:** MVP
-
-**Type:** User-Facing
-
-**Rationale:** This is the brief's central financial protection: "a client who doesn't turn up gets one tap to mark the no-show and the deposit stays put, and a cancellation outside the window forfeits on its own" (BRIEF.md, The Experience) — directly solving the founder's stated problem of no-shows costing real money. MVP: without this, the deposit mechanism has no teeth.
-
-**Connected Entities:** Booking (update, to no-show or cancelled-out-of-window), Deposit/Payment Record (update, to forfeited or refunded), Cancellation & Deposit Policy (read, to determine automatic forfeiture eligibility)
-
-**Key Capabilities:**
-- Mark a no-show -- Mara marks a booking as a no-show in one tap; the deposit is kept automatically
-- Automatic out-of-window forfeiture -- A cancellation past the policy's window forfeits the deposit without Mara doing anything
-- Issue a refund within policy -- Mara can still choose to refund a deposit at her own discretion, even when policy would otherwise allow her to keep it
-
-**Primary Flows & Alternates:**
-- Happy path (no-show): appointment time passes with the client absent -> Mara taps "no-show" on that booking -> status updates and the deposit is retained, reflected instantly on the dashboard
-- Automatic forfeiture: a client cancels outside the window (see FEAT-06) -> the deposit is forfeited without any tap from Mara -> the outcome appears on her dashboard as already resolved
-- Discretionary refund: Mara chooses to refund a kept deposit anyway (e.g., a client with a documented emergency) -> she issues the refund manually, overriding the default policy outcome in the client's favor
-
-**States:** Empty: N/A — this acts on a specific existing booking, not a list. Loading: a brief confirmation state shows while the no-show mark or refund is processed. Error: if marking a no-show or issuing a refund fails to process, the booking's prior state is preserved and Mara is shown a clear retry option — the deposit status is never left ambiguous. Offline-degraded: marking a no-show or issuing a refund requires connectivity; the action is disabled with a clear notice until reconnected.
-
-**Validation & Limits:** A booking can only be marked no-show after its scheduled time has passed; a no-show mark can be undone shortly after (to correct a mis-tap) but not after the deposit has already been included in a settlement; a discretionary refund cannot exceed the original deposit amount.
-
-**Access:** Only Mara (Full) can mark no-shows or issue discretionary refunds; Taylor (a Client) has no access to this action — a client cannot mark their own no-show or self-approve a refund outside policy. The Operator (View) can see the resulting status for support purposes only.
-
-**Communications:** The client receives a plain notice when a deposit is forfeited (no-show or out-of-window cancellation) or refunded, stating the outcome and, where forfeited, the policy it was based on.
-
-**Data Notes:** Captured: the no-show mark, its timestamp, and any discretionary refund with Mara's stated reason (optional freeform note). Derived: automatic forfeiture is computed from the Cancellation & Deposit Policy in force at booking time. Source: Mara's action, or the policy engine for automatic forfeiture.
-
-**Interactions:** Depends on Deposit Payment at Booking (FEAT-04) and Business Settings & Policy Configuration (FEAT-09); writes to Booking Record & Dispute Trail (FEAT-18); reflected on Pro Daily Dashboard (FEAT-07) and Simple Business Insights (FEAT-27).
-
-**Signals:** no_show_marked, no_show_mark_undone, deposit_forfeited_automatically, deposit_refunded_discretionary.
-
----
-
-### Business Settings & Policy Configuration
-
-**ID:** FEAT-09
-
-**Description:** The place Mara sets up how her business runs: her services with prices and durations, her deposit rule, her working hours and buffer time between clients, her cancellation window, and her timezone and currency.
-
-**Priority:** Core
-
-**Phase:** MVP
-
-**Type:** User-Facing
-
-**Rationale:** Every other feature depends on rules Mara defines here — the brief lists exactly these controls as what the Pro "sets up" (BRIEF.md, Target Users & Roles). MVP: the product has nothing to show a client until this exists.
-
-**Connected Entities:** Service (create, update, archive), Cancellation & Deposit Policy (create, update), Working Hours & Buffer Rule (create, update)
-
-**Key Capabilities:**
-- Manage services -- Mara adds, edits, and archives services with names, prices, and durations
-- Set the deposit rule -- Mara sets a flat amount or percentage deposit, per service or business-wide
-- Set working hours and buffer -- Mara defines her weekly working hours and the buffer time required between bookings
-- Set the cancellation window -- Mara defines how far ahead a client must cancel or reschedule to avoid forfeiting the deposit
-- Set timezone and currency -- Mara's business operates in her own timezone and currency, not a hard-coded one
-
-**Primary Flows & Alternates:**
-- Happy path: Mara adds a service with a name, price, and duration -> sets a deposit rule -> sets her working hours, buffer, and cancellation window -> settings take effect immediately for new bookings
-- Editing an in-use service: changing a service's price or deposit rule applies to new bookings only; already-confirmed bookings keep the terms the client agreed to
-- Business-wide vs per-service deposit: Mara can set one deposit rule for everything, or override it for a specific service (e.g., a higher-value service carries a higher deposit)
-
-**States:** Empty: a Pro with no services yet sees a clear prompt to add the first one, not a blank settings page. Loading: settings load and save with brief, visible confirmation. Error: a failed save preserves Mara's entered changes and offers a retry, never silently discarding edits. Offline-degraded: settings can be viewed read-only offline; changes require connectivity to save, with a clear notice.
-
-**Validation & Limits:** Service name required (1–100 characters); price must be a positive value; duration must be a positive number of minutes; deposit must be a positive flat amount or a percentage between 1–100; working hours must not overlap themselves; buffer time is a non-negative number of minutes; cancellation window must be a positive number of hours.
-
-**Access:** Only Mara (Full) can view or change these settings; Taylor and other clients have no access at all — they only ever see the resulting Public Booking Page. The Operator (View) can see current settings read-only for troubleshooting.
-
-**Communications:** N/A — configuration changes do not trigger client-facing messages by themselves.
-
-**Data Notes:** Captured: services, prices, durations, deposit rule, working hours, buffer, cancellation window, timezone, currency. Displayed: current configuration and its effective date. Source: entirely Mara's own input.
-
-**Interactions:** Feeds Public Booking Page (FEAT-01), Live Availability & Slot Booking (FEAT-02), Deposit Payment at Booking (FEAT-04), Client Self-Service Reschedule & Cancellation (FEAT-06), and No-Show & Cancellation Deposit Handling (FEAT-08); consumed during Pro Onboarding & Setup (FEAT-13).
-
-**Signals:** service_created, service_updated, service_archived, policy_updated, hours_updated.
-
----
-
-### Pro Manual Schedule Blocking
-
-**ID:** FEAT-10
-
-**Description:** Mara can block off a span of time — personal time, travel, or simply keeping a slot free — so it never appears as bookable, without having to invent a fake appointment to hide it.
-
-**Priority:** Core
-
-**Phase:** MVP
-
-**Type:** User-Facing
-
-**Rationale:** The brief lists "block off time" among the Pro's core capabilities (BRIEF.md, Target Users & Roles). MVP: without it, Mara's only way to protect personal time is through her external calendar, and the brief's calendar sync is confirmed but not guaranteed to be connected or perfectly timed — a direct blocking tool is the reliable fallback the non-negotiable double-booking promise requires.
-
-**Connected Entities:** Blocked Time (create, update, delete)
-
-**Key Capabilities:**
-- Block a span of time -- Mara marks a date/time range as unavailable
-- Remove a block -- Mara un-blocks time she no longer needs held
-- Recurring block -- Mara can mark a block as repeating (e.g., every Sunday)
-
-**Primary Flows & Alternates:**
-- Happy path: Mara selects a date and time range -> confirms the block -> that time immediately stops appearing as bookable in Live Availability & Slot Booking
-- Recurring block: Mara sets a weekly recurring block (e.g., Sundays) once, rather than repeating the action every week
-- Removing a block with an existing booking: if Mara later tries to block time that already holds a confirmed booking, she is warned and must resolve the conflicting booking first rather than silently orphaning it
-
-**States:** Empty: a Pro with no blocks sees a plain "no blocked time" state. Loading: blocks load and apply with a brief, visible confirmation. Error: a failed block save leaves prior availability unchanged and offers a retry. Offline-degraded: existing blocks remain visible read-only; adding or removing a block requires connectivity.
-
-**Validation & Limits:** A block must have a start before its end; a block cannot be silently created over a slot with an existing confirmed booking — Mara must address the conflict explicitly.
-
-**Access:** Only Mara (Full) can create or remove blocked time; clients have no visibility into blocks beyond simply not seeing that time as available.
-
-**Communications:** N/A — blocking time is a private scheduling action with no client-facing message.
-
-**Data Notes:** Captured: block start, end, and optional recurrence. Source: entirely Mara's own input.
-
-**Interactions:** Feeds Live Availability & Slot Booking (FEAT-02); interacts with Booking Conflict Recovery flows.
-
-**Signals:** block_created, block_removed, block_conflict_warned.
-
----
-
-### Client Record Management
-
-**ID:** FEAT-11
-
-**Description:** Mara's private list of every client who has booked with her — name, phone, and any freeform note she keeps (allergies, preferences, history) — visible only to her, with the ability to delete a client's record on request.
-
-**Priority:** Core
-
-**Phase:** MVP
-
-**Type:** User-Facing
-
-**Rationale:** The brief states Mara "sees every booking, every client" and that "the Pro is the only person who ever sees the client list" (BRIEF.md, Target Users & Roles), and separately requires that "a pro must be able to delete a client's record on request" (BRIEF.md, Constraints). MVP: this is core to running the day-to-day relationship with returning clients, and the deletion right is a stated regulatory-adjacent constraint, not an optional add-on.
-
-**Connected Entities:** Client Record (read, update, delete)
-
-**Key Capabilities:**
-- View the client list -- Mara sees every client who has booked with her
-- Search clients -- Mara finds a specific client by name or phone
-- Add or edit a note -- Mara keeps a freeform note per client
-- Delete a client's record -- Mara permanently removes a client's record on request
-
-**Primary Flows & Alternates:**
-- Happy path: Mara opens her client list -> searches or scrolls to find someone -> views or edits their note
-- First booking creates the record: a client's first successful booking with Mara automatically creates their Client Record — Mara never has to add clients manually for this to work
-- Deletion request: a client asks Mara to delete their data -> Mara finds them in the list -> deletes the record -> the client's personal details are removed while past booking history is anonymized rather than silently vanishing from Mara's own financial records
-
-**States:** Empty: a brand-new Pro with no clients yet sees a plain "no clients yet — your first booking will appear here" message. Loading: the list and search render within about a second. Error: a failed load shows the last successfully loaded list with a retry option. Offline-degraded: the client list remains viewable read-only; edits and deletion require connectivity.
-
-**Validation & Limits:** A note is freeform text up to a generous length (e.g., 1,000 characters); deletion is a deliberate, confirmed action (not a single accidental tap) given it is irreversible.
-
-**Access:** Only Mara (Full, own clients only) can view or manage her client list; no other Pro can ever see it, and clients themselves have no access to this view of their own record — they see only their own bookings via Client Self-Service Booking History (FEAT-19).
-
-**Communications:** N/A — viewing or noting a client record does not itself message the client; deletion may prompt an optional acknowledgment to the client that their data was removed.
-
-**Data Notes:** Captured: freeform notes (Mara's input). Displayed: name, phone, note, and booking history summary. Source: name and phone originate from Client Identity & Booking Details Capture (FEAT-03) or Client List Import (FEAT-22); notes are Mara's own input.
-
-**Interactions:** Depends on Client Identity & Booking Details Capture (FEAT-03) and Client List Import (FEAT-22); feeds Pro Daily Dashboard (FEAT-07), Account Closure & Client Data Deletion (FEAT-20), and Data Export (FEAT-28).
-
-**Signals:** client_list_viewed, client_searched, client_note_updated, client_record_deleted.
-
----
-
-### Two-Way Calendar Sync
-
-**ID:** FEAT-12
-
-**Description:** Mara connects her personal calendar so that busy time she has already committed elsewhere blocks availability here, and confirmed bookings made here appear on her personal calendar automatically — one true schedule instead of two she has to reconcile by hand.
+**Description:** The system that computes, at the moment a client is looking, exactly which time slots are genuinely free — combining the Pro's working hours, buffer time, existing Chairtime bookings, manual time blocks, and busy times from the Pro's connected personal calendar — so a client can never select a time that is not truly open.
 
 **Priority:** Core
 
@@ -585,127 +208,120 @@ This product includes 29 features: 17 Core, 4 Important, 8 Nice-to-Have. By phas
 
 **Type:** Platform
 
-**Rationale:** The brief names this as a confirmed, two-way integration: "the pro's personal... calendar... busy times there block availability here, and bookings made here appear there" (BRIEF.md, Ecosystem & Integrations). MVP: double-booking integrity is a stated non-negotiable, and Mara's personal life commitments live on her existing calendar today — sync is required from day one to keep that promise true.
+**Rationale:** BRIEF.md's Vision and Success Criteria are explicit: "a genuinely free time," and "nobody has ever had a double booking." This is the mechanism that makes that promise true; every other feature that touches time depends on it.
+
+**Connected Entities:** Booking (read), Availability Rule (read), Time Block (read), Calendar Connection (read), Recurring Series (read)
+
+**Key Capabilities:**
+- Compute the live set of open slots for a given service and date range
+- Reserve a slot the instant a client begins paying, preventing a second client from grabbing it mid-checkout
+- Release a held-but-unpaid slot automatically after a short timeout if payment is not completed
+
+**Primary Flows & Alternates:**
+- Happy path: client opens the booking page, picks a service, and sees only slots that account for hours, buffer, existing bookings, manual blocks, and external calendar busy time.
+- Alternate: two clients open the same slot simultaneously; the first to complete payment wins it, and the second sees it disappear from the list before they can pay, with a clear "just booked" message rather than a payment error.
+- Alternate: the Pro's external calendar sync is temporarily unavailable; the engine falls back to Chairtime-only data and visibly flags reduced confidence to the Pro (never to the client, who must never be shown a slot that turns out to be unavailable).
+
+**States:** Empty: if a service has no open slots in the visible window, the client sees a plain "fully booked, check back or view other services" message, never a blank grid. Loading: a lightweight in-place loading indicator while slots compute; never a blank screen with no feedback. Error: if computation fails, the client sees a retry prompt rather than a stale or incorrect slot list — an incorrect slot is treated as worse than no slot list at all. Offline-degraded: N/A — availability must always reflect live, connected data; a stale offline slot list is exactly the double-booking risk the product exists to prevent.
+
+**Validation & Limits:** A slot is only offered if the full service duration plus buffer fits entirely within an open working window with no conflicting booking, block, or external calendar event; slot holds during checkout expire after a short, fixed timeout (a few minutes) if payment is not completed.
+
+**Access:** Clients see only the resulting open slots for one pro's public page — never another pro's schedule. The Pro sees their own full schedule. Platform Operator (Support) has View-only access for troubleshooting a specific pro's reported conflict.
+
+**Communications:** N/A — this is a computation engine; it triggers no messages of its own (Automated Booking Messaging, FEAT-08, sends the resulting confirmations).
+
+**Data Notes:** Displayed: computed available slots. Derived: entirely — every slot shown is computed live from Availability Rule, Time Block, Booking, Calendar Connection, and Recurring Series data; nothing here is directly entered by a user.
+
+**Interactions:** Depends on Availability & Working Hours Setup (FEAT-02), Two-Way Calendar Sync (FEAT-04), Manual Time Blocking (FEAT-17), Recurring/Standing Appointments (FEAT-21); feeds Public Booking Page & Booking Flow (FEAT-05).
+
+**Signals:** slot_list_computed, slot_held, slot_hold_expired, slot_conflict_prevented.
+
+### Two-Way Calendar Sync
+
+**ID:** FEAT-04
+
+**Description:** The Pro connects their personal Google or Apple calendar. Busy time there blocks Chairtime availability, and confirmed Chairtime bookings appear on that personal calendar automatically.
+
+**Priority:** Core
+
+**Phase:** MVP
+
+**Type:** Platform
+
+**Rationale:** BRIEF.md's Ecosystem & Integrations states this is two-way and "both matter" for Google and Apple. A pro who lives partly off-platform (personal appointments, a second job) cannot trust the availability engine without it, directly serving the "never silently double-book" success criterion.
 
 **Connected Entities:** Calendar Connection (create, update, delete)
 
 **Key Capabilities:**
-- Connect a personal calendar -- Mara links her existing calendar to the product
-- Pull busy time in -- Existing personal events block matching availability automatically
-- Push bookings out -- Confirmed bookings appear on Mara's personal calendar automatically
-- Disconnect -- Mara can unlink her calendar at any time
+- Connect a Google or Apple calendar
+- See connection health (connected / needs reconnection)
+- Disconnect a calendar at any time
 
 **Primary Flows & Alternates:**
-- Happy path: Mara connects her calendar during onboarding (or later from settings) -> busy events immediately start blocking matching availability -> every new confirmed booking appears on her personal calendar within a short delay
-- Sync temporarily unavailable: if the external calendar is briefly unreachable, availability falls back to internally-known bookings and blocks only, with a discreet notice that external busy time may be briefly stale, rather than silently trusting outdated data
-- Disconnection: Mara disconnects her calendar -> external busy time stops being pulled in going forward, and previously pushed bookings remain on her personal calendar (the product does not reach back to remove them)
+- Happy path: Pro connects their calendar during onboarding; from that point, external busy time blocks Chairtime slots and new Chairtime bookings appear on the personal calendar within moments of confirmation.
+- Alternate: the connection lapses (revoked access, expired token); the Pro sees a clear "reconnect your calendar" prompt on their dashboard, and the availability engine visibly narrows its confidence rather than silently trusting stale data.
+- Alternate: Pro disconnects intentionally; existing Chairtime bookings remain intact, but external busy time no longer factors into future availability until reconnected.
 
-**States:** Empty: a Pro who has not connected a calendar sees a plain, optional prompt to do so — connection is not mandatory to use the product. Loading: initial sync after connecting shows a visible "syncing your calendar" state. Error: a sync failure is shown discreetly to Mara with guidance to reconnect if it persists; it never silently and permanently breaks availability accuracy without telling her. Offline-degraded: the last successfully synced busy-time snapshot continues to inform availability until sync resumes.
+**States:** Empty: no calendar connected shows a plain explanation of what connecting does and why, not a technical error. Loading: a brief "syncing" indicator appears right after connecting. Error: a sync failure surfaces as a dashboard banner ("reconnect needed"), never a silent gap. Offline-degraded: the most recently synced busy times remain in effect until connectivity is restored.
 
-**Validation & Limits:** Only one personal calendar connection per Pro in v1; sync delay for busy time and pushed bookings is expected to be short (on the order of a few minutes), not instantaneous.
+**Validation & Limits:** Only one calendar of each supported kind may be connected per Pro Account at a time; sync latency target is near-immediate (busy time and new bookings should reflect within a couple of minutes each way).
 
-**Access:** Only Mara (Full) can connect, view sync status, or disconnect her own calendar; this has no client-facing surface at all.
+**Access:** The Pro has Full access to connect/disconnect their own calendar. Clients have no visibility into this at all. Platform Operator (Support) has View-only access to connection health for troubleshooting.
 
-**Communications:** N/A — sync is a background capability with no messages of its own beyond an in-product status notice to Mara if it fails.
+**Communications:** A dashboard alert (not a text/email) when a connection needs reconnecting.
 
-**Data Notes:** Captured: connection credentials/authorization (handled by the calendar capability itself, not stored as product data beyond what is needed to maintain the connection). Displayed: sync status. Derived: busy-time blocks used by Live Availability & Slot Booking. Source: the Pro's connected personal calendar.
+**Data Notes:** Captured: connection status and the minimum busy/free time data needed to block slots (not full event details). Displayed: connection status to the Pro. Derived: none. Source: the Pro's own calendar account, and Chairtime's own confirmed bookings written out to it.
 
-**Interactions:** Feeds Live Availability & Slot Booking (FEAT-02); consumed during Pro Onboarding & Setup (FEAT-13); interacts with Pro Manual Schedule Blocking (FEAT-10) as a second, external source of blocked time.
+**Interactions:** Feeds Real-Time Slot Availability Engine (FEAT-03); reads from Booking (FEAT-05, FEAT-10, FEAT-11) to write bookings out to the external calendar.
 
-**Signals:** calendar_connected, calendar_disconnected, calendar_sync_succeeded, calendar_sync_failed.
+**Signals:** calendar_connected, calendar_disconnected, calendar_sync_failed, calendar_reconnected.
 
----
+### Public Booking Page & Booking Flow
 
-### Pro Onboarding & Setup
+**ID:** FEAT-05
 
-**ID:** FEAT-13
-
-**Description:** The guided first-run experience that takes Mara from signing up to having a working, shareable booking page: creating her account, adding her first services and policy, optionally connecting her calendar, and getting her bio-link URL.
+**Description:** The single, mobile-first page a client reaches from the Pro's Instagram bio link — showing the Pro's name, services with prices and durations, and the deposit rule in plain words — where a client picks a service, a genuinely free time, enters their name and phone, opts into texts, and pays the deposit, all in one continuous flow.
 
 **Priority:** Core
 
 **Phase:** MVP
 
-**Type:** Lifecycle
+**Type:** User-Facing
 
-**Rationale:** Every product has a first run, and this one gates the founder's own three-month goal of "first paying pro" (BRIEF.md, Constraints) — a Pro who cannot quickly reach a working page never becomes that first paying customer. MVP: it is the on-ramp to every other Core feature.
+**Rationale:** This is the literal product described in BRIEF.md's Vision: "a client opens the pro's link... picks a service and a genuinely free time... pays a card deposit." It is the entire reason the product exists and the founder's stated one-minute benchmark.
 
-**Connected Entities:** Pro Profile (create), Subscription (create), Service (create, via handoff to FEAT-09), Calendar Connection (create, optional, via handoff to FEAT-12)
-
-**Key Capabilities:**
-- Create a Pro account -- Mara signs up and creates her business profile
-- Add first services and policy -- Mara is guided through adding at least one service and setting her deposit/cancellation rule
-- Connect calendar (optional) -- Mara can connect her personal calendar during setup or skip and do it later
-- Get the bio-link URL -- Mara receives the link to put in her Instagram bio
-
-**Primary Flows & Alternates:**
-- Happy path: Mara signs up -> adds her business name, timezone, and currency -> adds at least one service with a price, duration, and deposit rule -> sets basic hours -> optionally connects her calendar -> receives her bio-link URL, ready to share
-- Skip calendar connection: Mara completes setup without connecting a calendar; her availability is still fully protected by internal bookings and manual blocking, and she can connect a calendar later from settings with no penalty
-- Abandon mid-setup: Mara closes the product partway through; on return, setup resumes exactly where she left off with earlier answers preserved
-
-**States:** Empty: N/A — onboarding is itself the empty-state resolution for a brand-new Pro. Loading: each step saves with brief, visible confirmation before advancing. Error: a failed save at any step preserves entered data and offers a retry, never forcing Mara to restart. Offline-degraded: onboarding requires connectivity to create the account and save progress; a clear message asks her to reconnect.
-
-**Validation & Limits:** At least one service with a valid price, duration, and deposit rule is required before the bio-link URL is issued; all other steps (hours refinement, calendar connection) can be completed or revisited later from settings.
-
-**Access:** Only a new or existing Mara (Full, for her own onboarding) goes through this; there is no client- or operator-facing equivalent.
-
-**Communications:** A welcome message confirms account creation and provides the bio-link URL once minimum setup is complete.
-
-**Data Notes:** Captured: business name, timezone, currency, initial services, initial policy, optional calendar connection. Source: entirely Mara's own input during this guided flow.
-
-**Interactions:** Hands off to Business Settings & Policy Configuration (FEAT-09) and Two-Way Calendar Sync (FEAT-12); depends on Pro Account & Authentication (FEAT-14) and Pro Subscription & Billing (FEAT-17).
-
-**Signals:** onboarding_started, onboarding_step_completed, onboarding_resumed, onboarding_completed, bio_link_issued.
-
----
-
-### Pro Account & Authentication
-
-**ID:** FEAT-14
-
-**Description:** Mara's own account — how she signs in securely, recovers access if she's locked out, and manages her basic profile details.
-
-**Priority:** Core
-
-**Phase:** MVP
-
-**Type:** Lifecycle
-
-**Rationale:** A paid, single-operator business tool requires a durable, securable account for its one operator — this is domain-standard scaffolding every feature in the product depends on. [INFERRED from: domain knowledge — a subscription business tool with a Pro who "sets up services, prices... working hours" (BRIEF.md, Target Users & Roles) cannot exist without an account that reliably belongs to that one Pro across sessions.] MVP: every other Pro-facing feature assumes an authenticated Mara.
-
-**Connected Entities:** Pro Profile (create, update)
+**Connected Entities:** Booking (create), Client (create), Service (read), Cancellation Policy (read), Messaging Consent (create — captured here)
 
 **Key Capabilities:**
-- Sign in securely -- Mara accesses her account from her phone
-- Recover access -- Mara regains access if she loses her sign-in method
-- Manage basic profile -- Mara updates her name, business name, and contact details
+- View a Pro's services, prices, durations, and deposit rule in plain language
+- Pick a service and a genuinely free time slot
+- Enter name and phone, and opt in to text messages
+- Complete deposit payment and receive an immediate on-screen confirmation
 
 **Primary Flows & Alternates:**
-- Happy path: Mara signs in on her phone -> lands on her dashboard
-- Lost access: Mara requests recovery -> verifies she owns the account -> regains access without losing any of her data
-- Profile update: Mara edits her business name or contact details -> change applies immediately to her Public Booking Page
+- Happy path: client taps the bio link -> sees services -> picks one -> picks a free time -> enters name and phone -> opts in to texts -> pays the deposit by card -> sees a confirmation on screen, in under a minute end to end.
+- Alternate: returning client — a client who has booked with this Pro before is recognized by phone number and can skip re-entering their name (BRIEF.md's identity mechanism, FEAT-06).
+- Alternate: payment fails or is declined — the client sees a clear, specific reason and can retry with the same or a different card without losing their selected slot (within the slot hold timeout).
 
-**States:** Empty: N/A — an account either exists or the Pro is in onboarding. Loading: sign-in shows a brief confirmation state. Error: a failed sign-in shows a clear, non-technical reason (wrong details, needs recovery) without revealing whether a given identifier is registered. Offline-degraded: previously signed-in sessions may continue to view already-loaded data; signing in fresh requires connectivity.
+**States:** Empty: N/A — the booking page always shows the Pro's current service list; if a Pro has zero active services, the page shows a plain "temporarily not accepting bookings" message rather than a broken page. Loading: a lightweight indicator while slots load; the page never appears interactive before real availability has loaded. Error: a failed step (slot no longer available, payment failure) keeps all previously entered information intact so the client never has to start over. Offline-degraded: booking requires a live connection to guarantee correctness (per the Real-Time Slot Availability Engine's own offline stance); a client who loses connection mid-flow sees a plain "check your connection and try again" message with nothing charged.
 
-**Validation & Limits:** Standard account-security expectations apply — a functional, non-technical way to prove ownership at sign-in and at recovery; one account per Pro.
+**Validation & Limits:** Name required (1–100 characters); phone number required and must be a valid, reachable format; the client must actively check the texting opt-in — it is never pre-checked; a slot hold expires after a short fixed window if payment is not completed.
 
-**Access:** Only Mara (Full) accesses her own account; the Operator (View) may look up account status read-only for support but cannot sign in as Mara.
+**Access:** Open to any Client, with no login required to reach the flow itself (BRIEF.md: "must not face a signup wall"). The Pro has Full/View access to see resulting bookings on their own dashboard. Platform Operator (Support) has View-only access.
 
-**Communications:** Account-related notices (e.g., a recovery request was made) are sent to Mara's own registered contact method.
+**Communications:** Triggers the immediate booking confirmation handled by Automated Booking Messaging (FEAT-08).
 
-**Data Notes:** Captured: Mara's name, business name, and contact details. Source: Mara's own input, established during Pro Onboarding & Setup (FEAT-13).
+**Data Notes:** Captured: chosen service and time, client name and phone, texting opt-in, deposit payment outcome. Displayed: service list, prices, durations, deposit rule, available slots. Derived: none directly; the resulting Booking record is the source others read from.
 
-**Interactions:** Depended on by every Pro-facing feature; feeds Pro Subscription & Billing (FEAT-17) and Two-Way Calendar Sync (FEAT-12).
+**Interactions:** Depends on Service & Pricing Management (FEAT-01), Real-Time Slot Availability Engine (FEAT-03), Client Booking Identity (FEAT-06), Deposit Payment at Booking (FEAT-07), Cancellation & No-Show Policy Engine (FEAT-09); feeds Automated Booking Messaging (FEAT-08) and Pro Daily Schedule Dashboard (FEAT-12).
 
-**Signals:** signed_in, sign_in_failed, recovery_requested, profile_updated.
+**Signals:** booking_page_viewed, service_selected, slot_selected, booking_completed, booking_abandoned (with last completed step).
 
----
+### Client Booking Identity
 
-### Payment Processing Capability
+**ID:** FEAT-06
 
-**ID:** FEAT-15
-
-**Description:** The underlying capability that collects client deposits and the Pro's own subscription payments by card, without the product's own code ever seeing or storing a card number.
+**Description:** The lightweight, password-free way a client proves it's them when they come back to view, reschedule, or cancel a booking — a phone number plus a one-tap link sent to that phone, rather than any signup wall or password.
 
 **Priority:** Core
 
@@ -713,41 +329,119 @@ This product includes 29 features: 17 Core, 4 Important, 8 Nice-to-Have. By phas
 
 **Type:** Platform
 
-**Rationale:** The brief is explicit and non-negotiable here: "an established card payment processor — collects deposits and subscription payments; owns all card data. The product never sees or stores a card number" (BRIEF.md, Ecosystem & Integrations). MVP: both deposit collection and subscription billing depend on it from day one.
+**Rationale:** BRIEF.md's Open Questions names this exactly ("A phone number plus a magic link, or something else?") and its Target Users & Roles states clients "must not face a signup wall or need a password-style account." As the Visionary's product judgment on this open question: phone-plus-link is the lightest workable mechanism that still lets a client manage a specific booking without exposing any other client's or pro's data. MVP: without it, a client has no way to self-serve a reschedule or cancellation, which the brief requires (FEAT-10).
 
-**Connected Entities:** Deposit/Payment Record (create, via FEAT-04), Subscription (create, via FEAT-17)
+**Connected Entities:** Client (read, update — matches by phone), Booking (read — scoped to that client and pro)
 
 **Key Capabilities:**
-- Collect a client deposit -- Processes a card payment into the Pro's own payout account
-- Collect a Pro's subscription payment -- Processes the Pro's own monthly card charge
-- Process a refund -- Returns a previously collected deposit to the client's card
+- Request a one-tap access link sent by text to the phone number used at booking
+- View only this pro's bookings tied to that phone number, past and upcoming
+- Access expires and must be re-requested after a short period for security
 
 **Primary Flows & Alternates:**
-- Happy path: a deposit or subscription charge is requested -> payment-processing capability handles card entry and authorization -> result (success/decline) is returned to the requesting feature
-- Decline: the capability returns a clear decline reason where available, without exposing any card details back to the product
-- Refund: a previously captured deposit is returned to the original card via the same capability
+- Happy path: client taps "manage my booking" from a reminder text or the booking page, requests a link, taps it, and sees only their own bookings with this one pro.
+- Alternate: client requests a link from a phone number with no bookings for this pro; they see a plain "no bookings found" message rather than an error, with no hint about whether the number exists elsewhere.
+- Alternate: the access link expires before use; requesting a new one is a single tap, with no separate "reset" flow to learn.
 
-**States:** Empty: N/A — this is a capability invoked by other features, not a standalone view. Loading: N/A — handled within the invoking feature's own loading state. Error: N/A — handled within the invoking feature's own error state (see FEAT-04, FEAT-17). Offline-degraded: N/A — requires connectivity by nature; handled within the invoking feature.
+**States:** Empty: a phone number with no bookings shows a plain, non-alarming message. Loading: brief indicator while the link is generated and sent. Error: failed link delivery offers an immediate retry. Offline-degraded: N/A — this is an online-only identity check by design (correctness over convenience).
 
-**Validation & Limits:** The product's own code never receives or stores raw card numbers, per the brief's stated regulatory constraint (BRIEF.md, Constraints); all money the client pays as a deposit flows directly into the Pro's own payout account, with no per-booking platform cut (BRIEF.md, Business Context).
+**Validation & Limits:** Access links are single-use and time-limited (short expiry, on the order of minutes to a couple of hours); a client can never view another phone number's bookings even if they guess or mistype one.
 
-**Access:** N/A — this is a Platform-type capability with no direct user-facing access surface of its own; it is invoked by Deposit Payment at Booking (FEAT-04), No-Show & Cancellation Deposit Handling (FEAT-08), and Pro Subscription & Billing (FEAT-17), which carry their own Access rules.
+**Access:** Open to any Client using their own phone number; a client can never see another client's bookings under any circumstance — this is a hard privacy boundary from BRIEF.md's Constraints. The Pro does not use this mechanism (the Pro has their own dashboard login, out of this feature's scope). Platform Operator (Support): None — support access does not use or bypass client identity.
 
-**Communications:** N/A — this capability itself sends no messages; the features that invoke it own their own communications.
+**Communications:** Sends the one-tap access link by text (or email fallback per BRIEF.md's messaging constraint) each time one is requested.
 
-**Data Notes:** Captured: none directly by the product beyond payment status and amount; card data is owned entirely by the processing capability. Derived: N/A. Source: N/A.
+**Data Notes:** Captured: nothing new — reuses the phone number captured at booking (FEAT-05). Displayed: the client's own booking list. Derived: none. Source: matched against existing Client records for this pro only.
 
-**Interactions:** Invoked by Deposit Payment at Booking (FEAT-04), No-Show & Cancellation Deposit Handling (FEAT-08, for refunds), Pro Subscription & Billing (FEAT-17), In-App Tipping at Checkout (FEAT-24), and In-App Balance Payment (FEAT-25).
+**Interactions:** Depended on by Client-Initiated Cancel/Reschedule (FEAT-10); reads Client (created by FEAT-05) and Booking.
 
-**Signals:** payment_capability_invoked, payment_capability_succeeded, payment_capability_failed.
+**Signals:** access_link_requested, access_link_used, access_link_expired_unused.
 
----
+### Deposit Payment at Booking
 
-### SMS Messaging & Consent Capability
+**ID:** FEAT-07
 
-**ID:** FEAT-16
+**Description:** The client pays a card deposit — a fixed amount or a percentage of the service price, per the Pro's own rule — at the moment of booking, with the balance left due in person at the appointment.
 
-**Description:** The underlying capability that delivers text messages to clients — verification codes, confirmations, and reminders — while enforcing that a client's explicit consent is captured and respected before any message beyond the initial verification is sent.
+**Priority:** Core
+
+**Phase:** MVP
+
+**Type:** User-Facing
+
+**Rationale:** BRIEF.md's Vision states the client "pays a card deposit," and the Business Context is explicit that the platform never stores or handles card data itself and takes no per-booking cut. This is the mechanism that solves the founder's core problem: deposits that used to be asked for by hand and often never arrived.
+
+**Connected Entities:** Deposit Transaction (create), Booking (update — marks as paid/confirmed), Service (read — for the deposit rule)
+
+**Key Capabilities:**
+- Pay the exact deposit amount required by the selected service's rule, by card
+- See a clear on-screen and confirmed record that the deposit succeeded
+- Have a failed or declined payment explained clearly, with the slot held briefly to retry
+
+**Primary Flows & Alternates:**
+- Happy path: client enters card details at the payment step; the deposit is authorized and captured; the booking flips from pending to confirmed instantly.
+- Alternate: the card is declined; the client sees the decline reason from the processor in plain language and can retry with another card without losing the held slot (within its short hold window).
+- Alternate: payment succeeds but the confirmation step fails to load; the booking is still correctly confirmed server-side and the client is shown the confirmation on next page load or via the confirmation text, never double-charged and never left unsure whether they are booked.
+
+**States:** Empty: N/A — payment is always tied to an in-progress booking, never a standalone screen. Loading: a clear "processing payment, do not close this page" state during authorization. Error: a specific, actionable message for each decline reason available from the processor. Offline-degraded: payment requires connectivity by nature; a connection drop mid-payment is treated as a failure with a safe retry, never an ambiguous charge.
+
+**Validation & Limits:** Deposit amount is computed exactly from the service's rule (fixed amount, or percentage rounded to the nearest currency unit) and cannot be altered by the client; one deposit charge per booking.
+
+**Access:** The Client pays for their own booking only. The Pro sees the resulting deposit status on their dashboard (Full/View) but never the card number itself — the processor owns all card data, per BRIEF.md's Constraints. Platform Operator (Support) has View-only access to transaction status, never to card data.
+
+**Communications:** Feeds the confirmation message in Automated Booking Messaging (FEAT-08); a payment failure shows in-flow only and sends no separate message.
+
+**Data Notes:** Captured: deposit amount and payment outcome. Displayed: paid/unpaid status on bookings, on both the client's confirmation and the Pro's dashboard. Derived: none — amount is computed once from Service at the moment of booking and then fixed. Source: the payment-processing capability the product depends on (BRIEF.md, Business Context) for the actual card handling; Chairtime holds only the outcome and amount.
+
+**Interactions:** Depends on Service & Pricing Management (FEAT-01) and Public Booking Page & Booking Flow (FEAT-05); feeds Cancellation & No-Show Policy Engine (FEAT-09), No-Show Marking & Deposit Forfeiture (FEAT-11), and Booking & Payment Activity Record (FEAT-16).
+
+**Signals:** deposit_payment_attempted, deposit_payment_succeeded, deposit_payment_failed (with decline reason category).
+
+### Automated Booking Messaging
+
+**ID:** FEAT-08
+
+**Description:** The client receives an immediate confirmation the moment a booking is paid, and an automatic reminder before the appointment with a one-tap "I'll be there / I need to reschedule" response — replacing the Pro's habit of texting reminders by hand.
+
+**Priority:** Core
+
+**Phase:** MVP
+
+**Type:** User-Facing
+
+**Rationale:** BRIEF.md's Vision states this exactly: "a confirmation text lands immediately... a reminder arrives with a one-tap 'I'll be there / I need to reschedule.'" This directly replaces the founder's stated evening admin burden and is central to the "pro never chases" success criterion.
+
+**Connected Entities:** Message (create), Booking (read), Messaging Consent (read)
+
+**Key Capabilities:**
+- Send an immediate confirmation message on successful booking
+- Send an automatic reminder a set time before the appointment (two days, per BRIEF.md's example)
+- Offer a one-tap "I'll be there" or "I need to reschedule" response from the reminder itself
+
+**Primary Flows & Alternates:**
+- Happy path: booking completes -> confirmation text sent within moments; two days before the appointment -> reminder sent with the one-tap options; tapping "I'll be there" simply acknowledges, tapping "I need to reschedule" routes into Client-Initiated Cancel/Reschedule (FEAT-10).
+- Alternate: the client never opted in to texting; the confirmation and reminder are sent by email instead, per BRIEF.md's fallback ("Email confirmations are acceptable as a fallback").
+- Alternate: a text fails to deliver; the system retries once and, on continued failure, falls back to email and flags the delivery gap on the Pro's dashboard so the Pro is never blindsided by a client who "never got a reminder."
+
+**States:** Empty: N/A — messages only ever exist tied to a booking. Loading: N/A — sending happens asynchronously in the background with no user-facing wait. Error: a delivery failure is retried and then falls back to email; it is never silently dropped. Offline-degraded: N/A — this is a server-side sending capability, not a client-facing interactive screen.
+
+**Validation & Limits:** No message is sent to a phone number without active Messaging Consent (FEAT-14); reminder timing defaults to two days before the appointment, matching BRIEF.md's stated example.
+
+**Access:** Only the Client tied to that Booking receives its messages; the Pro sees message history for their own bookings (via FEAT-16) but does not receive the client's replies as raw texts — only the resulting reschedule/confirmation status. Platform Operator (Support) has View-only access to delivery status for troubleshooting.
+
+**Communications:** This feature *is* the communications: booking confirmation, pre-appointment reminder, and the reminder's one-tap reply handling.
+
+**Data Notes:** Captured: message content summary and delivery status per send. Displayed: delivery status to the Pro (via FEAT-16). Derived: reminder timing is derived from the Booking's appointment time. Source: Booking and Messaging Consent records.
+
+**Interactions:** Depends on Public Booking Page & Booking Flow (FEAT-05), Deposit Payment at Booking (FEAT-07), and Messaging Consent Management (FEAT-14); feeds Client-Initiated Cancel/Reschedule (FEAT-10) (via the reschedule tap) and Booking & Payment Activity Record (FEAT-16).
+
+**Signals:** confirmation_sent, reminder_sent, reminder_reply_confirmed, reminder_reply_reschedule_requested, message_delivery_failed.
+
+### Cancellation & No-Show Policy Engine
+
+**ID:** FEAT-09
+
+**Description:** The Pro defines their own cancellation window and what happens to the deposit inside vs. outside it; the system enforces that policy automatically and consistently on every cancellation and no-show, exactly as the client agreed to it at booking.
 
 **Priority:** Core
 
@@ -755,367 +449,563 @@ This product includes 29 features: 17 Core, 4 Important, 8 Nice-to-Have. By phas
 
 **Type:** Platform
 
-**Rationale:** The brief requires explicit consent captured at booking with reminders that "respect that consent (US texting rules)" (BRIEF.md, Constraints; Ecosystem & Integrations). MVP: confirmations and reminders — a Core capability — cannot legally or functionally exist without this.
+**Rationale:** BRIEF.md's Business Context is exact: "a cancellation inside the pro's window forfeits the deposit... a cancellation outside the window refunds the deposit automatically," "under the pro's own cancellation policy that the client agreed to when booking." This is the mechanism behind the founder's headline promise: "the pro never chases a no-show again."
 
-**Connected Entities:** Messaging Consent Record (create, read, update)
+**Connected Entities:** Cancellation Policy (create, update), Deposit Transaction (update — refund or forfeit), Booking (read)
 
 **Key Capabilities:**
-- Deliver a text message -- Sends a verification code, confirmation, or reminder to a client's phone
-- Enforce consent -- Blocks any consent-gated message (confirmation, reminder) if consent is not active
-- Record consent state -- Tracks whether a client has granted or withdrawn consent
+- Set the cancellation/reschedule window (e.g., 24 hours before appointment)
+- Automatically refund the deposit for a cancellation made outside the window
+- Automatically flag a cancellation inside the window (or a no-show) for deposit forfeiture, applied via FEAT-11
 
 **Primary Flows & Alternates:**
-- Happy path: a feature requests a message be sent -> capability checks consent state where required -> delivers the message -> reports delivery status back
-- Consent withdrawn: a client withdraws consent -> future consent-gated messages for that client stop -> already-scheduled reminders for existing bookings are cancelled rather than sent anyway
-- Delivery failure: the capability reports a failure back to the requesting feature rather than silently dropping the message
+- Happy path: client cancels well outside the window -> deposit refunds automatically, no Pro action needed.
+- Alternate: client cancels inside the window -> the client is shown, before confirming, exactly what will happen to their deposit under this pro's policy, so there is no surprise or dispute later.
+- Alternate: Pro changes their policy going forward; every already-confirmed booking is still governed by the policy version shown to the client at the time they booked, never retroactively changed underneath them.
 
-**States:** Empty: N/A — this is a capability, not a standalone view. Loading: N/A — handled within the invoking feature. Error: delivery failures are reported to the invoking feature to display appropriately (see FEAT-05). Offline-degraded: N/A — requires connectivity by nature.
+**States:** Empty: N/A — a default, sensible cancellation window is proposed during onboarding (FEAT-15) so no Pro Account exists without an active policy. Loading: N/A — policy evaluation is instantaneous at the moment of cancellation. Error: if automatic refund processing fails, the outcome is flagged clearly on the Pro's dashboard rather than silently failing. Offline-degraded: N/A — enforcement happens server-side regardless of either party's connectivity at the time.
 
-**Validation & Limits:** No consent-gated message (confirmation, reminder) is ever sent without an active, recorded consent for that client; the one-time verification code at booking is the one message type sent prior to consent being granted, since it is part of establishing identity, not marketing or reminder content.
+**Validation & Limits:** The cancellation window must be a positive number of hours before the appointment; the policy in force is always the one shown to the client at the moment they booked (versioned, never edited retroactively for existing bookings).
 
-**Access:** N/A — this is a Platform-type capability with no direct user-facing access surface; it is invoked by Client Identity & Booking Details Capture (FEAT-03) and Booking Confirmation & Reminders (FEAT-05), which carry their own Access rules.
+**Access:** The Pro has Full access to set the policy. The Client sees the current policy in plain words during booking and at cancellation time (Own-only, read). Platform Operator (Support) has View-only access.
 
-**Communications:** N/A — this capability performs communications on behalf of other features rather than owning any of its own.
+**Communications:** N/A — the policy's application is communicated in-flow (at booking and at cancellation), not as a separate standalone message; the outcome (refund confirmed / deposit kept) is included in the relevant confirmation.
 
-**Data Notes:** Captured: consent grant/withdrawal events and timestamps. Source: client action during Client Identity & Booking Details Capture (FEAT-03) or a later consent-withdrawal action.
+**Data Notes:** Displayed: the plain-language policy on the booking page and at cancellation. Derived: the refund-vs-forfeit outcome for every cancellation is derived from comparing the cancellation timestamp to the booking's appointment time and the policy's window. Source: pro-set policy plus system clock.
 
-**Interactions:** Invoked by Client Identity & Booking Details Capture (FEAT-03) and Booking Confirmation & Reminders (FEAT-05); extended by WhatsApp Messaging Channel (FEAT-29).
+**Interactions:** Feeds Public Booking Page & Booking Flow (FEAT-05) (policy display), Client-Initiated Cancel/Reschedule (FEAT-10), and No-Show Marking & Deposit Forfeiture (FEAT-11).
 
-**Signals:** message_send_requested, message_delivered, message_delivery_failed, consent_withdrawn.
+**Signals:** cancellation_policy_updated, cancellation_within_window_flagged, deposit_refund_triggered.
 
----
+### Client-Initiated Cancel/Reschedule
 
-### Pro Subscription & Billing
+**ID:** FEAT-10
 
-**ID:** FEAT-17
-
-**Description:** Mara's own flat monthly subscription to use the product, paid by card inside the product itself — with no per-booking cut ever taken from her deposits.
+**Description:** A client can cancel or reschedule their own booking, within the Pro's stated policy, without a phone call or a DM — from the reminder's one-tap option or the client's own booking-management link.
 
 **Priority:** Core
 
 **Phase:** MVP
 
-**Type:** Lifecycle
+**Type:** User-Facing
 
-**Rationale:** The brief's business model is explicit: "a flat monthly subscription per pro... absolutely no per-booking cut" and "the pro pays the subscription by card inside the product" (BRIEF.md, Business Context). MVP: this is how the product is commercially viable from the very first paying Pro.
+**Rationale:** BRIEF.md's Target Users & Roles states the Client "reschedules or cancels within the policy window" as a defined capability, and the Vision's reminder flow ("I need to reschedule") depends on it existing.
 
-**Connected Entities:** Subscription (create, update)
+**Connected Entities:** Booking (update — cancel or reschedule), Deposit Transaction (read — for policy outcome preview), Cancellation Policy (read)
 
 **Key Capabilities:**
-- Subscribe -- Mara starts her paid subscription by card
-- View billing status -- Mara sees her current plan status and next charge date
-- Update payment method -- Mara updates the card used for her own subscription
-- Handle a failed charge -- Mara is clearly told if her subscription payment fails and how to fix it
+- Cancel an upcoming booking and see the deposit outcome before confirming
+- Reschedule to a new genuinely free time for the same service, without a new deposit charge if within policy
+- See the applicable cancellation window countdown before acting
 
 **Primary Flows & Alternates:**
-- Happy path: Mara enters card details during or shortly after onboarding -> subscription activates -> she is charged automatically each month going forward
-- Payment fails: a monthly charge fails -> Mara is notified clearly and given a grace period and a simple way to update her card before booking capability is affected
-- Cancellation: Mara cancels her subscription -> her Public Booking Page stops accepting new bookings at the end of the current billing period, while existing confirmed bookings remain honored
+- Happy path: client accesses their booking (via FEAT-06), taps reschedule, picks a new free slot; the booking updates and both parties are notified.
+- Alternate: client cancels inside the policy window; they see the deposit-forfeiture outcome plainly before confirming, so the action is never a surprise.
+- Alternate: the desired new time is not available; the client sees the same real-time slot list as a fresh booking, never a stale or misleading option.
 
-**States:** Empty: N/A — a Pro is either mid-onboarding (no subscription yet) or subscribed. Loading: billing actions show a brief confirmation state. Error: a failed charge or update shows a clear, specific reason and next step, never a silent failure. Offline-degraded: billing status can be viewed read-only offline; changes require connectivity.
+**States:** Empty: N/A — this flow only exists against an existing booking. Loading: brief indicator while re-checking live availability for a reschedule. Error: if the update fails to save, the original booking remains untouched and intact rather than left in an ambiguous state. Offline-degraded: requires connectivity, consistent with the availability engine's correctness-first stance.
 
-**Validation & Limits:** Subscription is billed at a single flat monthly rate, per pro, with no usage- or booking-based variable component; a grace period applies before a failed payment suspends new-booking capability, so a single card decline does not instantly take Mara offline.
+**Validation & Limits:** A reschedule must land on a slot that passes the same validation as a new booking (FEAT-03); a booking already marked completed or no-show cannot be cancelled or rescheduled.
 
-**Access:** Only Mara (Full) manages her own subscription; there is no client-facing surface, and the Operator (View) can see subscription status read-only for support purposes only.
+**Access:** Own-only for the Client (their own booking only, verified via FEAT-06). The Pro sees the resulting change on their dashboard (Full/View) and can also cancel/reschedule on the client's behalf as part of their own booking management. Platform Operator (Support) has View-only access.
 
-**Communications:** Billing confirmations, upcoming-charge notices, and payment-failure alerts are sent to Mara.
+**Communications:** Triggers a cancellation or reschedule confirmation to the client and a change notice to the Pro's dashboard (via FEAT-08's messaging mechanism).
 
-**Data Notes:** Captured: subscription status and billing history. Source: Payment Processing Capability (FEAT-15) reports charge outcomes here.
+**Data Notes:** Captured: the new time (if rescheduling) or cancellation timestamp. Displayed: updated booking status to both parties. Derived: deposit outcome, via Cancellation & No-Show Policy Engine (FEAT-09).
 
-**Interactions:** Depends on Pro Account & Authentication (FEAT-14) and Payment Processing Capability (FEAT-15); consumed during Pro Onboarding & Setup (FEAT-13).
+**Interactions:** Depends on Client Booking Identity (FEAT-06), Real-Time Slot Availability Engine (FEAT-03), Cancellation & No-Show Policy Engine (FEAT-09); feeds Automated Booking Messaging (FEAT-08), Waitlist for Cancelled Slots (FEAT-20), and Booking & Payment Activity Record (FEAT-16).
 
-**Signals:** subscription_started, subscription_charge_succeeded, subscription_charge_failed, subscription_cancelled.
+**Signals:** booking_cancelled_by_client, booking_rescheduled_by_client.
 
----
+### No-Show Marking & Deposit Forfeiture
+
+**ID:** FEAT-11
+
+**Description:** The Pro marks a booking as a no-show when a client fails to appear, and the deposit is forfeited to the Pro automatically under the agreed policy — with no manual chasing, invoicing, or renegotiation required.
+
+**Priority:** Core
+
+**Phase:** MVP
+
+**Type:** User-Facing
+
+**Rationale:** This is the founder's headline promise verbatim: "the pro never chases a no-show again," and BRIEF.md's Success Criteria states "Pros say 'I haven't had an unpaid no-show since I switched.'" The mechanism must be a single, low-effort action for the Pro.
+
+**Connected Entities:** Booking (update — mark no-show), Deposit Transaction (update — forfeit)
+
+**Key Capabilities:**
+- Mark a past-due booking as a no-show in one tap from the daily schedule
+- See the deposit automatically reflected as kept, with no separate invoicing step
+- Reverse a mistaken no-show mark (e.g., the client did show up) within a short grace period
+
+**Primary Flows & Alternates:**
+- Happy path: appointment time passes with the client absent; the Pro taps "no-show" from the dashboard; the deposit is marked forfeited automatically, and the record is retained for any future dispute.
+- Alternate: Pro mistakenly marks a no-show; they can undo it within a short grace period, restoring the booking to completed and the deposit to its prior state.
+- Alternate: a client disputes the no-show later; the Pro (or Platform Operator Support, if asked to help) can pull up the exact booking, its agreed policy version, and its timeline from Booking & Payment Activity Record (FEAT-16) as evidence.
+
+**States:** Empty: N/A — this action only appears against a specific past-due booking. Loading: N/A — instantaneous local action. Error: a failed forfeiture write is retried and flagged, never silently dropped, since money is at stake. Offline-degraded: marking requires connectivity so the forfeiture is recorded reliably and immediately — this is exactly the "never lose a deposit" correctness bar from BRIEF.md.
+
+**Validation & Limits:** A booking can only be marked no-show after its appointment time has passed; the undo grace period is short and fixed (on the order of a day) to prevent indefinite ambiguity in the client's own records.
+
+**Access:** The Pro has Full access to mark and unmark no-shows on their own bookings only. The Client sees the outcome (deposit kept) reflected in their own booking history but cannot mark or dispute it in-app beyond contacting the Pro directly. Platform Operator (Support) has View-only access, useful for dispute troubleshooting.
+
+**Communications:** N/A — the deposit outcome is visible in the client's own booking history rather than triggering a separate confrontational notification; the Pro's action is deliberately low-friction and silent toward the client.
+
+**Data Notes:** Captured: the no-show marking action and timestamp. Displayed: updated booking status and deposit outcome to the Pro; deposit status to the client. Derived: the forfeiture amount, from Cancellation & No-Show Policy Engine (FEAT-09).
+
+**Interactions:** Depends on Cancellation & No-Show Policy Engine (FEAT-09) and Deposit Payment at Booking (FEAT-07); feeds Booking & Payment Activity Record (FEAT-16) and Booking & Revenue Insights (FEAT-25).
+
+**Signals:** booking_marked_no_show, no_show_mark_undone, deposit_forfeited.
+
+### Pro Daily Schedule Dashboard
+
+**ID:** FEAT-12
+
+**Description:** The Pro's primary, phone-first view: today's (and upcoming) bookings, each with a paid badge, a client note, and how much balance is still due in person — the screen the Pro glances at between clients.
+
+**Priority:** Core
+
+**Phase:** MVP
+
+**Type:** User-Facing
+
+**Rationale:** BRIEF.md's Vision describes this exactly: "As the pro, you glance at your phone between clients: today's list, each booking with a paid badge, a client note, and how much is still due in person." This is the Pro's single most frequent touchpoint with the product.
+
+**Connected Entities:** Booking (read, update — quick actions), Client (read), Deposit Transaction (read)
+
+**Key Capabilities:**
+- View today's bookings at a glance, in time order, with paid/unpaid and balance-due status
+- View upcoming bookings beyond today
+- Take quick actions directly from the list: mark no-show, view client note, jump to reschedule/cancel
+
+**Primary Flows & Alternates:**
+- Happy path: Pro opens the dashboard between clients and sees the day's remaining bookings, each with status, in seconds.
+- Alternate: an empty day (no bookings) shows a plain, encouraging state rather than looking broken, with a shortcut to share the booking link.
+- Alternate: a booking's calendar-sync status is uncertain (FEAT-04 flagged an issue); the dashboard visibly marks that booking's reliability rather than presenting it with false confidence.
+
+**States:** Empty: a day with zero bookings shows a friendly "nothing booked yet today" state, never a bare blank screen. Loading: bookings render with a lightweight in-place indicator on slow connections. Error: a failed load shows the last successfully loaded data with a retry action, never an unexplained blank dashboard. Offline-degraded: the most recently loaded schedule remains viewable read-only; actions (like marking no-show) require reconnecting.
+
+**Validation & Limits:** N/A — this is a read-and-quick-action view; no new data is created here beyond the quick actions themselves, which are validated by their own features (FEAT-11, FEAT-10).
+
+**Access:** The Pro has Full access to their own schedule only. Clients have no access to this view. Platform Operator (Support) has View-only access for troubleshooting a specific reported issue.
+
+**Communications:** N/A — this is a viewing surface; it does not itself send messages.
+
+**Data Notes:** Displayed: booking time, service, client name/note, paid status, balance due. Derived: balance due (service price minus deposit paid). Source: reads Booking, Client, and Deposit Transaction records created elsewhere.
+
+**Interactions:** Depends on Public Booking Page & Booking Flow (FEAT-05), Deposit Payment at Booking (FEAT-07), Client Record Management (FEAT-13); surfaces quick actions into No-Show Marking & Deposit Forfeiture (FEAT-11) and Client-Initiated Cancel/Reschedule (FEAT-10, pro-initiated side).
+
+**Signals:** dashboard_viewed, quick_action_taken (with action type).
 
 ## Important Features
 
-### Booking Record & Dispute Trail
+### Client Record Management
+
+**ID:** FEAT-13
+
+**Description:** The Pro maintains a simple record for each client — contact details, private notes, and booking history with that Pro — and can permanently delete a client's record on request.
+
+**Priority:** Important
+
+**Phase:** MVP
+
+**Type:** User-Facing
+
+**Rationale:** BRIEF.md's Target Users & Roles states the Pro "sees every... client" and "can delete a client's record on request," and the Constraints section makes deletion-on-request an explicit regulatory-adjacent obligation. Ranked Important rather than Core because a client record is created automatically by the act of booking (FEAT-05) — this feature is about managing that record afterward, not about the core booking loop itself. MVP phase: the delete-on-request obligation is a launch-blocking privacy commitment, not something safe to defer.
+
+**Connected Entities:** Client (read, update, delete)
+
+**Key Capabilities:**
+- View a client's contact details and full booking history with this Pro
+- Add or edit a private note about a client (preferences, allergies noted informally, etc.)
+- Permanently delete a client's record on their request
+
+**Primary Flows & Alternates:**
+- Happy path: Pro opens a client from the dashboard or booking list, reviews history, and adds a quick note after an appointment.
+- Alternate: a client requests deletion; the Pro deletes the record, which removes contact details and notes while past financial records needed for dispute/audit purposes (FEAT-16) are retained in de-identified form per data-retention obligations.
+- Alternate: a deleted client books again later; a new client record is created — the system does not silently resurrect the old one.
+
+**States:** Empty: a client with no notes yet shows a plain empty note field, not an error. Loading: N/A — instant for the small per-pro client volumes described in BRIEF.md (100–500 clients). Error: a failed save preserves entered text with a retry option. Offline-degraded: the most recently loaded client list remains viewable read-only.
+
+**Validation & Limits:** Notes are free text with a generous but bounded length (e.g., up to 1,000 characters); deletion is a deliberate, confirmed action (not reversible, consistent with "delete on request" meaning delete).
+
+**Access:** The Pro has Full access to their own clients only. A Client can view their own contact details implicitly through their own booking history (FEAT-06) but does not see the Pro's private notes about them. Platform Operator (Support) has View-only access, explicitly excluding the Pro's private notes field, to respect the client's privacy even in support contexts.
+
+**Communications:** N/A — record management itself sends no notifications; a deletion is silent to the client beyond honoring their own request.
+
+**Data Notes:** Captured: private notes. Displayed: contact details, notes, booking history. Derived: none. Source: contact details from Public Booking Page & Booking Flow (FEAT-05); notes are direct pro input.
+
+**Interactions:** Depends on Public Booking Page & Booking Flow (FEAT-05) (creates the Client); feeds Pro Daily Schedule Dashboard (FEAT-12) and Client List Search & Filter (FEAT-24).
+
+**Signals:** client_note_added, client_record_viewed, client_record_deleted.
+
+### Messaging Consent Management
+
+**ID:** FEAT-14
+
+**Description:** The system that captures a client's explicit opt-in to text messaging at booking, lets a client withdraw consent at any time, and ensures every reminder and confirmation respects the current consent state.
+
+**Priority:** Important
+
+**Phase:** MVP
+
+**Type:** Platform
+
+**Rationale:** BRIEF.md's Constraints state plainly: "clients must explicitly agree to receive texts when they book, and reminders must respect that consent," citing US texting rules as the reason. Ranked Important rather than Core because it is a compliance-and-preference layer underneath the Core messaging feature (FEAT-08) rather than a capability a client seeks out on its own; it must still ship in MVP because it is a regulatory precondition for FEAT-08 to operate lawfully.
+
+**Connected Entities:** Messaging Consent (create, update)
+
+**Key Capabilities:**
+- Capture explicit opt-in at the moment of booking (never pre-checked)
+- Let a client withdraw consent at any time via a link included in messages
+- Fall back to email automatically for any client without active texting consent
+
+**Primary Flows & Alternates:**
+- Happy path: client checks the opt-in box at booking; all future confirmations and reminders for that pro go by text.
+- Alternate: client replies "STOP" or uses an opt-out link; texting consent is revoked immediately and future messages fall back to email.
+- Alternate: a client never opted in at all; every message for their bookings goes by email from the start, with no degraded experience implied.
+
+**States:** Empty: N/A — consent is always tied to a specific client-pro relationship, captured at first booking. Loading: N/A — instantaneous local state. Error: a failed consent-state update is treated conservatively — if in doubt, the system defaults to the safer (no-text) state rather than risk texting without valid consent. Offline-degraded: N/A — this is a background compliance state, not an interactive screen.
+
+**Validation & Limits:** Consent must be an explicit, unchecked-by-default action; a revoke request is honored on the very next message sent, with no grace period.
+
+**Access:** A Client manages only their own consent (Own-only). The Pro sees whether a given client can currently be texted (View, for planning purposes) but cannot override a client's revoked consent. Platform Operator (Support) has View-only access.
+
+**Communications:** N/A — this feature governs communications rather than sending its own, aside from an opt-out confirmation acknowledgment.
+
+**Data Notes:** Captured: opt-in/opt-out state and timestamp. Displayed: current consent status to the Pro (for planning) and to the client (in their own preferences). Derived: none. Source: direct client action at booking or via an opt-out link.
+
+**Interactions:** Depended on by Automated Booking Messaging (FEAT-08); fed by Public Booking Page & Booking Flow (FEAT-05).
+
+**Signals:** consent_granted, consent_revoked, message_routed_to_fallback_email.
+
+### Pro Onboarding & Setup Wizard
+
+**ID:** FEAT-15
+
+**Description:** The guided, one-time setup flow that takes a brand-new Pro from signup to a live, shareable booking link — services, hours, deposit rule, cancellation policy, and calendar connection, in a sensible order with sensible defaults.
+
+**Priority:** Important
+
+**Phase:** MVP
+
+**Type:** Lifecycle
+
+**Rationale:** Every product has a first run, and this one has an unusually high stakes first run: BRIEF.md's Constraints name a three-month runway to the first paying pro, so setup friction directly threatens the founder's timeline. Ranked Important rather than Core because, once complete, the wizard itself is never used again — the Core features it configures are what deliver ongoing value. MVP phase: a Pro cannot reach any Core feature without it.
+
+**Connected Entities:** Pro Account (create), Service (create), Availability Rule (create), Cancellation Policy (create), Subscription (create), Calendar Connection (create — offered, not required, to complete)
+
+**Key Capabilities:**
+- Guided, ordered setup: account -> at least one service -> working hours -> deposit rule -> cancellation policy -> (optional) calendar connection -> subscription payment
+- Sensible defaults offered at each step (e.g., a common cancellation window) that the Pro can accept or change
+- A shareable booking link generated the moment setup is minimally complete
+
+**Primary Flows & Alternates:**
+- Happy path: Pro signs up, moves through each step in order, accepting or adjusting defaults, and receives their shareable link at the end.
+- Alternate: Pro abandons setup partway through; on return, the wizard resumes exactly where they left off with earlier answers preserved, never forcing a restart.
+- Alternate: Pro skips connecting a calendar during setup; they can complete the rest of onboarding and connect it later from settings without being blocked.
+
+**States:** Empty: N/A — the wizard itself is the empty-state handler for a new account. Loading: N/A — each step is a simple form with instant local response. Error: a failed step preserves entered values with a retry option, consistent with every setup screen in this product. Offline-degraded: N/A — setup is a deliberate, connected session, not an in-the-moment mobile flow.
+
+**Validation & Limits:** The booking link is not generated until the minimum required steps (account, one service, working hours, deposit rule, cancellation policy, active subscription) are complete; calendar connection is the one optional step.
+
+**Access:** The Pro has Full access to their own onboarding. No other role touches this feature. Platform Operator (Support) has View-only access to see how far a specific pro has progressed, useful for support.
+
+**Communications:** A welcome confirmation once the booking link goes live.
+
+**Data Notes:** Captured: every setup field listed under Connected Entities. Displayed: setup progress and the resulting live link. Derived: none. Source: direct pro input at each step.
+
+**Interactions:** Feeds Service & Pricing Management (FEAT-01), Availability & Working Hours Setup (FEAT-02), Cancellation & No-Show Policy Engine (FEAT-09), Two-Way Calendar Sync (FEAT-04), Pro Subscription Billing & Account Management (FEAT-18).
+
+**Signals:** onboarding_started, onboarding_step_completed (with step name), onboarding_completed, onboarding_link_shared.
+
+### Booking & Payment Activity Record
+
+**ID:** FEAT-16
+
+**Description:** An always-on, append-only record of every booking's key events — created, paid, confirmed, messaged, cancelled/rescheduled, marked no-show, refunded/forfeited — so the Pro (or, when asked to help, Platform Operator Support) has a trustworthy timeline to point to if a client ever disputes a charge.
+
+**Priority:** Important
+
+**Phase:** MVP
+
+**Type:** Platform
+
+**Rationale:** BRIEF.md's Problem Statement names this precisely as a current failure: "no record when a client disputes a no-show charge." Ranked Important rather than Core because it is a record-keeping layer that supports the Core booking/deposit/no-show features rather than something a user directly seeks out day to day; it must still ship at MVP because the dispute scenario it prevents is a launch-day risk, not a later refinement.
+
+**Connected Entities:** Booking (read), Deposit Transaction (read), Message (read)
+
+**Key Capabilities:**
+- View a chronological timeline of everything that happened to a specific booking
+- See exactly which cancellation policy version applied and when it was shown to the client
+- Reference this record when responding to a client's dispute
+
+**Primary Flows & Alternates:**
+- Happy path: a client disputes a no-show charge; the Pro opens the booking's timeline and sees the exact policy shown at booking, the appointment time, and the no-show mark's timestamp.
+- Alternate: Platform Operator (Support) is asked to help with a dispute; they can view the same timeline read-only without being able to alter it.
+- Alternate: a booking has an unusual gap (e.g., a message failed to send); the timeline shows that gap plainly rather than presenting a falsely clean record.
+
+**States:** Empty: N/A — a timeline only exists for bookings that have happened; a brand-new booking simply starts its timeline at "created." Loading: N/A — small per-booking dataset, loads instantly. Error: N/A — this is a read-only, append-only log; there is no user-facing write path to fail. Offline-degraded: the most recently loaded timeline remains viewable read-only.
+
+**Validation & Limits:** Entries are append-only and immutable once written — this is the property that makes the record trustworthy as dispute evidence; retained for as long as the associated Booking record exists.
+
+**Access:** The Pro has Full (view) access to their own bookings' timelines. Platform Operator (Support) has View-only access. Clients do not see this internal timeline directly — they see the outcomes (their own confirmation, deposit status) through their own booking view, not this operational record.
+
+**Communications:** N/A — this feature is a passive record, not a message sender.
+
+**Data Notes:** Displayed: a chronological event list per booking. Derived: entirely — every entry is written automatically as other features act on the booking; nothing is directly entered here.
+
+**Interactions:** Reads from Public Booking Page & Booking Flow (FEAT-05), Deposit Payment at Booking (FEAT-07), Automated Booking Messaging (FEAT-08), Client-Initiated Cancel/Reschedule (FEAT-10), No-Show Marking & Deposit Forfeiture (FEAT-11).
+
+**Signals:** activity_record_viewed.
+
+### Manual Time Blocking
+
+**ID:** FEAT-17
+
+**Description:** The Pro can block off a span of time — a doctor's appointment, a vacation day, a personal commitment — removing it from bookable availability without needing to edit their recurring working hours.
+
+**Priority:** Important
+
+**Phase:** MVP
+
+**Type:** User-Facing
+
+**Rationale:** A direct, near-universal need once recurring hours exist: a Pro's actual availability always has one-off exceptions. Without it, the Pro would be forced to edit recurring hours for a single day, which is error-prone and easy to forget to revert. Important rather than Core: the product still functions on recurring hours alone at a pinch, but reliability (a hallmark of this brief) suffers without it. MVP phase: this is a day-one operational need, not a later refinement.
+
+**Connected Entities:** Time Block (create, update, delete)
+
+**Key Capabilities:**
+- Block a span of time on a specific date (or a recurring pattern, e.g., "every Sunday")
+- Remove a block to restore availability
+- See blocked time reflected immediately in the slot engine
+
+**Primary Flows & Alternates:**
+- Happy path: Pro blocks tomorrow afternoon; that window disappears from bookable slots immediately.
+- Alternate: a block is added over an already-booked slot; the existing booking is never silently affected — the Pro is warned and must explicitly decide (contact the client, or leave the booking as an exception to the block).
+- Alternate: Pro removes a block early; the previously blocked time becomes bookable again right away.
+
+**States:** Empty: a Pro with no blocks sees a plain "no time blocked" state. Loading: N/A — instant, small dataset. Error: a failed save is retried with entered values preserved. Offline-degraded: N/A — a setup-style action requiring connectivity for correctness.
+
+**Validation & Limits:** A block's end time must be after its start time; a block cannot silently delete an existing conflicting booking.
+
+**Access:** The Pro has Full access to their own blocks. Clients never see blocks directly — only their absence from available slots. Platform Operator (Support) has View-only access.
+
+**Communications:** N/A — blocking time is a private scheduling action with no message trigger.
+
+**Data Notes:** Captured: block start/end and an optional label (private to the Pro). Displayed: on the Pro's own schedule view. Derived: none.
+
+**Interactions:** Feeds Real-Time Slot Availability Engine (FEAT-03).
+
+**Signals:** time_block_added, time_block_removed, time_block_conflict_flagged.
+
+### Pro Subscription Billing & Account Management
 
 **ID:** FEAT-18
 
-**Description:** A durable, timestamped record of each booking's history — what policy was agreed to, when payment happened, and what status changes occurred — so that if a client disputes a no-show charge, Mara has something concrete to point to.
+**Description:** The Pro's own flat monthly subscription to Chairtime — one price tier, card-based, cancel anytime — including seeing their current plan status and updating their payment method.
 
 **Priority:** Important
 
 **Phase:** MVP
 
-**Type:** Platform
+**Type:** Lifecycle
 
-**Rationale:** The brief names this exact gap as a current pain point: "no record when a client disputes a no-show charge" (BRIEF.md, Problem Statement). Ranked Important rather than Core because the booking loop itself still functions without a dedicated dispute view — but phased to MVP rather than later, because the underlying record it depends on (what was agreed, when, and what changed) must be captured from the very first booking, or it is unrecoverable retroactively once a dispute arises.
+**Rationale:** BRIEF.md's Business Context is explicit: "revenue comes from a flat monthly subscription paid by each pro... cancel anytime, with one price tier in v1... no per-booking cut." Ranked Important rather than Core because it is the business's monetization mechanism rather than part of the client-facing booking loop the founder's headline promise describes; it must still ship at MVP because the product has no revenue model without it.
 
-**Connected Entities:** Booking (read), Deposit/Payment Record (read), Cancellation & Deposit Policy (read, as it stood at booking time)
+**Connected Entities:** Subscription (create, update, cancel)
 
 **Key Capabilities:**
-- View a booking's full history -- Mara sees every status change for a booking (booked, confirmed, reminded, no-show marked, etc.) with timestamps
-- See the policy as agreed -- Mara sees exactly what deposit and cancellation terms the client agreed to at booking time, even if her current settings have since changed
+- Subscribe during onboarding with a card
+- View current plan status and next billing date
+- Update the payment method on file
+- Cancel the subscription at any time, effective at the end of the current billing period
 
 **Primary Flows & Alternates:**
-- Happy path: a client disputes a forfeited deposit -> Mara opens that booking's history -> sees the exact policy version agreed to, the payment timestamp, and the no-show or cancellation timestamp -> has a concrete answer
-- Policy changed since booking: the history always shows the policy version in force when that specific booking was made, never the currently-active version, so a later policy change cannot retroactively look like it applied to an old booking
+- Happy path: Pro enters payment details once during onboarding; the subscription renews automatically each month with no further action.
+- Alternate: a renewal payment fails; the Pro is notified and given a grace period to update their payment method before the account is paused (booking page taken offline to new bookings, but existing bookings and data preserved).
+- Alternate: Pro cancels; the subscription remains active through the already-paid period and then lapses, with the account paused (not deleted) afterward.
 
-**States:** Empty: N/A — every booking has at least a creation event; there is no truly empty history. Loading: history renders with the same brief indicator as the dashboard. Error: if history cannot load, the underlying booking and payment status (from FEAT-07) are still visible even if the detailed timeline is temporarily unavailable. Offline-degraded: previously viewed history remains available read-only.
+**States:** Empty: N/A — an account cannot exist past onboarding without an active subscription. Loading: N/A — plan status is a small, instant read. Error: a failed payment update is retried with a clear reason and retry action. Offline-degraded: the last known plan status remains viewable read-only.
 
-**Validation & Limits:** History entries are immutable once recorded — no status-change event can be edited or deleted after the fact, only added to, so the trail itself cannot become part of a dispute.
+**Validation & Limits:** One price tier only in v1 — no plan selection is offered; cancellation takes effect at the end of the already-paid period, never an immediate mid-period cutoff that would feel like losing paid time.
 
-**Access:** Only Mara (Full) can view a booking's dispute trail; the Operator (View, read-only) can see the same trail strictly to help troubleshoot a reported issue. Clients do not see this internal history — they see their own booking's current status via Client Self-Service Booking History (FEAT-19).
+**Access:** The Pro has Full access to their own subscription. Platform Operator (Support) has View-only access to plan status, useful for billing support questions. Clients have no visibility into this at all.
 
-**Communications:** N/A — this is an internal record-keeping feature with no messages of its own.
+**Communications:** Payment-failure notice with a grace-period deadline; renewal receipt; cancellation confirmation.
 
-**Data Notes:** Captured: every status-change event on a booking, with timestamp and the policy version in force at booking time. Derived: none — this is a faithful log, not a computed summary. Source: every other Core feature that changes a booking's status writes an entry here.
+**Data Notes:** Captured: subscription status, billing cycle, payment method reference (the payment-processing capability owns the actual card data, per BRIEF.md's Constraints). Displayed: current plan status and next billing date. Derived: none.
 
-**Interactions:** Depends on Deposit Payment at Booking (FEAT-04) and No-Show & Cancellation Deposit Handling (FEAT-08) as its primary writers; read by Operator Support Console (FEAT-21).
+**Interactions:** Created during Pro Onboarding & Setup Wizard (FEAT-15); referenced by Platform Support Read-Only Access (FEAT-19).
 
-**Signals:** dispute_trail_viewed.
+**Signals:** subscription_started, subscription_payment_failed, subscription_payment_recovered, subscription_cancelled.
 
----
-
-### Client Self-Service Booking History
+### Platform Support Read-Only Access
 
 **ID:** FEAT-19
 
-**Description:** A client's own simple view of their upcoming and past bookings with this specific Pro — nothing about any other Pro or any other client.
+**Description:** The founder, in a support capacity, can open a read-only view into a specific Pro's account — services, schedule, bookings, and billing status — to help troubleshoot a reported problem, with no ability to edit anything and no client-facing access of any kind.
 
 **Priority:** Important
 
 **Phase:** MVP
 
-**Type:** User-Facing
-
-**Rationale:** The brief states the client "sees only their own upcoming and past bookings with that pro" (BRIEF.md, Target Users & Roles). Ranked Important rather than Core because the booking-and-reminder loop functions without a dedicated history view (the confirmation and reminder texts already carry the essential details) — but phased to MVP because it is a small, low-risk addition that meaningfully reduces "did I already book this?" confusion from day one.
-
-**Connected Entities:** Booking (read)
-
-**Key Capabilities:**
-- View upcoming bookings -- Client sees any future bookings with this Pro
-- View past bookings -- Client sees a simple history of past appointments with this Pro
-
-**Primary Flows & Alternates:**
-- Happy path: client re-verifies their phone number (same lightweight identity as booking) -> sees their upcoming and past bookings with this Pro
-- No bookings yet: a client who has never booked with this Pro sees a plain empty state rather than an error
-
-**States:** Empty: a client with no bookings sees "no bookings yet" rather than a blank screen. Loading: the list loads with the same brief indicator used elsewhere. Error: a failed load shows a retry option. Offline-degraded: the most recently loaded view remains available read-only.
-
-**Validation & Limits:** A client can only view bookings tied to their own verified phone number, and only with this one Pro — never a cross-Pro view.
-
-**Access:** Any Client (Own-only) sees only their own bookings with this Pro; Mara has no reason to use this view herself (she has the fuller Pro Daily Dashboard, FEAT-07).
-
-**Communications:** N/A — this is a viewing surface with no messages of its own.
-
-**Data Notes:** Displayed: booking time, service, and status for this client's bookings with this Pro. Source: read from Booking.
-
-**Interactions:** Depends on Client Identity & Booking Details Capture (FEAT-03) for identity verification; reads Booking data written by Deposit Payment at Booking (FEAT-04) and updated by Client Self-Service Reschedule & Cancellation (FEAT-06).
-
-**Signals:** booking_history_viewed.
-
----
-
-### Account Closure & Client Data Deletion
-
-**ID:** FEAT-20
-
-**Description:** Mara can close her own account if she stops using the product, and can permanently delete an individual client's record on that client's request — both cleanly, without leaving orphaned or ambiguous data behind.
-
-**Priority:** Important
-
-**Phase:** v1
-
-**Type:** User-Facing
-
-**Rationale:** The brief requires client-record deletion on request as a stated privacy constraint (BRIEF.md, Constraints); account closure is the natural, domain-standard counterpart for the Pro's own account. [INFERRED from: domain knowledge — any subscription product needs a clean way for its one paying customer to leave.] Ranked Important because it is not part of the daily value loop. Phased to v1 rather than MVP: the individual client-deletion capability itself is required from MVP (see FEAT-11's Key Capabilities, which already includes it) — this feature specifically covers the Pro's own full account closure, which can reasonably wait until real Pros exist who might want to leave.
-
-**Connected Entities:** Pro Profile (delete), Client Record (delete, in bulk on account closure), Subscription (update, to cancelled)
-
-**Key Capabilities:**
-- Close the Pro account -- Mara permanently closes her account and stops billing
-- Understand what happens to data -- Mara is told plainly what is deleted versus retained (e.g., for legal/financial record-keeping) before confirming
-
-**Primary Flows & Alternates:**
-- Happy path: Mara requests account closure -> is shown plainly what will be deleted and what (if anything) is retained for financial record-keeping -> confirms -> subscription is cancelled and her Public Booking Page stops accepting bookings immediately
-- Change of mind: Mara can cancel a closure request within a short grace window before it takes final effect
-
-**States:** Empty: N/A — this is a deliberate account action, not a list. Loading: closure shows a clear "processing" state. Error: a failed closure leaves the account fully active and notifies Mara to retry. Offline-degraded: closure requires connectivity.
-
-**Validation & Limits:** Account closure requires explicit confirmation of a clear warning (not a single accidental tap), given it is largely irreversible after the grace window.
-
-**Access:** Only Mara (Full) can close her own account; only Mara (Full, own clients only) can delete an individual client's record, as already established in Client Record Management (FEAT-11).
-
-**Communications:** A confirmation is sent to Mara when closure completes; any clients with future bookings at the time of closure are notified their upcoming appointments are cancelled and any deposits are refunded.
-
-**Data Notes:** Captured: closure request and timestamp. Derived: what is deleted versus retained is determined by financial record-keeping needs (e.g., payment records may be retained in minimal form) versus personal data (deleted). Source: Mara's request.
-
-**Interactions:** Depends on Pro Account & Authentication (FEAT-14), Pro Subscription & Billing (FEAT-17), and Client Record Management (FEAT-11).
-
-**Signals:** account_closure_requested, account_closure_completed, account_closure_cancelled, client_record_deleted.
-
----
-
-### Operator Support Console
-
-**ID:** FEAT-21
-
-**Description:** A narrow, read-only view the founder uses to see exactly what a specific Pro sees — their setup and their bookings — in order to help when that Pro reports a problem, without ever acting on the Pro's behalf.
-
-**Priority:** Important
-
-**Phase:** v1
-
 **Type:** Platform
 
-**Rationale:** The brief confirms this actor and its read-only scope explicitly (BRIEF.md, Target Users & Roles). Ranked Important rather than Core because it supports the founder's ability to help Pros, rather than being part of any Pro's or Client's own value loop. Phased to v1 rather than MVP: with only a handful of Pros in the earliest weeks (drawn from the founder's own network per BRIEF.md, Business Context), direct, ad hoc troubleshooting is workable briefly, but a proper read-only console becomes necessary as soon as the Pro base grows past a size the founder can track personally.
+**Rationale:** BRIEF.md's Target Users & Roles names this directly: "the founder needs only a read-only support view of a pro's account to help them... It is minimal admin access." Ranked Important rather than Core because it serves the business's operational need rather than either product role's own value; still needed at MVP because support requests will arrive from day one with real, paying pros.
 
-**Connected Entities:** Pro Profile (read), Booking (read), Deposit/Payment Record (read)
+**Connected Entities:** Pro Account (read), Service (read), Booking (read), Client (read — excluding private notes), Subscription (read)
 
 **Key Capabilities:**
-- Look up a Pro's setup -- Operator sees a specific Pro's services, policy, and hours, read-only
-- Look up a Pro's bookings -- Operator sees that Pro's bookings and their statuses, read-only
-- View the dispute trail -- Operator sees the same booking history trail Mara would see, for the reported booking only
+- Look up a specific Pro's account by request
+- View their services, schedule, bookings, and billing status read-only
+- View booking timelines (FEAT-16) to help resolve a dispute
 
 **Primary Flows & Alternates:**
-- Happy path: a Pro reports an issue -> Operator opens that Pro's read-only view -> reviews setup, bookings, or a specific booking's history -> diagnoses the issue without changing anything
-- Attempted action: the console has no controls that modify data — there is nothing to attempt beyond viewing, by design
+- Happy path: a Pro reports a confusing issue; the founder opens the read-only view, diagnoses it (e.g., a lapsed calendar connection), and guides the Pro to fix it themselves.
+- Alternate: the founder attempts an action outside read-only scope (there is none available in this view by design) — the interface simply offers no edit controls at all, removing the possibility rather than blocking it after the fact.
+- Alternate: the founder is asked about a client dispute; they view the relevant booking's activity record (FEAT-16) but not the Pro's private client notes, respecting the client-record privacy boundary even in support.
 
-**States:** Empty: N/A — the Operator only opens a Pro's view when there is something to look up. Loading: same brief indicator as other read views. Error: a failed load shows a retry option. Offline-degraded: N/A — this is an internal tool used at a desk, not in the field.
+**States:** Empty: N/A — this view only exists once a specific Pro Account is looked up. Loading: N/A — small per-account dataset. Error: N/A — a read-only view with no write path to fail. Offline-degraded: N/A — an operational tool used in a connected context.
 
-**Validation & Limits:** Strictly read-only — no create, update, or delete action exists anywhere in this console; access is scoped to one Pro's data at a time, never a cross-Pro view.
+**Validation & Limits:** No write actions exist in this view at all — the constraint is structural, not a permission check that could be bypassed.
 
-**Access:** Only the Operator (Full, of this console specifically) can use it; Mara and Taylor have no access to it at all — it is not part of either persona's product experience.
+**Access:** Platform Operator (Support) has View access product-wide, scoped to one account at a time. Neither the Pro nor the Client has any awareness that this access exists as a routine matter — it is used only when a Pro has asked for help.
 
-**Communications:** N/A — this is an internal viewing tool with no messages of its own.
+**Communications:** N/A — this is an internal tool with no client- or pro-facing messages of its own.
 
-**Data Notes:** Displayed: the same data Mara's own screens would show her, read-only. Source: read directly from existing Pro, Booking, and Deposit/Payment Record data — no new data is captured.
+**Data Notes:** Displayed: read-only mirror of the Pro's own data, minus the Pro's private client notes. Derived: none. Source: reads existing records only; creates nothing.
 
-**Interactions:** Reads data written by Business Settings & Policy Configuration (FEAT-09), Pro Daily Dashboard (FEAT-07), and Booking Record & Dispute Trail (FEAT-18).
+**Interactions:** Reads Pro Onboarding & Setup Wizard (FEAT-15) output, Pro Daily Schedule Dashboard (FEAT-12) data, Booking & Payment Activity Record (FEAT-16), Pro Subscription Billing & Account Management (FEAT-18).
 
-**Signals:** operator_lookup_performed.
-
----
+**Signals:** support_view_opened (with reason/ticket reference).
 
 ## Nice-to-Have Features
 
-### Client List Import
+### Waitlist for Cancelled Slots
 
-**ID:** FEAT-22
+**ID:** FEAT-20
 
-**Description:** Mara can bring in her existing client list (names and phone numbers she already has from Instagram DMs or elsewhere) in bulk, so her client history is not starting from zero on day one.
-
-**Priority:** Nice-to-Have
-
-**Phase:** Later
-
-**Type:** User-Facing
-
-**Rationale:** [INFERRED from: domain knowledge — the brief describes Mara currently running her business "out of Instagram DMs" with an existing base of "roughly 100–500 clients" (BRIEF.md, Vision; Scale & Non-Functional Expectations); a domain-standard bulk-import convenience meaningfully lowers the switching cost from her current DM-based system.] Nice-to-Have because Client Record Management (FEAT-11) already builds the list organically from first bookings — import is a convenience, not a requirement. Phased Later: it addresses a one-time migration moment, not the recurring value loop.
-
-**Connected Entities:** Client Record (create, in bulk)
-
-**Key Capabilities:**
-- Bulk-add clients -- Mara adds multiple existing clients' names and phone numbers at once
-
-**Primary Flows & Alternates:**
-- Happy path: Mara provides a list of existing clients' names and phone numbers -> records are created in bulk -> they appear in Client Record Management going forward
-- Duplicate detection: an imported entry matching an existing client (by phone number) updates rather than duplicates that record
-
-**States:** Empty: N/A — this is a one-time bulk action, not a persistent list view. Loading: import shows progress for larger lists. Error: entries that fail to import (e.g., invalid phone format) are reported individually so valid entries still succeed. Offline-degraded: import requires connectivity.
-
-**Validation & Limits:** Each imported entry requires at minimum a name and a valid phone number; a reasonable batch-size limit per import applies to keep processing predictable.
-
-**Access:** Only Mara (Full, own clients only) can import; there is no client- or operator-facing surface.
-
-**Communications:** N/A — importing existing clients does not itself message them.
-
-**Data Notes:** Captured: name and phone number per imported entry. Source: entirely Mara's own provided list.
-
-**Interactions:** Feeds Client Record Management (FEAT-11).
-
-**Signals:** client_import_started, client_import_completed, client_import_row_failed.
-
----
-
-### Cancellation Waitlist
-
-**ID:** FEAT-23
-
-**Description:** A client who wants an earlier time than what's currently free can ask to be notified if a slot opens up from a cancellation, instead of repeatedly checking back.
+**Description:** A client can ask to be notified if a specific service and day opens up from someone else's cancellation, instead of repeatedly checking the booking page.
 
 **Priority:** Nice-to-Have
 
-**Phase:** Later
+**Phase:** v1
 
 **Type:** User-Facing
 
-**Rationale:** The brief raises this directly as an open question: "should a pro be able to offer a waitlist for slots that open up from cancellations?" (BRIEF.md, Open Questions). Nice-to-Have because the core booking loop closes fully without it — a client can always book the next genuinely free slot. Phased Later: it adds meaningful scheduling complexity that is better tackled once the core loop is proven with real bookings.
+**Rationale:** BRIEF.md's Open Questions names this exactly: "should a pro be able to offer a waitlist for slots that open up from cancellations?" As Visionary judgment: valuable but not required for the core one-minute-booking promise, and it depends on Client-Initiated Cancel/Reschedule (FEAT-10) already existing to generate openings. Phased to v1, once the core cancellation flow is proven.
 
-**Connected Entities:** Waitlist Entry (create, update)
+**Connected Entities:** Waitlist Entry (create, update), Service (read)
 
 **Key Capabilities:**
-- Join a waitlist -- Client requests notification if an earlier slot opens for a chosen service and date range
-- Get notified and book -- Client is notified when a matching slot opens and can claim it quickly
+- Join a waitlist for a specific service/day when no slot is currently free
+- Get notified the moment a matching slot opens from a cancellation
+- Book directly from the notification before anyone else can grab the slot
 
 **Primary Flows & Alternates:**
-- Happy path: client sees no slot they want -> joins the waitlist for a service and date range -> a matching cancellation occurs -> client is notified -> claims the newly-open slot through the normal booking flow
-- Slot claimed by someone else first: if the notified client does not claim the slot in time, it becomes normally bookable and the waitlist entry simply expires without penalty
+- Happy path: client finds no free slot, joins the waitlist for that day; a cancellation opens a matching slot; the client is notified and books within a short priority window.
+- Alternate: two clients are on the waitlist for the same opening; the first to act on the notification gets it, and the other remains on the waitlist for the next opportunity.
+- Alternate: the waitlist entry expires unclaimed after a set period with no matching opening; the client is informed rather than left wondering indefinitely.
 
-**States:** Empty: a client with no waitlist entries sees nothing to manage — the join action is available wherever no matching slot exists. Loading: joining shows a brief confirmation. Error: a failed join preserves the client's chosen criteria for retry. Offline-degraded: requires connectivity to join or be notified.
+**States:** Empty: no waitlist entries shows a plain "you're not on any waitlists" state. Loading: N/A — small dataset. Error: a failed join is retried. Offline-degraded: N/A — requires connectivity to reliably capture a fast-moving opening.
 
-**Validation & Limits:** A waitlist entry has an expiration (it does not wait forever); a client can hold a reasonable number of active waitlist entries at once.
+**Validation & Limits:** A waitlist entry is tied to one service and one day (or a small date range); a client may hold a small, bounded number of active waitlist entries at once.
 
-**Access:** Any Client (Own-only) manages only their own waitlist entries; Mara has no separate waitlist-management view — releases happen automatically through cancellations.
+**Access:** Own-only for the Client. The Pro has View access to see how many people are waitlisted for a given day (useful context, not an action). Platform Operator (Support) has View-only access.
 
-**Communications:** A notification (matching the client's consented channel) is sent when a matching slot opens.
+**Communications:** A notification the moment a matching slot opens, with a short window to claim it before it returns to general availability.
 
-**Data Notes:** Captured: service, date range, and client identity for the waitlist request. Source: client's own input.
+**Data Notes:** Captured: requested service and date range. Displayed: waitlist position/status to the client; aggregate waitlist demand to the Pro. Derived: none.
 
-**Interactions:** Depends on Live Availability & Slot Booking (FEAT-02) for slot matching and Client Self-Service Reschedule & Cancellation (FEAT-06) as the source of released slots.
+**Interactions:** Depends on Client-Initiated Cancel/Reschedule (FEAT-10) (the source of openings) and Real-Time Slot Availability Engine (FEAT-03).
 
-**Signals:** waitlist_joined, waitlist_notified, waitlist_slot_claimed, waitlist_entry_expired.
+**Signals:** waitlist_joined, waitlist_notified, waitlist_converted_to_booking, waitlist_expired.
 
----
+### Recurring/Standing Appointments
 
-### In-App Tipping at Checkout
+**ID:** FEAT-21
 
-**ID:** FEAT-24
-
-**Description:** A client can optionally add a tip on top of their deposit at checkout, rather than needing cash at the chair.
+**Description:** A client can set up a standing appointment pattern (e.g., "every 3 weeks") with the same Pro, generating individual bookings automatically instead of booking fresh each time.
 
 **Priority:** Nice-to-Have
 
-**Phase:** Later
+**Phase:** v1
 
 **Type:** User-Facing
 
-**Rationale:** The brief raises this directly as an open question: "where does tipping fit, if anywhere?" (BRIEF.md, Open Questions). Nice-to-Have because tipping is not part of the deposit/no-show protection loop the brief centers the product around. Phased Later: it depends on In-App Balance Payment groundwork being reasonably mature and is a genuine "nice to have" rather than something the earliest Pros are asking for.
+**Rationale:** BRIEF.md's Open Questions asks directly whether this is "v1 or later." As Visionary judgment: valuable for retention-style services (lash fills, haircuts) but not required for the founder's three-month first-paying-pro timeline, and it adds real complexity to the availability engine. Phased to v1, once the single-booking core loop is proven reliable.
 
-**Connected Entities:** Tip (create)
+**Connected Entities:** Recurring Series (create, update, cancel), Booking (create — generated per occurrence)
 
 **Key Capabilities:**
-- Add an optional tip -- Client can add a tip amount at checkout, entirely optional
+- Set up a recurring pattern from an existing booking ("repeat this every N weeks")
+- See and manage the upcoming generated occurrences as a group
+- Cancel the whole series, or just one upcoming occurrence, independently
 
 **Primary Flows & Alternates:**
-- Happy path: at deposit checkout, client is shown an optional tip prompt -> adds an amount or skips it -> tip (if any) is included in the same payment
-- Skip: client proceeds without adding a tip, with no friction or repeated prompting
+- Happy path: after booking, the client opts into a recurring pattern; future occurrences are generated and each still requires its own deposit per the Pro's rule.
+- Alternate: a future occurrence's usual time is no longer available (the Pro changed hours); the client is notified in advance and asked to pick a new time for that occurrence only, without breaking the rest of the series.
+- Alternate: client cancels just one occurrence; the series continues generating future ones normally.
 
-**States:** Empty: N/A — this is an optional add-on at a single checkout moment. Loading: handled within the same checkout loading state as FEAT-04. Error: handled within the same checkout error state as FEAT-04. Offline-degraded: N/A — requires connectivity as part of checkout.
+**States:** Empty: a client with no recurring series sees no extra UI at all — this is fully optional. Loading: N/A — series management is a small, occasional action. Error: a failed occurrence generation is retried and, if it keeps failing, surfaces to the Pro as a flagged gap rather than a silently missed appointment. Offline-degraded: N/A — requires connectivity for correctness, consistent with the rest of scheduling.
 
-**Validation & Limits:** Tip amount must be zero or a positive value; it cannot exceed a sensible upper bound relative to the service price, to guard against accidental entry.
+**Validation & Limits:** A series must have a bounded interval (a reasonable minimum/maximum recurrence period); each generated occurrence is still subject to the same slot validation as any booking (FEAT-03).
 
-**Access:** Any Client (Own-only) can add a tip to their own booking's checkout; Mara cannot add or edit a tip on a client's behalf.
+**Access:** Own-only for the Client (their own series). The Pro has Full/View access to see and manage series tied to their own schedule. Platform Operator (Support) has View-only access.
 
-**Communications:** N/A — a tip is reflected in the existing payment confirmation rather than triggering a separate message.
+**Communications:** A confirmation when a new occurrence is generated, and an advance notice if an occurrence needs a new time.
 
-**Data Notes:** Captured: tip amount, if any. Source: client's own input at checkout.
+**Data Notes:** Captured: recurrence interval and originating service/time. Displayed: the series and its upcoming occurrences. Derived: each occurrence's specific Booking record is derived from the series pattern.
 
-**Interactions:** Depends on Deposit Payment at Booking (FEAT-04) and Payment Processing Capability (FEAT-15); reflected in Pro Daily Dashboard (FEAT-07) and Simple Business Insights (FEAT-27).
+**Interactions:** Depends on Public Booking Page & Booking Flow (FEAT-05) and Real-Time Slot Availability Engine (FEAT-03) (which reserves future occurrence slots).
 
-**Signals:** tip_prompted, tip_added, tip_skipped.
-
----
+**Signals:** recurring_series_created, recurring_occurrence_generated, recurring_series_cancelled.
 
 ### In-App Balance Payment
 
-**ID:** FEAT-25
+**ID:** FEAT-22
 
-**Description:** Instead of settling the remaining balance in person, a client can optionally pay it in-app before or at the appointment.
+**Description:** A client can optionally pay the remaining balance (beyond the deposit) through the app before or at the appointment, instead of paying the Pro directly in person.
+
+**Priority:** Nice-to-Have
+
+**Phase:** v1
+
+**Type:** User-Facing
+
+**Rationale:** BRIEF.md's Open Questions asks directly whether the balance "should be payable in the app, or stay in person." As Visionary judgment: the brief's default flow ("the balance is due at the appointment") works fine without this, so it is not required for MVP, but it is a natural, low-risk enhancement once deposit payment (FEAT-07) is proven. Phased to v1.
+
+**Connected Entities:** Deposit Transaction (read), Booking (read, update — balance payment status)
+
+**Key Capabilities:**
+- Pay the remaining balance in-app at any point before or at the appointment
+- See a running record of deposit paid vs. balance remaining
+
+**Primary Flows & Alternates:**
+- Happy path: client opens their booking and pays the balance in-app; the Pro's dashboard reflects "fully paid" instead of "balance due."
+- Alternate: client chooses to pay in person instead — this remains the default, unaffected experience; in-app balance payment is purely additive, never required.
+- Alternate: an in-app balance payment fails; the booking remains marked "balance due" exactly as if the client had never attempted it, with no partial or ambiguous state.
+
+**States:** Empty: N/A — only appears against an existing confirmed booking with a balance due. Loading: standard payment-processing indicator. Error: a specific decline message, matching the deposit payment feature's pattern. Offline-degraded: requires connectivity, consistent with all payment actions.
+
+**Validation & Limits:** The balance amount is fixed by the service price minus the deposit already paid and cannot be altered by the client.
+
+**Access:** Own-only for the Client (pays their own balance). The Pro has View access to the resulting paid/unpaid status. Platform Operator (Support) has View-only access, never to card data.
+
+**Communications:** A payment confirmation on successful balance payment.
+
+**Data Notes:** Captured: balance payment outcome. Displayed: updated balance-due status to both parties. Derived: balance amount, from Service price minus Deposit Transaction amount.
+
+**Interactions:** Depends on Deposit Payment at Booking (FEAT-07); updates Pro Daily Schedule Dashboard (FEAT-12).
+
+**Signals:** balance_payment_attempted, balance_payment_succeeded, balance_payment_failed.
+
+### Tipping at Checkout
+
+**ID:** FEAT-23
+
+**Description:** A client can optionally add a tip when paying in-app (at deposit or, once available, at balance payment), which passes through to the Pro.
 
 **Priority:** Nice-to-Have
 
@@ -1123,38 +1013,115 @@ This product includes 29 features: 17 Core, 4 Important, 8 Nice-to-Have. By phas
 
 **Type:** User-Facing
 
-**Rationale:** The brief raises this directly as an open question: "should the balance after the deposit be payable in the app, or does it stay in person?" (BRIEF.md, Open Questions; Business Context). Nice-to-Have because the brief's own default assumption is in-person settlement, which the product already supports today by simply showing the balance due on the Pro Daily Dashboard (FEAT-07). Phased Later: it is a genuine option to build once real usage shows Pros or clients want it, not a day-one requirement.
+**Rationale:** BRIEF.md's Open Questions asks directly "where does tipping fit, if anywhere?" As Visionary judgment: tipping has no bearing on the core no-show/deposit problem the product exists to solve, and depends on in-app balance payment (FEAT-22) to be meaningful (tipping on a deposit alone is an unusual pattern). Phased to Later.
 
-**Connected Entities:** Deposit/Payment Record (update, with balance payment)
+**Connected Entities:** Deposit Transaction (read), Booking (read)
 
 **Key Capabilities:**
-- Pay the remaining balance in-app -- Client pays the balance due before or at the appointment instead of in person
+- Add an optional tip amount at in-app payment time
+- See tips reflected in the Pro's own payment records
 
 **Primary Flows & Alternates:**
-- Happy path: client opens their upcoming booking -> sees the balance due -> pays it in-app -> Pro Daily Dashboard reflects the booking as fully paid
-- Partial timing: a client can pay the balance any time between booking and the appointment; paying it does not change the appointment time or service
+- Happy path: client is offered an optional tip at balance payment; they choose an amount (or none) and complete payment.
+- Alternate: client skips tipping entirely — this must never feel like a required step or block the underlying payment.
+- Alternate: client pays their balance in person instead, bypassing in-app tipping entirely; this remains a fully normal path.
 
-**States:** Empty: N/A — this acts on a specific existing booking's balance. Loading: same brief confirmation as other payment actions. Error: a failed balance payment leaves the booking's prior paid status unchanged. Offline-degraded: requires connectivity.
+**States:** Empty: N/A — only appears within an existing payment flow. Loading: N/A — part of the standard payment flow's own states. Error: N/A — tipping failure is treated as part of the underlying payment's own error handling, never a separate failure mode. Offline-degraded: N/A — inherits the payment flow's connectivity requirement.
 
-**Validation & Limits:** The amount payable is exactly the remaining balance (service price minus deposit already paid); it cannot be paid twice.
+**Validation & Limits:** Tip amount, when given, must be a non-negative value; never pre-selected to a default that could feel presumptive.
 
-**Access:** Any Client (Own-only) can pay only their own booking's balance; Mara sees the resulting fully-paid status but does not collect it directly for balances paid this way.
+**Access:** Own-only for the Client (chooses their own tip). The Pro has View access to tips received. Platform Operator (Support) has View-only access, never to card data.
 
-**Communications:** A payment confirmation is sent to the client when the balance is paid.
+**Communications:** N/A — included in the existing payment confirmation, not a separate message.
 
-**Data Notes:** Captured: balance payment amount and timestamp. Derived: remaining balance, computed as service price minus deposit paid. Source: Payment Processing Capability (FEAT-15) reports the outcome.
+**Data Notes:** Captured: optional tip amount. Displayed: tips received, on the Pro's payment records. Derived: none.
 
-**Interactions:** Depends on Payment Processing Capability (FEAT-15) and Deposit Payment at Booking (FEAT-04); reflected in Pro Daily Dashboard (FEAT-07).
+**Interactions:** Depends on In-App Balance Payment (FEAT-22).
 
-**Signals:** balance_payment_started, balance_payment_succeeded, balance_payment_failed.
+**Signals:** tip_offered_shown, tip_added, tip_skipped.
 
----
+### Client List Search & Filter
 
-### Recurring Appointment Booking
+**ID:** FEAT-24
+
+**Description:** As a Pro's client base grows, they can search and filter their client list by name, phone, or recent activity instead of scrolling a long list.
+
+**Priority:** Nice-to-Have
+
+**Phase:** v1
+
+**Type:** User-Facing
+
+**Rationale:** BRIEF.md's Scale & Non-Functional Expectations states a Pro may have "100–500 clients," a volume where an unfiltered list becomes genuinely unwieldy. Not required at launch (a new Pro starts with very few clients), so phased to v1 rather than MVP.
+
+**Connected Entities:** Client (read — search/filter only)
+
+**Key Capabilities:**
+- Search clients by name or phone number
+- Filter by recency (e.g., booked in the last 30 days) or upcoming-booking status
+
+**Primary Flows & Alternates:**
+- Happy path: Pro types a partial name into search and the client list narrows instantly.
+- Alternate: a search returns no matches; a plain "no clients match" state is shown rather than an empty, unexplained list.
+
+**States:** Empty: N/A — inherits the underlying client list's own empty state (FEAT-13). Loading: instant for the stated client volumes. Error: a failed search falls back to the full, unfiltered list rather than an error screen. Offline-degraded: search operates against the most recently loaded client list.
+
+**Validation & Limits:** N/A — a read-only convenience feature with no input validation beyond a search box.
+
+**Access:** The Pro has Full access to search their own clients. Platform Operator (Support) has View-only access, useful when helping locate a specific client's record during support.
+
+**Communications:** N/A — a browsing convenience with no message trigger.
+
+**Data Notes:** Displayed: filtered/searched subset of existing Client records. Derived: none — this is a view over existing data.
+
+**Interactions:** Depends on Client Record Management (FEAT-13).
+
+**Signals:** client_search_performed, client_filter_applied.
+
+### Booking & Revenue Insights
+
+**ID:** FEAT-25
+
+**Description:** A simple, functional summary for the Pro of their own booking volume, deposits collected, and no-shows recovered over time — proof of the value the product is delivering, not a full analytics suite.
+
+**Priority:** Nice-to-Have
+
+**Phase:** v1
+
+**Type:** User-Facing
+
+**Rationale:** BRIEF.md's Success Criteria centers on the Pro noticing outcomes ("I haven't had an unpaid no-show since I switched"); a simple summary makes that outcome visible rather than only felt anecdotally, which supports the brief's referral-driven go-to-market ("most new pros arrive because another pro told them about it"). Not required for the core loop, so phased to v1.
+
+**Connected Entities:** Booking (read), Deposit Transaction (read), Service (read)
+
+**Key Capabilities:**
+- See total bookings and deposits collected over a selected period
+- See how much would have been lost to no-shows without automatic forfeiture (a "saved" figure)
+- See which services are booked most often
+
+**Primary Flows & Alternates:**
+- Happy path: Pro opens the insights view and sees a simple period summary — bookings, deposits collected, no-shows recovered.
+- Alternate: a Pro with very little history sees a plain "not enough data yet" state rather than a chart with a single data point that reads as broken.
+
+**States:** Empty: a new account shows an encouraging "check back after a few weeks of bookings" message. Loading: a brief indicator while aggregating. Error: shows the last successfully computed summary with a retry option. Offline-degraded: the most recently viewed summary remains available read-only.
+
+**Validation & Limits:** N/A — a read-only reporting view with no input validation; summary periods are bounded to sensible ranges (e.g., week/month/year) matching the Pro's own history depth.
+
+**Access:** The Pro has Full (view) access to their own figures only — never compared against or visible to any other pro. Platform Operator (Support) has View-only access. Clients have no access.
+
+**Communications:** N/A — a self-initiated view with no notification trigger.
+
+**Data Notes:** Displayed: aggregated figures. Derived: entirely — every figure here is computed from existing Booking, Deposit Transaction, and Service records; nothing is captured directly.
+
+**Interactions:** Depends on Deposit Payment at Booking (FEAT-07) and No-Show Marking & Deposit Forfeiture (FEAT-11) for the "saved" figure.
+
+**Signals:** insights_viewed, insights_period_changed.
+
+### WhatsApp Reminders
 
 **ID:** FEAT-26
 
-**Description:** A client who sees the same Pro on a regular schedule (e.g., "every 3 weeks") can set up a standing series of appointments instead of booking each one individually.
+**Description:** Confirmations and reminders can optionally be sent over WhatsApp instead of, or alongside, SMS, for clients and pros who prefer it.
 
 **Priority:** Nice-to-Have
 
@@ -1162,184 +1129,59 @@ This product includes 29 features: 17 Core, 4 Important, 8 Nice-to-Have. By phas
 
 **Type:** User-Facing
 
-**Rationale:** The brief raises this directly as an open question: "recurring / standing appointments... v1 or later?" (BRIEF.md, Open Questions). Nice-to-Have because a single booking at a time already fully closes the core value loop the brief centers on (deposit-protected, no-DM booking). Phased Later, resolving the brief's own open question in favor of not blocking MVP: recurrence adds real scheduling complexity (handling a series when one occurrence is rescheduled, cancelled, or a no-show) that is safer to design once the single-booking loop is proven in production.
+**Rationale:** BRIEF.md's Ecosystem & Integrations states this explicitly: "WhatsApp is a nice-to-have later, not v1." Phased to Later exactly as the brief specifies, and it slots into the existing Automated Booking Messaging (FEAT-08) mechanism as an additional channel rather than a new capability.
 
-**Connected Entities:** Booking (create, in a linked series)
-
-**Key Capabilities:**
-- Set up a recurring series -- Client books a repeating cadence (e.g., every 3 weeks) for a service
-- Manage one occurrence independently -- Client can reschedule or cancel a single occurrence without affecting the rest of the series
-
-**Primary Flows & Alternates:**
-- Happy path: client selects a recurring cadence during booking -> a series of linked bookings is created against genuinely free slots at that cadence -> each occurrence is confirmed and deposited individually
-- Occurrence unavailable: if a future occurrence's usual slot is not free (e.g., a conflict has appeared), the client is asked to pick an alternate time for that occurrence only, without breaking the rest of the series
-
-**States:** Empty: N/A — this extends the existing booking flow rather than introducing a new list. Loading: same as Live Availability & Slot Booking for each occurrence. Error: a failure to schedule one occurrence does not roll back already-confirmed occurrences in the series. Offline-degraded: requires connectivity, same as standard booking.
-
-**Validation & Limits:** Cadence must be a supported recurrence pattern (e.g., every N weeks); a series has a maximum number of pre-scheduled future occurrences to keep availability commitments realistic.
-
-**Access:** Any Client (Own-only) manages only their own recurring series; Mara sees each occurrence on her dashboard exactly as any other booking.
-
-**Communications:** Confirmation and reminder messages are sent per occurrence, same as a standalone booking.
-
-**Data Notes:** Captured: recurrence cadence and the linked series identifier. Source: client's own input at booking time.
-
-**Interactions:** Depends on Live Availability & Slot Booking (FEAT-02) and Deposit Payment at Booking (FEAT-04) for each occurrence.
-
-**Signals:** recurring_series_created, recurring_occurrence_rescheduled, recurring_occurrence_cancelled, recurring_series_ended.
-
----
-
-### Simple Business Insights
-
-**ID:** FEAT-27
-
-**Description:** A simple, plain-language snapshot of how the business is doing — bookings this week, no-show rate, and deposits (and tips, if enabled) collected — so Mara can see her own success without doing any math.
-
-**Priority:** Nice-to-Have
-
-**Phase:** Later
-
-**Type:** User-Facing
-
-**Rationale:** [INFERRED from: domain knowledge — the brief's own Success Criteria include Mara being able to say "I haven't had an unpaid no-show since I switched" (BRIEF.md, Success Criteria); a simple insights view gives her the evidence for that feeling rather than requiring her to remember it.] Nice-to-Have because the Pro Daily Dashboard already delivers the operational, day-to-day value without any summary view. Phased Later: it is only meaningful once a Pro has accumulated enough bookings to summarize.
-
-**Connected Entities:** Booking (read), Deposit/Payment Record (read), Tip (read)
+**Connected Entities:** Message (create — additional channel), Messaging Consent (read)
 
 **Key Capabilities:**
-- View a weekly snapshot -- Mara sees bookings, no-shows, and money collected for the current week
-- See the no-show rate -- Mara sees what share of bookings resulted in a no-show
+- Opt for WhatsApp as the delivery channel for confirmations and reminders
+- Fall back to SMS or email automatically if WhatsApp delivery is unavailable
 
 **Primary Flows & Alternates:**
-- Happy path: Mara opens the insights view -> sees a plain-language summary of the current week -> can page back to prior weeks
-- Insufficient history: a new Pro with very few bookings sees an encouraging "still gathering data" message rather than a misleadingly precise-looking statistic from a tiny sample
+- Happy path: client indicates a WhatsApp preference; confirmations and reminders deliver there instead of SMS.
+- Alternate: WhatsApp delivery fails or is unavailable for that number; the system falls back to SMS or email per the client's existing consent state, exactly as FEAT-08 already does for SMS failures.
 
-**States:** Empty: a Pro with no bookings yet sees "not enough data yet." Loading: summary renders with a brief indicator. Error: a failed summary load shows the last successfully computed week with a retry option. Offline-degraded: the last viewed week remains available read-only.
+**States:** Empty: N/A — inherits Automated Booking Messaging's own states as an additional channel. Loading: N/A. Error: falls back per the alternate flow above, never silently dropped. Offline-degraded: N/A — server-side sending capability.
 
-**Validation & Limits:** The summary window is a rolling week by default; no user input is captured in this view beyond week navigation.
+**Validation & Limits:** Requires the same explicit consent discipline as texting (FEAT-14) before use — consent is channel-aware, not a blanket "texting is fine" assumption.
 
-**Access:** Only Mara (Full) sees her own business insights; there is no client- or operator-facing equivalent.
+**Access:** Clients opt in for their own messages (Own-only). The Pro sees delivery channel/status like any other message (View, via FEAT-16). Platform Operator (Support) has View-only access.
 
-**Communications:** N/A — this is a self-initiated viewing feature with no messages of its own.
+**Communications:** This feature is itself an additional communications channel for the messages FEAT-08 already sends.
 
-**Data Notes:** Displayed: weekly booking count, no-show rate, deposits and tips collected. Derived: entirely computed from Booking, Deposit/Payment Record, and Tip data — no new data captured here.
+**Data Notes:** Captured: channel preference. Displayed: delivery channel/status. Derived: none.
 
-**Interactions:** Depends on No-Show & Cancellation Deposit Handling (FEAT-08), Deposit Payment at Booking (FEAT-04), and In-App Tipping at Checkout (FEAT-24).
+**Interactions:** Extends Automated Booking Messaging (FEAT-08); depends on Messaging Consent Management (FEAT-14).
 
-**Signals:** insights_viewed, insights_week_navigated.
-
----
-
-### Data Export
-
-**ID:** FEAT-28
-
-**Description:** Mara can export her client list and booking history for her own records outside the product.
-
-**Priority:** Nice-to-Have
-
-**Phase:** Later
-
-**Type:** User-Facing
-
-**Rationale:** [INFERRED from: domain knowledge — a solo business owner reasonably wants her own client and booking data portable for her own records, independent of any single tool she uses.] Nice-to-Have because nothing in the brief's stated success criteria depends on export. Phased Later: it is a data-portability convenience, not part of the core loop.
-
-**Connected Entities:** Client Record (read), Booking (read)
-
-**Key Capabilities:**
-- Export client list -- Mara downloads her client records for her own use
-- Export booking history -- Mara downloads her booking history for her own use
-
-**Primary Flows & Alternates:**
-- Happy path: Mara requests an export -> a downloadable file of her client list and/or booking history is produced
-- Large history: for a Pro with several years of history, the export is prepared and made available shortly after the request rather than blocking the screen until complete
-
-**States:** Empty: a Pro with no clients or bookings yet sees a plain notice that there is nothing to export. Loading: export preparation shows a visible "preparing your export" state for larger datasets. Error: a failed export offers a retry without losing the request. Offline-degraded: requires connectivity to request or retrieve an export.
-
-**Validation & Limits:** An export contains only that Pro's own data — never another Pro's; Mara can request a fresh export at any time without limit beyond reasonable rate protection.
-
-**Access:** Only Mara (Full, own clients only) can export her own data; no other role has access to this feature.
-
-**Communications:** N/A directly, though a notice may indicate the export is ready if preparation takes more than a moment.
-
-**Data Notes:** Displayed/exported: client names, phone numbers, notes, and booking history. Source: read from Client Record and Booking; nothing new is captured here.
-
-**Interactions:** Depends on Client Record Management (FEAT-11) and Pro Daily Dashboard (FEAT-07) data.
-
-**Signals:** export_requested, export_ready, export_downloaded.
-
----
-
-### WhatsApp Messaging Channel
-
-**ID:** FEAT-29
-
-**Description:** An additional channel — alongside text messages — for sending confirmations and reminders, for clients who prefer it.
-
-**Priority:** Nice-to-Have
-
-**Phase:** Later
-
-**Type:** Platform
-
-**Rationale:** The brief names this directly: "WhatsApp is a later nice-to-have, not v1" (BRIEF.md, Ecosystem & Integrations). This is a discovered, brief-named capability and is documented in full here rather than only as a scope note, per the requirement that nothing the brief raises is silently folded into an exclusion.
-
-**Connected Entities:** Messaging Consent Record (update, to record channel preference)
-
-**Key Capabilities:**
-- Choose a preferred channel -- Client can opt to receive confirmations and reminders via this channel instead of text
-- Deliver via the alternate channel -- Confirmations and reminders are sent through this channel when chosen
-
-**Primary Flows & Alternates:**
-- Happy path: client indicates a channel preference at booking -> confirmations and reminders are delivered via that channel instead of text going forward
-- Channel unavailable for a given client: if delivery via this channel is not possible for a client, the product falls back to text messaging rather than silently failing to notify them
-
-**States:** Empty: N/A — this extends existing messaging rather than introducing a new list. Loading: N/A — handled within the invoking feature (FEAT-05). Error: a delivery failure on this channel falls back to text messaging. Offline-degraded: N/A — requires connectivity, same as any messaging.
-
-**Validation & Limits:** A client's channel preference applies only to their own future messages; consent rules from SMS Messaging & Consent Capability (FEAT-16) apply equally to this channel.
-
-**Access:** Any Client (Own-only) can set their own channel preference; Mara has no separate control over which channel is used for a given client.
-
-**Communications:** This feature is itself a communications channel: confirmations and reminders delivered via this channel instead of text, when chosen.
-
-**Data Notes:** Captured: channel preference. Source: client's own input.
-
-**Interactions:** Extends SMS Messaging & Consent Capability (FEAT-16); used by Booking Confirmation & Reminders (FEAT-05).
-
-**Signals:** channel_preference_set, message_delivered_alternate_channel, message_fallback_to_sms.
-
----
+**Signals:** whatsapp_channel_selected, whatsapp_delivery_failed_fallback_used.
 
 ## Feature Interaction Summary
 
 | Feature | Depends On |
 |---------|------------|
-| FEAT-01 Public Booking Page | FEAT-09 (services/policy display), FEAT-02 (availability) |
-| FEAT-02 Live Availability & Slot Booking | FEAT-09 (hours/buffer), FEAT-10 (blocked time), FEAT-12 (calendar busy time), FEAT-23 (waitlist release) |
-| FEAT-03 Client Identity & Booking Details Capture | FEAT-02 (held slot), FEAT-16 (verification code delivery) |
-| FEAT-04 Deposit Payment at Booking | FEAT-03 (booking details), FEAT-15 (payment capability), FEAT-09 (deposit amount) |
-| FEAT-05 Booking Confirmation & Reminders | FEAT-04 (confirmed booking), FEAT-16 (delivery), FEAT-29 (alternate channel) |
-| FEAT-06 Client Self-Service Reschedule & Cancellation | FEAT-05 (reminder link), FEAT-02 (new slot), FEAT-09 (policy window) |
-| FEAT-07 Pro Daily Dashboard | FEAT-04 (paid status), FEAT-11 (client notes), FEAT-08 (no-show/cancel status), FEAT-24 (tip amount) |
-| FEAT-08 No-Show & Cancellation Deposit Handling | FEAT-04 (deposit record), FEAT-09 (policy), FEAT-18 (writes dispute trail) |
-| FEAT-09 Business Settings & Policy Configuration | None |
-| FEAT-10 Pro Manual Schedule Blocking | FEAT-02 (affects availability) |
-| FEAT-11 Client Record Management | FEAT-03 (client creation), FEAT-22 (import) |
-| FEAT-12 Two-Way Calendar Sync | FEAT-14 (pro account) |
-| FEAT-13 Pro Onboarding & Setup | FEAT-14, FEAT-09, FEAT-12 (optional), FEAT-17 |
-| FEAT-14 Pro Account & Authentication | None |
-| FEAT-15 Payment Processing Capability | None |
-| FEAT-16 SMS Messaging & Consent Capability | None |
-| FEAT-17 Pro Subscription & Billing | FEAT-14, FEAT-15 |
-| FEAT-18 Booking Record & Dispute Trail | FEAT-04, FEAT-08 |
-| FEAT-19 Client Self-Service Booking History | FEAT-03 (identity), FEAT-04 (booking data) |
-| FEAT-20 Account Closure & Client Data Deletion | FEAT-11, FEAT-14, FEAT-17 |
-| FEAT-21 Operator Support Console | FEAT-07, FEAT-18 |
-| FEAT-22 Client List Import | FEAT-11 |
-| FEAT-23 Cancellation Waitlist | FEAT-02, FEAT-06 |
-| FEAT-24 In-App Tipping at Checkout | FEAT-04, FEAT-15 |
-| FEAT-25 In-App Balance Payment | FEAT-15, FEAT-07 |
-| FEAT-26 Recurring Appointment Booking | FEAT-02, FEAT-04 |
-| FEAT-27 Simple Business Insights | FEAT-04, FEAT-08, FEAT-24 |
-| FEAT-28 Data Export | FEAT-11, FEAT-07 |
-| FEAT-29 WhatsApp Messaging Channel | FEAT-16, FEAT-05 |
+| FEAT-01 Service & Pricing Management | None |
+| FEAT-02 Availability & Working Hours Setup | None |
+| FEAT-03 Real-Time Slot Availability Engine | FEAT-02, FEAT-04, FEAT-17, FEAT-21 |
+| FEAT-04 Two-Way Calendar Sync | None |
+| FEAT-05 Public Booking Page & Booking Flow | FEAT-01, FEAT-03, FEAT-06, FEAT-07, FEAT-09 |
+| FEAT-06 Client Booking Identity | FEAT-05 (reads Client created there) |
+| FEAT-07 Deposit Payment at Booking | FEAT-01, FEAT-05 |
+| FEAT-08 Automated Booking Messaging | FEAT-05, FEAT-07, FEAT-14 |
+| FEAT-09 Cancellation & No-Show Policy Engine | None |
+| FEAT-10 Client-Initiated Cancel/Reschedule | FEAT-03, FEAT-06, FEAT-09 |
+| FEAT-11 No-Show Marking & Deposit Forfeiture | FEAT-07, FEAT-09 |
+| FEAT-12 Pro Daily Schedule Dashboard | FEAT-05, FEAT-07, FEAT-13 |
+| FEAT-13 Client Record Management | FEAT-05 |
+| FEAT-14 Messaging Consent Management | FEAT-05 |
+| FEAT-15 Pro Onboarding & Setup Wizard | None |
+| FEAT-16 Booking & Payment Activity Record | FEAT-05, FEAT-07, FEAT-08, FEAT-10, FEAT-11 |
+| FEAT-17 Manual Time Blocking | None |
+| FEAT-18 Pro Subscription Billing & Account Management | FEAT-15 |
+| FEAT-19 Platform Support Read-Only Access | FEAT-15, FEAT-12, FEAT-16, FEAT-18 |
+| FEAT-20 Waitlist for Cancelled Slots | FEAT-03, FEAT-10 |
+| FEAT-21 Recurring/Standing Appointments | FEAT-03, FEAT-05 |
+| FEAT-22 In-App Balance Payment | FEAT-07 |
+| FEAT-23 Tipping at Checkout | FEAT-22 |
+| FEAT-24 Client List Search & Filter | FEAT-13 |
+| FEAT-25 Booking & Revenue Insights | FEAT-07, FEAT-11 |
+| FEAT-26 WhatsApp Reminders | FEAT-08, FEAT-14 |

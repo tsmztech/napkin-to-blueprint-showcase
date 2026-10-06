@@ -3,7 +3,7 @@ document_type: user-journeys
 produced_by: product-visionary
 variant: draft
 status: draft
-created: 2026-09-21
+created: 2026-09-26
 coherence_check: passed
 ---
 
@@ -11,213 +11,182 @@ coherence_check: passed
 
 ## Journey
 
-This document contains 8 journeys, covering the required minimum for 29 defined features. Taylor (the Client) owns 3 journeys; Mara (the Pro) owns 5. Coverage spans first-use (2), regular use (3), and edge/recovery (3), with all three values represented at least once. Every Core and Important feature from product-features.md appears in at least one journey below.
+This document contains 7 journeys covering the full lifecycle for both product roles: two first-use journeys (Pro setup, Client's first booking), three regular-use journeys (the Pro's daily rhythm, a client managing an existing booking, and the Pro handling cancellations/reschedules), and two edge/recovery journeys (a no-show dispute, and a declined payment). Talia (the Pro) owns four journeys, Riley (the Client) owns three. Every Core and Important feature in draft-product-features.md appears in at least one journey.
 
 ---
 
-### Client First Booking
+### Pro First-Time Setup
 
-**Owning Persona:** Taylor
+**Owning Persona:** Talia
 
 **Coverage:** First-use
 
-**Journey Goal:** Go from tapping a Pro's Instagram bio link to a confirmed, deposit-paid appointment, in under a minute, without ever DMing anyone.
+**Journey Goal:** Get from signing up to a live, shareable booking link that Talia can put in her Instagram bio, with her real rules already in place.
 
-**Entry Point:** Taylor taps the booking link in Mara's Instagram bio, opened inside Instagram's own in-app browser.
+**Entry Point:** Talia signs up for Chairtime after a friend (another pro) tells her about it, motivated to stop negotiating times in DMs.
 
 **Steps:**
 
-1. Land on the booking page — Taylor sees Mara's name, her services with prices and durations, and the deposit rule stated plainly. No login screen stands between Taylor and browsing.
-2. Pick a service and time — Taylor selects "Full set — $65 — 90 min" and is shown only genuinely free times; Taylor picks Thursday 2:30pm, which is held for the moment.
-3. Provide identity and consent — Taylor enters name and phone, verifies with a one-time code, and explicitly agrees to texts and the cancellation policy.
-4. Pay the deposit — Taylor pays a $20 deposit by card; the product itself never touches the card number.
-5. Confirmation — Taylor sees the booking confirmed and a confirmation text lands immediately. The whole flow took under a minute.
+1. Account start — Talia begins the guided setup. She sees a short, plain-language explanation of what each step will ask for, with no jargon.
+2. Services and deposit rule — Talia adds her first service (name, price, duration) and sets her deposit rule (fixed amount or percentage). She sees exactly how a client will see this service on her future booking page.
+3. Hours and cancellation policy — Talia sets her working hours and buffer time, then sets her cancellation window and what happens to the deposit inside vs. outside it, choosing the recommended default or adjusting it.
+4. Calendar connection — Talia connects her personal Google or Apple calendar so her real busy time blocks Chairtime automatically; she is told she can skip this and connect later.
+5. Subscription — Talia enters her card for the flat monthly subscription. Her account is now active.
+6. Link is live — Talia is handed her shareable booking link and a short "here's what to do with it" note (drop it in her Instagram bio).
 
-**Failure/Recovery Variant:** While Taylor is entering booking details, another client completes payment for the same 2:30pm slot first. Taylor's payment step shows an immediate, plain "that time was just booked — please pick another" message rather than a failed charge, and Taylor is returned to slot selection with the rest of their entered details preserved.
+**Failure/Recovery Variant:** Talia closes the app partway through, right after setting her services, to attend to a client. When she reopens Chairtime later that day, setup resumes exactly at the hours/cancellation-policy step with her services already saved — nothing is lost and she is never asked to start over.
 
-**Success Outcome:** Taylor has a confirmed, deposit-paid appointment and a confirmation text, with no negotiation and no DM ever sent.
+**Success Outcome:** Within one sitting (or across a couple of short sessions), Talia has a live booking link reflecting her real services, hours, deposit rule, and cancellation policy, with her calendar connected and her subscription active.
 
-**Connected Features:** Public Booking Page, Live Availability & Slot Booking, Client Identity & Booking Details Capture, Deposit Payment at Booking, Booking Confirmation & Reminders, SMS Messaging & Consent Capability, Payment Processing Capability
+**Connected Features:** Pro Onboarding & Setup Wizard, Service & Pricing Management, Availability & Working Hours Setup, Cancellation & No-Show Policy Engine, Two-Way Calendar Sync, Pro Subscription Billing & Account Management.
 
 ---
 
-### Pro Onboarding & Setup
+### Client's First Booking
 
-**Owning Persona:** Mara
+**Owning Persona:** Riley
 
 **Coverage:** First-use
 
-**Journey Goal:** Go from signing up to having a working, shareable booking page ready to put in her Instagram bio.
+**Journey Goal:** Book an appointment with a pro discovered on Instagram, and pay the deposit, in under a minute, without creating an account.
 
-**Entry Point:** Mara signs up for the product for the first time, motivated to stop running her diary by DM.
+**Entry Point:** Riley sees a fresh set of lashes on the pro's Instagram feed and taps the link in the bio.
 
 **Steps:**
 
-1. Create account — Mara signs up and creates her business profile with her name, timezone, and currency.
-2. Add services and policy — Mara adds her services with prices and durations, and sets her deposit amount and cancellation window.
-3. Set hours — Mara sets her weekly working hours and the buffer time she needs between clients.
-4. Connect calendar (optional) — Mara connects her personal calendar so her existing commitments are respected from day one, or she skips this and does it later.
-5. Get her link — Mara receives her bio-link URL, ready to paste into her Instagram bio.
+1. Land on the booking page — Riley sees the pro's name, services with prices and durations, and the deposit rule stated in plain words, right inside the Instagram in-app browser.
+2. Pick a service and time — Riley chooses "Full set — $65 — 90 min" and sees only times that are genuinely free; they pick Thursday 2:30pm.
+3. Enter details and consent — Riley enters their name and phone number and actively opts in to receive text messages.
+4. Pay the deposit — Riley pays the $20 deposit by card. The page confirms success immediately.
+5. Confirmation lands — Riley sees an on-screen confirmation, and a confirmation text arrives moments later.
 
-**Failure/Recovery Variant:** Mara closes the product midway through adding services, distracted by a client. When she reopens it later that day, setup resumes exactly where she left off — her business name, timezone, and any services already added are preserved, and she is not asked to start over.
+**Failure/Recovery Variant:** Riley's card is declined at the payment step. The page shows the decline reason in plain language, keeps Thursday 2:30pm held for a short window, and lets Riley retry with a different card without re-entering their name, phone, or service choice.
 
-**Success Outcome:** Within one session (resumed if interrupted), Mara has at least one bookable service, a policy, working hours, and a live link she can put in her bio.
+**Success Outcome:** In under a minute, Riley has a confirmed, paid booking and a confirmation text, without ever creating a password or account.
 
-**Connected Features:** Pro Onboarding & Setup, Pro Account & Authentication, Business Settings & Policy Configuration, Two-Way Calendar Sync, Pro Subscription & Billing
+**Connected Features:** Public Booking Page & Booking Flow, Real-Time Slot Availability Engine, Client Booking Identity, Deposit Payment at Booking, Automated Booking Messaging, Messaging Consent Management, Cancellation & No-Show Policy Engine.
 
 ---
 
-### Pro's Daily Chair-Side Workflow
+### Talia's Between-Clients Day
 
-**Owning Persona:** Mara
+**Owning Persona:** Talia
 
 **Coverage:** Regular
 
-**Journey Goal:** Know exactly what to expect from each client today, glancing at her phone between appointments, without any manual reconciliation.
+**Journey Goal:** Glance at today's schedule between clients, confirm who's paid and who's next, and handle a no-show without any manual chasing.
 
-**Entry Point:** Mara has a moment between clients and checks her phone, as she does several times most working days.
+**Entry Point:** Talia has a few minutes between appointments and opens Chairtime on her phone, as she does throughout most working days.
 
 **Steps:**
 
-1. Open today's list — Mara sees every remaining booking for today, in time order.
-2. Check paid status — Each booking shows a clear paid badge, so Mara never wonders who has actually paid.
-3. Read the client note — Mara sees any note she's kept on that client (a preference, an allergy, a history detail) alongside the booking.
-4. Confirm balance due — Mara sees exactly how much is still owed at the chair for the next client.
-5. Block unplanned time, if needed — If a personal matter comes up, Mara blocks the rest of the afternoon in a couple of taps so it stops appearing as bookable.
+1. Open the dashboard — Talia sees today's remaining bookings in time order, each with a paid badge and balance-due amount.
+2. Check a client note — Talia taps into her next booking and sees a private note she left last time ("prefers a lighter volume").
+3. Handle a blocked afternoon — Talia adds a manual time block for a personal appointment later in the week directly from the schedule view.
+4. Mark a no-show — Her 11am client never arrives. Talia taps "no-show" on that booking; the deposit is automatically kept under her policy, with nothing further for her to do.
 
-**Failure/Recovery Variant:** A client reschedules from their reminder text while Mara is mid-appointment with someone else. When Mara next checks her phone, today's list already reflects the change — she is never working from a stale list or double-booked by a change she didn't see happen.
+**Failure/Recovery Variant:** Talia realizes moments later that she marked the wrong booking as a no-show (her actual 11am client texted that they were running five minutes late and did arrive). She undoes the no-show mark within the grace period, and the booking and deposit status both revert cleanly.
 
-**Success Outcome:** Mara runs her whole day off one trustworthy list, with no DM checking and no separate reconciliation against a paper diary.
+**Success Outcome:** Talia has moved through her day with a clear, trustworthy view of her schedule and handled a genuine no-show without a single manual invoice, text, or negotiation.
 
-**Connected Features:** Pro Daily Dashboard, No-Show & Cancellation Deposit Handling, Pro Manual Schedule Blocking, Client Record Management
+**Connected Features:** Pro Daily Schedule Dashboard, No-Show Marking & Deposit Forfeiture, Client Record Management, Manual Time Blocking.
 
 ---
 
-### Client Reminder-Driven Reschedule
+### Riley Manages an Existing Booking
 
-**Owning Persona:** Taylor
+**Owning Persona:** Riley
 
 **Coverage:** Regular
 
-**Journey Goal:** Respond to a reminder and change plans without a phone call or a DM.
+**Journey Goal:** Respond to a reminder and reschedule an upcoming appointment without calling or messaging the pro directly.
 
-**Entry Point:** Two days before the appointment, a reminder text arrives with a one-tap "I'll be there / I need to reschedule."
+**Entry Point:** Riley receives the automatic reminder text two days before their appointment.
 
 **Steps:**
 
-1. Receive the reminder — Taylor gets the reminder text and reads the one-tap choice.
-2. Realize plans changed — Taylor taps "I need to reschedule" instead of confirming.
-3. Pick a new time — Taylor is shown live availability and picks a new genuinely free slot for the same service.
-4. See the outcome plainly — Because the change is inside the cancellation window, Taylor sees the reschedule confirmed with no new charge.
-5. Get a new confirmation — A confirmation text arrives for the new time.
+1. Reminder arrives — Riley reads the reminder, which includes one-tap "I'll be there" and "I need to reschedule" options.
+2. Choose to reschedule — Riley taps "I need to reschedule" and is taken straight into their own booking, verified by the phone number the reminder was sent to.
+3. Pick a new time — Riley sees the same real-time list of genuinely free slots and picks a new one for the same service.
+4. Confirmation — The booking updates to the new time; Riley gets a confirmation, and the pro's calendar reflects the change automatically.
 
-**Failure/Recovery Variant:** Taylor tries to reschedule the same day the reminder arrives, which is outside Mara's cancellation window. Before confirming, Taylor is shown plainly that this counts as a late change and the deposit will be forfeited if cancelled outright — so Taylor can still choose to reschedule to a nearby time without penalty, or accept the forfeiture if cancelling entirely. Nothing is a surprise after the fact.
+**Failure/Recovery Variant:** Riley's first-choice new time disappears from the list moments after they open it (someone else just booked it). The page shows a plain "that time was just taken" message and keeps Riley on the same live slot list to pick another, rather than erroring out.
 
-**Success Outcome:** Taylor's appointment moves to a time that works, entirely self-service, with the policy outcome always visible before it's final.
+**Success Outcome:** Riley moves their appointment to a time that works, in a couple of taps, with no phone call and no re-paying a deposit.
 
-**Connected Features:** Booking Confirmation & Reminders, Client Self-Service Reschedule & Cancellation, Client Self-Service Booking History
+**Connected Features:** Automated Booking Messaging, Client Booking Identity, Client-Initiated Cancel/Reschedule, Real-Time Slot Availability Engine.
 
 ---
 
-### Pro Adjusts Policy and Reviews Business Health
+### Talia Handles Cancellations and Freed-Up Time
 
-**Owning Persona:** Mara
+**Owning Persona:** Talia
 
 **Coverage:** Regular
 
-**Journey Goal:** Tighten her cancellation policy after a rough patch and confirm, in her own numbers, that the change is working.
+**Journey Goal:** See a client's cancellation reflected correctly (deposit refunded or kept, per policy) and let a waitlisted client claim the newly freed slot.
 
-**Entry Point:** Mara notices a few too many late cancellations in a row and decides to act, outside of any specific appointment.
+**Entry Point:** A client cancels their own booking from a reminder text, well inside Talia's cancellation window.
 
 **Steps:**
 
-1. Open business settings — Mara reviews her current deposit amount and cancellation window.
-2. Tighten the policy — Mara increases the cancellation window from 24 to 48 hours; the change applies to new bookings going forward.
-3. Confirm her subscription is in good standing — Mara glances at her billing status while she's in settings.
-4. Check her weekly snapshot — A few weeks later, Mara opens her simple business insights and sees her no-show rate has dropped.
-5. Feel the difference — Mara notices she hasn't answered a single "are you free Saturday?" DM in weeks.
+1. Cancellation lands — Talia's dashboard shows the booking as cancelled, with the deposit automatically kept because the cancellation fell inside her stated window.
+2. Slot reopens — The freed time immediately becomes bookable again on Talia's public page.
+3. Waitlist notified — A different client who had joined the waitlist for that day is notified that a matching slot just opened.
+4. New booking lands — That client books the freed slot within the priority window; Talia's schedule fills back in without her doing anything.
 
-**Failure/Recovery Variant:** Mara accidentally sets the cancellation window shorter than she meant to (an easy mis-tap). Because the change only affects new bookings — never retroactively changing terms already agreed to by existing clients — the mistake is low-stakes, and she simply corrects the number the next time she opens settings.
+**Failure/Recovery Variant:** No one on the waitlist claims the slot before the priority window expires. The slot simply returns to ordinary public availability, and Talia's schedule shows it as open — nothing is lost or stuck in a pending state.
 
-**Success Outcome:** Mara's policy reflects what she's actually experiencing, and she has plain evidence her situation has improved, without doing any manual math.
+**Success Outcome:** A cancellation resolves itself correctly (deposit outcome, calendar update, and re-booking opportunity) with no manual intervention from Talia.
 
-**Connected Features:** Business Settings & Policy Configuration, Pro Subscription & Billing, Simple Business Insights
+**Connected Features:** Client-Initiated Cancel/Reschedule, Cancellation & No-Show Policy Engine, Waitlist for Cancelled Slots, Automated Booking Messaging.
 
 ---
 
-### No-Show and Deposit Forfeiture
+### Resolving a No-Show Dispute
 
-**Owning Persona:** Mara
+**Owning Persona:** Talia
 
 **Coverage:** Edge/Recovery
 
-**Journey Goal:** Protect her income when a client simply doesn't show up, and have something concrete if it's later disputed.
+**Journey Goal:** Respond confidently to a client who disputes a kept deposit, using a trustworthy record instead of memory or guesswork.
 
-**Entry Point:** The appointment time passes and the client hasn't arrived or messaged.
+**Entry Point:** A client messages Talia directly (outside the app) disputing why their deposit was kept for a missed appointment.
 
 **Steps:**
 
-1. Wait past the appointment time — Mara gives it a few minutes, as she normally would.
-2. Mark the no-show — Mara taps "no-show" on that booking from her daily dashboard.
-3. Deposit stays put — The deposit is retained automatically; Mara does nothing further to keep it.
-4. Client disputes later — A week later, the client messages claiming they were never properly booked or charged.
-5. Pull up the record — Mara opens that booking's history and sees the exact policy the client agreed to, the payment timestamp, and the no-show timestamp.
+1. Talia opens the booking — She finds the booking in question from her dashboard and opens its full activity timeline.
+2. Timeline review — She sees exactly when the client booked, which cancellation policy version was shown to them at that moment, the appointment time, and the timestamp she marked it as a no-show.
+3. Talia responds — Using the timeline as reference, Talia explains the outcome to the client with confidence, pointing to the exact policy they agreed to.
+4. Escalation (if needed) — If Talia is unsure how to interpret something, she contacts support; a support operator opens the same read-only timeline to help, without ever seeing Talia's private notes about the client.
 
-**Failure/Recovery Variant:** Mara realizes minutes later she tapped "no-show" on the wrong booking by mistake. Because the mark can be undone shortly after (before it's included in any settlement), she corrects it immediately without needing support intervention — though if she genuinely got stuck, the founder's read-only support console could look at the same booking to help confirm what happened.
+**Failure/Recovery Variant:** The client insists the timeline must be wrong. Because every entry is append-only and immutable, Talia can point to the exact, unaltered sequence of events rather than an editable log that could be doubted — the record itself is the recovery mechanism for the dispute.
 
-**Success Outcome:** Mara keeps the deposit she's owed and has a concrete, timestamped answer the one time a client pushes back — instead of no record at all.
+**Success Outcome:** Talia resolves the dispute in minutes with a clear, trustworthy record, rather than losing an evening to an argument she cannot substantiate.
 
-**Connected Features:** No-Show & Cancellation Deposit Handling, Booking Record & Dispute Trail, Pro Daily Dashboard, Operator Support Console
+**Connected Features:** No-Show Marking & Deposit Forfeiture, Booking & Payment Activity Record, Platform Support Read-Only Access, Cancellation & No-Show Policy Engine.
 
 ---
 
-### Booking Conflict Recovery via Calendar Sync
+### Recovering from a Declined Deposit Payment
 
-**Owning Persona:** Mara
-
-**Coverage:** Edge/Recovery
-
-**Journey Goal:** Trust that a personal commitment on her own calendar never turns into a double-booking, even when sync briefly lags.
-
-**Entry Point:** Mara adds a personal appointment (a dentist visit) directly to her own connected calendar, expecting it to protect that time here too.
-
-**Steps:**
-
-1. Add the personal event — Mara books her dentist appointment on her own calendar, as she always has.
-2. Sync picks it up — Within a few minutes, that time stops appearing as bookable on her availability.
-3. A client almost books the same time — Before sync completed, a client had the old availability open; when they try to confirm, the slot is no longer offered.
-4. Mara adds a manual block, just in case — For anything time-sensitive, Mara also uses manual blocking as a direct, immediate backstop rather than relying on sync alone.
-5. Confidence restored — No double-booking occurs, and Mara trusts the system even when sync has a short delay.
-
-**Failure/Recovery Variant:** The calendar connection becomes briefly unreachable. Availability falls back to internally-known bookings and manual blocks only, with a discreet notice to Mara that externally-blocked time may be briefly stale — rather than confidently showing a slot that's actually taken. Mara uses manual blocking to cover anything urgent until sync recovers.
-
-**Success Outcome:** Double-booking never silently happens, even through a sync delay or outage — the non-negotiable promise holds.
-
-**Connected Features:** Two-Way Calendar Sync, Live Availability & Slot Booking, Pro Manual Schedule Blocking
-
----
-
-### Client Data Deletion Request
-
-**Owning Persona:** Mara
+**Owning Persona:** Riley
 
 **Coverage:** Edge/Recovery
 
-**Journey Goal:** Honor a client's request to have their personal data removed, cleanly and completely.
+**Journey Goal:** Successfully complete a booking after an initial payment attempt fails, without losing the chosen time or having to start over.
 
-**Entry Point:** A client messages Mara (outside the product, as this is a personal request) asking her to delete their information.
+**Entry Point:** Riley reaches the payment step of booking and their card is declined.
 
 **Steps:**
 
-1. Find the client — Mara searches her client list by name or phone and finds the record.
-2. Confirm the request — Mara opens the client's record to confirm it's the right person before deleting.
-3. Delete the record — Mara deletes the client's personal details; past booking history is anonymized rather than silently vanishing from her own financial records.
-4. Confirm to the client — An optional acknowledgment lets the client know their data was removed.
-5. List reflects the change — The client no longer appears in Mara's client list.
+1. Decline shown — Riley sees a clear, specific reason for the decline rather than a generic error.
+2. Slot still held — Riley's chosen Thursday 2:30pm slot remains held for a short window rather than being released back to the public list immediately.
+3. Retry with a different card — Riley re-enters payment details with a different card, without re-selecting the service, time, name, or phone.
+4. Success — The deposit succeeds on the second attempt, and Riley gets the same confirmation experience as a first-attempt success.
 
-**Failure/Recovery Variant:** Mara starts the deletion but hesitates, unsure if it's fully reversible. The deletion flow requires a deliberate, explicit confirmation step (not a single accidental tap) precisely because it is largely irreversible, giving Mara a clear moment to back out before anything is actually removed.
+**Failure/Recovery Variant:** Riley takes too long deciding what card to use and the slot hold expires before they retry. Riley sees a plain "that hold has expired, please pick a time again" message and is returned to the live slot list — never charged, and never left uncertain about whether they are booked.
 
-**Success Outcome:** The client's personal data is genuinely gone from Mara's records, honoring the brief's privacy promise, without disrupting Mara's own financial history.
+**Success Outcome:** Riley completes their booking despite an initial payment hiccup, with no confusion about whether they were charged or whether their slot was lost.
 
-**Connected Features:** Client Record Management, Account Closure & Client Data Deletion
-
+**Connected Features:** Deposit Payment at Booking, Public Booking Page & Booking Flow, Real-Time Slot Availability Engine.
